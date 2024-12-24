@@ -27,7 +27,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         envFrom:
         - configMapRef:
-            name: {{ include "weather.fullname" . }}-blue-config
+            name: {{ include "weather.fullname" . }}-green-config
         image: {{ .Values.deployment.weather.image.repository }}:{{ .Values.deployment.weather.image.tag
           | default .Chart.AppVersion }}
         name: weather
