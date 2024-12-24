@@ -1,7 +1,7 @@
 blueConfig:
   bgColor: blue
 deployment:
-  replicas: 3
+  replicas: 5
   strategy:
     rollingUpdate:
       maxSurge: 25%
