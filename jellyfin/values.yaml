@@ -1,0 +1,17 @@
+jellyfin:
+  jellyfin:
+    image:
+      repository: jellyfin/jellyfin
+      tag: latest
+  ports:
+  - port: 8096
+    protocol: TCP
+    targetPort: 8096
+  replicas: 1
+  type: ClusterIP
+kubernetesClusterDomain: cluster.local
+pvc:
+  configPvc:
+    storageRequest: 5Gi
+  dataPvc:
+    storageRequest: 10Gi
