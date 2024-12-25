@@ -1,0 +1,20 @@
+jellyfin:
+  jellyfin:
+    image:
+      repository: jellyfin/jellyfin
+      tag: latest
+  ports:
+  - nodePort: 30080
+    port: 8096
+    protocol: TCP
+    targetPort: 8096
+  replicas: 1
+  type: NodePort
+kubernetesClusterDomain: cluster.local
+pvc:
+  configPvc:
+    storageRequest: 5Gi
+  mediaPvc:
+    storageRequest: 50Gi
+  usersPvc:
+    storageRequest: 5Gi

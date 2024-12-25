@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "jelly.fullname" . }}-config-pvc
+  labels:
+  {{- include "jelly.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.configPvc.storageRequest | quote }}
+  volumeName: jellyfin-config-pv
