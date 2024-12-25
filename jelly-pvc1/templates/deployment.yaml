@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jelly-pvc1.fullname" . }}-jellyfin
+  labels:
+  {{- include "jelly-pvc1.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.jellyfin.replicas }}
+  selector:
+    matchLabels:
+      app: jellyfin
+    {{- include "jelly-pvc1.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+      {{- include "jelly-pvc1.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.jellyfin.jellyfin.image.repository }}:{{ .Values.jellyfin.jellyfin.image.tag
+          | default .Chart.AppVersion }}
+        name: jellyfin
+        ports:
+        - containerPort: 8096
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: config-volume
+        - mountPath: /data/users
+          name: users-volume
+        - mountPath: /data/media
+          name: media-volume
+      volumes:
+      - name: config-volume
+        persistentVolumeClaim:
+          claimName: {{ include "jelly-pvc1.fullname" . }}-config-pvc
+      - name: users-volume
+        persistentVolumeClaim:
+          claimName: {{ include "jelly-pvc1.fullname" . }}-users-pvc
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: {{ include "jelly-pvc1.fullname" . }}-media-pvc
