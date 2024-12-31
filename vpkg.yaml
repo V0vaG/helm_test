@@ -44,7 +44,7 @@ spec:
     - protocol: TCP
       port: 81
       targetPort: 5000
-  type: ClusterIP # Use NodePort or LoadBalancer for external access
+  type: ClusterIP
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
