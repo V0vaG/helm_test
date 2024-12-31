@@ -1,6 +1,6 @@
 kubernetesClusterDomain: cluster.local
 webappDeployment:
-  replicas: 3
+  replicas: 1
   webappContainer:
     env:
       envVar: value
