@@ -27,6 +27,6 @@ spec:
           | default .Chart.AppVersion }}
         name: webapp-container
         ports:
-        - containerPort: 80
+        - containerPort: 81
         resources: {{- toYaml .Values.deployment.webappContainer.resources | nindent 10
           }}

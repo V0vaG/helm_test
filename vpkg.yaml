@@ -19,7 +19,7 @@ spec:
         - name: webapp-container
           image: vova0911/vpkg:amd64_latest # Replace with your image
           ports:
-            - containerPort: 80
+            - containerPort: 81
           env: # Example environment variables
             - name: ENV_VAR
               value: "value"
@@ -52,8 +52,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: vova-g.tplinkdns.com # Replace with your domain or IP
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
