@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: webapp-container
-          image: your-dockerhub-username/your-webapp:latest # Replace with your image
+          image: vova0911/vpkg:amd64_latest # Replace with your image
           ports:
             - containerPort: 81
           env: # Example environment variables
