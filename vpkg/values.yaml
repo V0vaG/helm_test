@@ -4,8 +4,8 @@ deployment:
     env:
       envVar: value
     image:
-      repository: vova0911/vpkg
-      tag: amd64_latest
+      repository: your-dockerhub-username/your-webapp
+      tag: latest
     resources:
       limits:
         cpu: 500m

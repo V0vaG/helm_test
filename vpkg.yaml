@@ -5,6 +5,7 @@ metadata:
   name: webapp-deployment
   labels:
     app: webapp
+  namespace: vpkg
 spec:
   replicas: 3
   selector:
@@ -17,7 +18,7 @@ spec:
     spec:
       containers:
         - name: webapp-container
-          image: vova0911/vpkg:amd64_latest # Replace with your image
+          image: your-dockerhub-username/your-webapp:latest # Replace with your image
           ports:
             - containerPort: 81
           env: # Example environment variables
@@ -35,6 +36,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: webapp-service
+  namespace: vpkg
 spec:
   selector:
     app: webapp
@@ -48,6 +50,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: webapp-ingress
+  namespace: vpkg
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
