@@ -1,6 +1,5 @@
-kubernetesClusterDomain: cluster.local
-webappDeployment:
-  replicas: 1
+deployment:
+  replicas: 3
   webappContainer:
     env:
       envVar: value
@@ -14,9 +13,10 @@ webappDeployment:
       requests:
         cpu: 250m
         memory: 64Mi
-webappService:
+kubernetesClusterDomain: cluster.local
+service:
   ports:
   - port: 81
     protocol: TCP
-    targetPort: 81
+    targetPort: 5000
   type: ClusterIP
