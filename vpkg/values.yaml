@@ -1,0 +1,22 @@
+deployment:
+  replicas: 3
+  webappContainer:
+    env:
+      envVar: value
+    image:
+      repository: your-dockerhub-username/your-webapp
+      tag: latest
+    resources:
+      limits:
+        cpu: 500m
+        memory: 128Mi
+      requests:
+        cpu: 250m
+        memory: 64Mi
+kubernetesClusterDomain: cluster.local
+service:
+  ports:
+  - port: 81
+    protocol: TCP
+    targetPort: 5000
+  type: ClusterIP
