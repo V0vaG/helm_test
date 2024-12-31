@@ -1,11 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "jellyfin.fullname" . }}-jellyfin
+  name: {{ include "jellyfin.fullname" . }}-server
   labels:
+    app: jellyfin
   {{- include "jellyfin.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.jellyfin.replicas }}
+  replicas: {{ .Values.server.replicas }}
   selector:
     matchLabels:
       app: jellyfin
@@ -20,7 +21,7 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.jellyfin.jellyfin.image.repository }}:{{ .Values.jellyfin.jellyfin.image.tag
+        image: {{ .Values.server.jellyfin.image.repository }}:{{ .Values.server.jellyfin.image.tag
           | default .Chart.AppVersion }}
         name: jellyfin
         ports:
@@ -28,18 +29,21 @@ spec:
         resources: {}
         volumeMounts:
         - mountPath: /config
-          name: config-volume
-        - mountPath: /data/users
-          name: users-volume
-        - mountPath: /data/media
-          name: media-volume
+          name: config
+        - mountPath: /cache
+          name: cache
+        - mountPath: /media
+          name: media
       volumes:
-      - name: config-volume
-        persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-config-pvc
-      - name: users-volume
-        persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-users-pvc
-      - name: media-volume
-        persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-media-pvc
+      - hostPath:
+          path: /home/vova/script_files/jelly_config/config
+          type: Directory
+        name: config
+      - hostPath:
+          path: /home/vova/script_files/jelly_config/cache
+          type: Directory
+        name: cache
+      - hostPath:
+          path: /home/vova/media
+          type: Directory
+        name: media

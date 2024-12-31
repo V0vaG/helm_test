@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    ports:
+      - "8096:8096"
+    volumes:
+      - /home/vova/jellyfin/config:/config
+      - /home/vova/jellyfin/users:/data/users
+      - /home/vova/jellyfin/media:/data/media
+
+networks:
+  jellyfin-network:
+    driver: bridge
+
+volumes:
+  config:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/vova/jellyfin/config
+      o: bind
+  users:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/vova/jellyfin/users
+      o: bind
+  media:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/vova/jellyfin/media
+      o: bind
+
