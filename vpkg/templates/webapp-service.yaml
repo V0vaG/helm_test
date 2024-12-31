@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "vpkg.fullname" . }}-service
+  name: {{ include "vpkg.fullname" . }}-webapp-service
   labels:
   {{- include "vpkg.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.webappService.type }}
   selector:
     app: webapp
     {{- include "vpkg.selectorLabels" . | nindent 4 }}
   ports:
-  {{- .Values.service.ports | toYaml | nindent 2 }}
+  {{- .Values.webappService.ports | toYaml | nindent 2 }}

@@ -49,7 +49,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: webapp-ingress
+  name: vpkg-ingress
   namespace: vpkg
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -64,4 +64,5 @@ spec:
                 name: webapp-service
                 port:
                   number: 81
+
 
