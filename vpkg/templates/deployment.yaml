@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vpkg.fullname" . }}-deployment
+  labels:
+    app: webapp
+  {{- include "vpkg.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      app: webapp
+    {{- include "vpkg.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: webapp
+      {{- include "vpkg.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: ENV_VAR
+          value: {{ quote .Values.deployment.webappContainer.env.envVar }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.webappContainer.image.repository }}:{{ .Values.deployment.webappContainer.image.tag
+          | default .Chart.AppVersion }}
+        name: webapp-container
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.webappContainer.resources | nindent 10
+          }}
