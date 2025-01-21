@@ -1,91 +1,58 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: lora-app
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/V0vaG/helm_test
-    targetRevision: HEAD
-    path: lora/lora
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: lora-namespace
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: lora-namespace
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lora-app
-  namespace: lora-namespace
+  name: lora-server
+  labels:
+    app: lora
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: lora-app
+      app: lora
   template:
     metadata:
       labels:
-        app: lora-app
+        app: lora
     spec:
       containers:
-      - name: lora-app
-        image: vova0911/lora:armhf_main
-        volumeMounts:
-        - name: lora-scripts
-          mountPath: /root/script_files/lora
-        securityContext:
-          privileged: true
-      volumes:
-      - name: lora-scripts
-        hostPath:
-          path: /home/vova/script_files/lora
-          type: Directory
-      restartPolicy: Always
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx
-  namespace: lora-namespace
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: vova0911/nginx_images:armhf_latest
-        ports:
-        - containerPort: 80
-      restartPolicy: Always
+        - name: lora
+          image: vova0911/lora:armhf_main
+          ports:
+            - containerPort: 5000
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
-  namespace: lora-namespace
+  name: lora-service
+  labels:
+    app: lora
 spec:
-  selector:
-    app: nginx
-  ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-    nodePort: 3086
   type: NodePort
+  selector:
+    app: lora
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lora-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: "vova-g.tplinkdns.com"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: lora-service
+                port:
+                  number: 30080
 
