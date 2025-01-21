@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: <YOUR_REPO_URL>
+    repoURL: https://github.com/V0vaG/helm_test
     targetRevision: HEAD
-    path: <YOUR_PATH_IN_REPO>
+    path: lora/lora
   destination:
     server: https://kubernetes.default.svc
     namespace: lora-namespace

@@ -10,8 +10,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: <YOUR_PATH_IN_REPO>
-    repoURL: <YOUR_REPO_URL>
+    path: lora/lora
+    repoURL: https://github.com/V0vaG/helm_test
     targetRevision: HEAD
   syncPolicy:
     automated:
