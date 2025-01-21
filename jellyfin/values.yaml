@@ -1,0 +1,24 @@
+jellyfin:
+  jellyfin:
+    image:
+      repository: jellyfin/jellyfin
+      tag: latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  ports:
+  - port: 8096
+    protocol: TCP
+    targetPort: 8096
+  replicas: 1
+  type: LoadBalancer
+kubernetesClusterDomain: cluster.local
+pvc:
+  configPvc:
+    storageRequest: 5Gi
+  mediaPvc:
+    storageRequest: 50Gi
