@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ include "lora.fullname" . }}-lora-app
+  labels:
+  {{- include "lora.labels" . | nindent 4 }}
+spec:
+  destination:
+    namespace: lora-namespace
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: <YOUR_PATH_IN_REPO>
+    repoURL: <YOUR_REPO_URL>
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

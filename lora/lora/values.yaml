@@ -1,0 +1,22 @@
+kubernetesClusterDomain: cluster.local
+loraApp:
+  loraApp:
+    containerSecurityContext:
+      privileged: true
+    image:
+      repository: vova0911/lora
+      tag: armhf_main
+  replicas: 1
+nginx:
+  nginx:
+    image:
+      repository: vova0911/nginx_images
+      tag: armhf_latest
+  replicas: 1
+nginxService:
+  ports:
+  - nodePort: 86
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  type: NodePort

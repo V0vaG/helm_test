@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lora.fullname" . }}-lora-app
+  labels:
+  {{- include "lora.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.loraApp.replicas }}
+  selector:
+    matchLabels:
+      app: lora-app
+    {{- include "lora.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: lora-app
+      {{- include "lora.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.loraApp.loraApp.image.repository }}:{{ .Values.loraApp.loraApp.image.tag
+          | default .Chart.AppVersion }}
+        name: lora-app
+        resources: {}
+        securityContext: {{- toYaml .Values.loraApp.loraApp.containerSecurityContext |
+          nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files/lora
+          name: lora-scripts
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /home/vova/script_files/lora
+          type: Directory
+        name: lora-scripts
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lora.fullname" . }}-nginx
+  labels:
+  {{- include "lora.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.nginx.replicas }}
+  selector:
+    matchLabels:
+      app: nginx
+    {{- include "lora.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: nginx
+      {{- include "lora.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.nginx.nginx.image.repository }}:{{ .Values.nginx.nginx.image.tag
+          | default .Chart.AppVersion }}
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+      restartPolicy: Always
