@@ -1,0 +1,92 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lora-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: <YOUR_REPO_URL>
+    targetRevision: HEAD
+    path: <YOUR_PATH_IN_REPO>
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lora-namespace
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lora-namespace
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lora-app
+  namespace: lora-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lora-app
+  template:
+    metadata:
+      labels:
+        app: lora-app
+    spec:
+      containers:
+      - name: lora-app
+        image: vova0911/lora:armhf_main
+        command: []
+        volumeMounts:
+        - name: lora-scripts
+          mountPath: /root/script_files/lora
+        securityContext:
+          privileged: true
+      volumes:
+      - name: lora-scripts
+        hostPath:
+          path: /home/vova/script_files/lora
+          type: Directory
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: lora-namespace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: vova0911/nginx_images:armhf_latest
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: lora-namespace
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 86
+  type: NodePort
+
