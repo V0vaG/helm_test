@@ -15,7 +15,7 @@ nginx:
   replicas: 1
 nginxService:
   ports:
-  - nodePort: 86
+  - nodePort: 3086
     port: 80
     protocol: TCP
     targetPort: 80

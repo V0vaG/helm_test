@@ -40,7 +40,6 @@ spec:
       containers:
       - name: lora-app
         image: vova0911/lora:armhf_main
-        command: []
         volumeMounts:
         - name: lora-scripts
           mountPath: /root/script_files/lora
@@ -87,6 +86,6 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
-    nodePort: 86
+    nodePort: 3086
   type: NodePort
 
