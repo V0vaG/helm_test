@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "jellyfin.fullname" . }}-ingress
+  labels:
+  {{- include "jellyfin.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: vova-g.tplinkdns.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: '{{ include "jellyfin.fullname" . }}-service'
+            port:
+              number: 30080
+        path: /
+        pathType: Prefix

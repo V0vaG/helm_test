@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jellyfin.fullname" . }}-server
+  labels:
+    app: jellyfin
+  {{- include "jellyfin.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.server.replicas }}
+  selector:
+    matchLabels:
+      app: jellyfin
+    {{- include "jellyfin.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+      {{- include "jellyfin.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.server.jellyfin.image.repository }}:{{ .Values.server.jellyfin.image.tag
+          | default .Chart.AppVersion }}
+        name: jellyfin
+        ports:
+        - containerPort: 8096
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: /cache
+          name: cache
+        - mountPath: /media
+          name: media
+      volumes:
+      - hostPath:
+          path: /home/vova/script_files/jelly_config/config
+          type: Directory
+        name: config
+      - hostPath:
+          path: /home/vova/script_files/jelly_config/cache
+          type: Directory
+        name: cache
+      - hostPath:
+          path: /home/vova/media
+          type: Directory
+        name: media
