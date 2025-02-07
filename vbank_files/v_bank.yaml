@@ -50,17 +50,19 @@ spec:
     #  - name: regcred
 
 ---
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
   name: vbank-service
+  namespace: default
 spec:
   selector:
     app: vbank
-  type: ClusterIP
   ports:
-  - protocol: TCP
-    port: 5000
-    targetPort: 5000
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30080  # This will bind to this port on your Node
+  type: NodePort
 ---
 

@@ -1,23 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vpkg
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp-deployment
+  name: vpkg-deployment
   labels:
-    app: webapp
+    app: vpkg
   namespace: vpkg
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: webapp
+      app: vpkg
   template:
     metadata:
       labels:
-        app: webapp
+        app: vpkg
     spec:
       containers:
-        - name: webapp-container
+        - name: vpkg-container
           image: vova0911/vpkg:amd64_latest
           ports:
             - containerPort: 5000
@@ -35,11 +39,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: webapp-service
+  name: vpkg-service
   namespace: vpkg
 spec:
   selector:
-    app: webapp
+    app: vpkg
   ports:
     - protocol: TCP
       port: 81
@@ -49,7 +53,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: webapp-ingress
+  name: vpkg-ingress
   namespace: vpkg
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
@@ -61,6 +65,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: webapp-service
+                name: vpkg-service
                 port:
                   number: 81
