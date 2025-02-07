@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: vbank
-        image: vova0911/vbank:amd64_latest
+        image: vova0911/v_bank:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
