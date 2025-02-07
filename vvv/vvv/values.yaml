@@ -1,0 +1,22 @@
+blueConfig:
+  bgColor: blue
+deployment:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  weather:
+    image:
+      repository: vova0911/vpkg
+      tag: amd64_latest
+greenConfig:
+  bgColor: green
+kubernetesClusterDomain: cluster.local
+service:
+  ports:
+  - port: 5000
+    protocol: TCP
+    targetPort: 5000
+  type: ClusterIP
