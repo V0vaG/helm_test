@@ -1,76 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: weather
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: python-web-app
-  labels:
-    app: python-web-app
+  name: weather-deployment
+  namespace: weather
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: python-web-app
+      app: weather
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
   template:
     metadata:
       labels:
-        app: python-web-app
+        app: weather
     spec:
       containers:
-      - name: python-web-app
-        image: vova0911/weather:latest
+      - name: weather
+        image: vova0911/weather:amd64_latest
         ports:
-        - containerPort: 80
-        env:
-        - name: ENV_VAR_EXAMPLE
-          value: "production"
+        - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
         resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
           limits:
-            memory: "128Mi"
-            cpu: "250m"
+            memory: "512Mi"
+            cpu: "1"
+
 ---
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: python-web-app-service
-  labels:
-    app: python-web-app
+  name: weather-service
+  namespace: weather
 spec:
   selector:
-    app: python-web-app
+    app: weather
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 80
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: python-web-app-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  rules:
-  - host: localhost
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: python-web-app-service
-            port:
-              number: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: python-web-app-nodeport
-spec:
-  selector:
-    app: python-web-app
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30081
   type: NodePort
-  ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30081  # Maps localhost:81 to container's port 80
 

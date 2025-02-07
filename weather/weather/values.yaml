@@ -1,5 +1,3 @@
-blueConfig:
-  bgColor: blue
 deployment:
   replicas: 1
   strategy:
@@ -11,12 +9,18 @@ deployment:
     image:
       repository: vova0911/weather
       tag: amd64_latest
-greenConfig:
-  bgColor: green
+    resources:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
 kubernetesClusterDomain: cluster.local
 service:
   ports:
-  - port: 5000
+  - nodePort: 30081
+    port: 80
     protocol: TCP
     targetPort: 5000
-  type: ClusterIP
+  type: NodePort

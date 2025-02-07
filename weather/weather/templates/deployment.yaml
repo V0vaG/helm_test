@@ -25,12 +25,9 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        envFrom:
-        - configMapRef:
-            name: {{ include "weather.fullname" . }}-blue-config
         image: {{ .Values.deployment.weather.image.repository }}:{{ .Values.deployment.weather.image.tag
           | default .Chart.AppVersion }}
         name: weather
         ports:
         - containerPort: 5000
-        resources: {}
+        resources: {{- toYaml .Values.deployment.weather.resources | nindent 10 }}

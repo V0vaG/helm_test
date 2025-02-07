@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "weather.fullname" . }}-green-config
-  labels:
-  {{- include "weather.labels" . | nindent 4 }}
-data:
-  BG_COLOR: {{ .Values.greenConfig.bgColor | quote }}

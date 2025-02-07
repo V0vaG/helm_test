@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: weather
+  name: APP
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: weather-deployment
-  namespace: weather
+  name: APP-deployment
+  namespace: APP
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: weather
+      app: APP
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,11 +23,11 @@ spec:
   template:
     metadata:
       labels:
-        app: weather
+        app: APP
     spec:
       containers:
-      - name: weather
-        image: vova0911/weather:amd64_latest
+      - name: APP
+        image: vova0911/APP:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
@@ -46,15 +46,15 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: weather-service
-  namespace: weather
+  name: APP-service
+  namespace: APP
 spec:
   selector:
-    app: weather
+    app: APP
   ports:
     - protocol: TCP
       port: 80
       targetPort: 5000
-      nodePort: 30081
+      nodePort: PORT
   type: NodePort
 
