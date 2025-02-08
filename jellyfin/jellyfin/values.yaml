@@ -3,6 +3,9 @@ jellyfin:
     image:
       repository: jellyfin/jellyfin
       tag: latest
+    resources:
+      limits:
+        nvidia.com/gpu: "1"
   ports:
   - nodePort: 30080
     port: 8096
@@ -11,13 +14,22 @@ jellyfin:
   replicas: 1
   type: NodePort
 kubernetesClusterDomain: cluster.local
+nvidiaDevicePluginDaemonset:
+  nvidiaDevicePlugin:
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+    env:
+      failOnInitError: "false"
+    image:
+      repository: nvidia/k8s-device-plugin
+      tag: v0.13.0
 pvc:
-  configPvc:
+  jellyfinConfigPvc:
     storageClass: ""
     storageRequest: 5Gi
-  mediaPvc:
+  jellyfinMediaPvc:
     storageClass: ""
     storageRequest: 50Gi
-  usersPvc:
+  jellyfinUsersPvc:
     storageClass: ""
     storageRequest: 5Gi
