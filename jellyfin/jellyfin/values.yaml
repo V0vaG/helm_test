@@ -21,7 +21,7 @@ nvidiaDevicePluginDaemonset:
     env:
       failOnInitError: "false"
     image:
-      repository: nvidia/k8s-device-plugin
+      repository: nvcr.io/nvidia/k8s-device-plugin
       tag: v0.13.0
 pvc:
   jellyfinConfigPvc:

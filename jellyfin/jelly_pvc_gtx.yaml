@@ -159,7 +159,7 @@ spec:
     spec:
       containers:
       - name: nvidia-device-plugin
-        image: nvidia/k8s-device-plugin:v0.13.0
+        image: nvcr.io/nvidia/k8s-device-plugin:v0.13.0
         env:
         - name: FAIL_ON_INIT_ERROR
           value: "false"
@@ -172,4 +172,5 @@ spec:
       - name: device-plugin
         hostPath:
           path: /var/lib/kubelet/device-plugins
+
 
