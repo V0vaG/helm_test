@@ -1,20 +1,20 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: apt_repo
+  name: apt-repo
 
 ---
 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: apt_repo-deployment
-  namespace: apt_repo
+  name: apt-repo-deployment
+  namespace: apt-repo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: apt_repo
+      app: apt-repo
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -23,11 +23,11 @@ spec:
   template:
     metadata:
       labels:
-        app: apt_repo
+        app: apt-repo
     spec:
       containers:
-      - name: apt_repo
-        image: vova0911/apt_repo:amd64_latest
+      - name: apt-repo
+        image: vova0911/apt-repo:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
@@ -46,11 +46,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: apt_repo-service
-  namespace: apt_repo
+  name: apt-repo-service
+  namespace: apt-repo
 spec:
   selector:
-    app: apt_repo
+    app: apt-repo
   ports:
     - protocol: TCP
       port: 80

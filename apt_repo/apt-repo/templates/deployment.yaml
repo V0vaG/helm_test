@@ -13,12 +13,12 @@ spec:
     type: {{ .Values.deployment.strategy.type | quote }}
   selector:
     matchLabels:
-      app: apt_repo
+      app: apt-repo
     {{- include "apt-repo.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: apt_repo
+        app: apt-repo
       {{- include "apt-repo.selectorLabels" . | nindent 8 }}
     spec:
       containers:
@@ -27,7 +27,7 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.aptRepo.image.repository }}:{{ .Values.deployment.aptRepo.image.tag
           | default .Chart.AppVersion }}
-        name: apt_repo
+        name: apt-repo
         ports:
         - containerPort: 5000
         resources: {{- toYaml .Values.deployment.aptRepo.resources | nindent 10 }}
