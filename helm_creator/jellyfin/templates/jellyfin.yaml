@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jellyfin.fullname" . }}-jellyfin
+  labels:
+  {{- include "jellyfin.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.jellyfin.type }}
+  selector:
+    app: jellyfin
+    {{- include "jellyfin.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.jellyfin.ports | toYaml | nindent 2 }}
