@@ -1,0 +1,26 @@
+deployment:
+  aptRepo:
+    image:
+      repository: vova0911/apt_repo
+      tag: amd64_latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+kubernetesClusterDomain: cluster.local
+service:
+  ports:
+  - nodePort: 30084
+    port: 80
+    protocol: TCP
+    targetPort: 5000
+  type: NodePort

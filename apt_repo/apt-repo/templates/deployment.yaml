@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "apt-repo.fullname" . }}-deployment
+  labels:
+  {{- include "apt-repo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: apt_repo
+    {{- include "apt-repo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: apt_repo
+      {{- include "apt-repo.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.aptRepo.image.repository }}:{{ .Values.deployment.aptRepo.image.tag
+          | default .Chart.AppVersion }}
+        name: apt_repo
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.aptRepo.resources | nindent 10 }}
