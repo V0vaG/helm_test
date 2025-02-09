@@ -27,6 +27,8 @@ spec:
         - containerPort: 8096
         resources: {}
         volumeMounts:
+        - mountPath: /cash
+          name: cash-volume
         - mountPath: /config
           name: config-volume
         - mountPath: /data/users
@@ -34,6 +36,9 @@ spec:
         - mountPath: /data/media
           name: media-volume
       volumes:
+      - name: cash-volume
+        persistentVolumeClaim:
+          claimName: {{ include "jellyfin.fullname" . }}-cash-pvc
       - name: config-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-config-pvc
