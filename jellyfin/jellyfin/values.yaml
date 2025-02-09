@@ -18,6 +18,9 @@ pvc:
   configPvc:
     storageClass: ""
     storageRequest: 5Gi
+  logPvc:
+    storageClass: ""
+    storageRequest: 5Gi
   mediaPvc:
     storageClass: ""
     storageRequest: 50Gi

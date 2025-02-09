@@ -29,6 +29,8 @@ spec:
         volumeMounts:
         - mountPath: /cash
           name: cash-volume
+        - mountPath: /config/log
+          name: log-volume
         - mountPath: /config
           name: config-volume
         - mountPath: /data/users
@@ -39,6 +41,9 @@ spec:
       - name: cash-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-cash-pvc
+      - name: log-volume
+        persistentVolumeClaim:
+          claimName: {{ include "jellyfin.fullname" . }}-log-pvc
       - name: config-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-config-pvc

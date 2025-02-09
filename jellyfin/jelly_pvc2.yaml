@@ -20,6 +20,19 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: jellyfin-log-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /var/log/jellyfin
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   name: jellyfin-config-pv
 spec:
   capacity:
@@ -68,6 +81,20 @@ spec:
     requests:
       storage: 5Gi
   volumeName: jellyfin-cash-pv
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-log-pvc
+  namespace: jellyfin
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: jellyfin-log-pv
   storageClassName: ""
 ---
 apiVersion: v1
@@ -135,6 +162,8 @@ spec:
         volumeMounts:
         - name: cash-volume
           mountPath: /cash
+        - name: log-volume
+          mountPath: /config/log
         - name: config-volume
           mountPath: /config
         - name: users-volume
@@ -145,6 +174,9 @@ spec:
       - name: cash-volume
         persistentVolumeClaim:
           claimName: jellyfin-cash-pvc
+      - name: log-volume
+        persistentVolumeClaim:
+          claimName: jellyfin-log-pvc
       - name: config-volume
         persistentVolumeClaim:
           claimName: jellyfin-config-pvc
