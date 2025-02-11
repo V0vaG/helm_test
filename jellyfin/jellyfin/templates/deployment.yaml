@@ -31,8 +31,6 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: config-volume
-        - mountPath: /jellyfin/jellyfin-web
-          name: web-volume
         - mountPath: /cache
           name: cache-volume
         - mountPath: /media
@@ -42,9 +40,6 @@ spec:
       - name: config-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-config-pvc
-      - name: web-volume
-        persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-web-pvc
       - name: cache-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-cache-pvc
