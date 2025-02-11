@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 5Gi
   hostPath:
-    path: /home/vova/jellyfin/users
+    path: /home/vova/16GB/jellyfin/users
   storageClassName: ""
