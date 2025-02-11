@@ -23,7 +23,7 @@ spec:
     automated:
       prune: true
       selfHeal: true
-
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
