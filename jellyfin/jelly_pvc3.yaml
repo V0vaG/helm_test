@@ -10,7 +10,7 @@ metadata:
   name: jellyfin-config-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 3Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -23,7 +23,7 @@ metadata:
   name: jellyfin-cache-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 3Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
