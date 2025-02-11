@@ -18,6 +18,8 @@ spec:
     spec:
       containers:
       - env:
+        - name: JELLYFIN_PublishedServerName
+          value: {{ quote .Values.jellyfin.jellyfin.env.jellyfinPublishedservername }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.jellyfin.jellyfin.image.repository }}:{{ .Values.jellyfin.jellyfin.image.tag

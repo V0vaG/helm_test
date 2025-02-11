@@ -1,5 +1,7 @@
 jellyfin:
   jellyfin:
+    env:
+      jellyfinPublishedservername: vova_server
     image:
       repository: jellyfin/jellyfin
       tag: latest

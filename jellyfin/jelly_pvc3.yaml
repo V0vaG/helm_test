@@ -105,6 +105,9 @@ spec:
         image: jellyfin/jellyfin:latest
         ports:
         - containerPort: 8096
+        env:
+        - name: JELLYFIN_PublishedServerName
+          value: "vova_server"
         volumeMounts:
         - name: config-volume
           mountPath: /config
