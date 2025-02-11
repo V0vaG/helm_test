@@ -16,10 +16,10 @@ kubernetesClusterDomain: cluster.local
 pvc:
   cachePvc:
     storageClass: ""
-    storageRequest: 3Gi
+    storageRequest: 5Gi
   configPvc:
     storageClass: ""
-    storageRequest: 3Gi
+    storageRequest: 5Gi
   mediaPvc:
     storageClass: ""
     storageRequest: 8000Gi
