@@ -1,60 +1,19 @@
-apiVersion: v1
-kind: Namespace
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
   name: topix
-
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: topix-deployment
-  namespace: topix
+  namespace: argocd
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: topix
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 1
-  template:
-    metadata:
-      labels:
-        app: topix
-    spec:
-      containers:
-      - name: topix
-        image: vova0911/topix:amd64_latest
-        ports:
-        - containerPort: 5000
-        # Uncomment if needed
-        # imagePullSecrets:
-        # - name: regcred
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "1"
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: topix-service
-  namespace: topix
-spec:
-  selector:
-    app: topix
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 5000
-      nodePort: 30084
-  type: NodePort
+  project: default
+  source:
+    repoURL: https://github.com/V0vaG/helm_test
+    targetRevision: main
+    path: topix/topix  # Directory containing the Kubernetes manifests for app1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: topix
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 
