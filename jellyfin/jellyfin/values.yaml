@@ -24,6 +24,9 @@ pvc:
   mediaPvc:
     storageClass: ""
     storageRequest: 50Gi
+  metadataPvc:
+    storageClass: ""
+    storageRequest: 5Gi
   usersPvc:
     storageClass: ""
     storageRequest: 5Gi
