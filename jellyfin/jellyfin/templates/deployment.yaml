@@ -29,17 +29,12 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: config-volume
-        - mountPath: /data/users
-          name: users-volume
         - mountPath: /media
           name: media-volume
       volumes:
       - name: config-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-config-pvc
-      - name: users-volume
-        persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-users-pvc
       - name: media-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-media-pvc

@@ -18,6 +18,3 @@ pvc:
   mediaPvc:
     storageClass: ""
     storageRequest: 50Gi
-  usersPvc:
-    storageClass: ""
-    storageRequest: 5Gi

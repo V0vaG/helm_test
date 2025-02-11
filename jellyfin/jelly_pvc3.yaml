@@ -20,19 +20,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jellyfin-users-pv
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /home/vova/16GB/jellyfin/users
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
   name: jellyfin-media-pv
 spec:
   capacity:
@@ -55,20 +42,6 @@ spec:
     requests:
       storage: 5Gi
   volumeName: jellyfin-config-pv
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: jellyfin-users-pvc
-  namespace: jellyfin
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
-  volumeName: jellyfin-users-pv
   storageClassName: ""
 ---
 apiVersion: v1
@@ -108,17 +81,12 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /config
-        - name: users-volume
-          mountPath: /data/users
         - name: media-volume
           mountPath: /media
       volumes:
       - name: config-volume
         persistentVolumeClaim:
           claimName: jellyfin-config-pvc
-      - name: users-volume
-        persistentVolumeClaim:
-          claimName: jellyfin-users-pvc
       - name: media-volume
         persistentVolumeClaim:
           claimName: jellyfin-media-pvc
