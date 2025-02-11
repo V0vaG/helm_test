@@ -53,7 +53,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 3Gi
   volumeName: jellyfin-config-pv
   storageClassName: ""
 ---
@@ -67,7 +67,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 3Gi
   volumeName: jellyfin-cache-pv
   storageClassName: ""
 ---
@@ -81,7 +81,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 8000Gi
   volumeName: jellyfin-media-pv
   storageClassName: ""
 ---
