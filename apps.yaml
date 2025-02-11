@@ -1,18 +1,13 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: apps
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/V0vaG/helm_test/app-of-apps
-    targetRevision: HEAD
-    path: apps  # Directory containing the Kubernetes manifests for app1
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+project: default
+source:
+  repoURL: https://github.com/V0vaG/helm_test
+  path: apps
+  targetRevision: main
+destination:
+  server: https://kubernetes.default.svc
+  namespace: apps
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+
