@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: app-of-apps
+  namespace: argocd
+spec:
+  project: default  # Or specify your custom project
+  source:
+    repoURL: https://github.com/V0vaG/helm_test
+    targetRevision: main  # The branch or tag
+    path: apps  # Directory containing the child app manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
