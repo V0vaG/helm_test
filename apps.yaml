@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/V0vaG/helm_test/app-of-apps
-    targetRevision: main
+    targetRevision: HEAD
     path: apps  # Directory containing the Kubernetes manifests for app1
   destination:
     server: https://kubernetes.default.svc
