@@ -100,6 +100,7 @@ spec:
       labels:
         app: jellyfin
     spec:
+      hostname: vova_server
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:latest
