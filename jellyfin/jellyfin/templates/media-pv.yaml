@@ -8,7 +8,7 @@ spec:
   accessModes:
   - ReadWriteOnce
   capacity:
-    storage: 50Gi
+    storage: 8000Gi
   hostPath:
     path: /media/vova
   storageClassName: ""
