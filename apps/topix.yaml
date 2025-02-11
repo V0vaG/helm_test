@@ -3,6 +3,25 @@ kind: Namespace
 metadata:
   name: topix
 
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: topix
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/V0vaG/helm_test
+    targetRevision: main
+    path: topix/topix  # Directory containing the Kubernetes manifests for app1
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: topix
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
 
 ---
 apiVersion: apps/v1
