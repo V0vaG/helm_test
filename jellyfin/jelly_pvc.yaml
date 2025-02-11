@@ -111,7 +111,7 @@ spec:
         - name: users-volume
           mountPath: /data/users
         - name: media-volume
-          mountPath: /data/media
+          mountPath: /media
       volumes:
       - name: config-volume
         persistentVolumeClaim:

@@ -12,21 +12,12 @@ jellyfin:
   type: NodePort
 kubernetesClusterDomain: cluster.local
 pvc:
-  cashPvc:
-    storageClass: ""
-    storageRequest: 5Gi
   configPvc:
-    storageClass: ""
-    storageRequest: 5Gi
-  logPvc:
     storageClass: ""
     storageRequest: 5Gi
   mediaPvc:
     storageClass: ""
     storageRequest: 50Gi
-  metadataPvc:
-    storageClass: ""
-    storageRequest: 5Gi
   usersPvc:
     storageClass: ""
     storageRequest: 5Gi

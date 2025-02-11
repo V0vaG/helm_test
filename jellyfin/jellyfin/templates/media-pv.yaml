@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 50Gi
   hostPath:
-    path: /media/vova
+    path: /home/vova/jellyfin/media
   storageClassName: ""
