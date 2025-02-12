@@ -1,10 +1,10 @@
 project: default
 source:
-  repoURL: https://github.com/V0vaG/helm_test
+  repoURL: 'https://github.com/V0vaG/helm_test.git'
   path: apps
   targetRevision: main
 destination:
-  server: https://kubernetes.default.svc
+  server: 'https://kubernetes.default.svc'
   namespace: vova-apps
 syncPolicy:
   automated:
