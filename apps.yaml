@@ -5,7 +5,7 @@ source:
   targetRevision: main
 destination:
   server: https://kubernetes.default.svc
-  namespace: apps
+  namespace: vova-apps
 syncPolicy:
   automated:
     prune: true
