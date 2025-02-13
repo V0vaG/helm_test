@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: topix
-  namespace: argocd
+  namespace: topix
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
