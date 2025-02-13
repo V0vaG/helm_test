@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vpkg
+  namespace: vova-apps
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/V0vaG/helm_test
+    path: vpkg/vpkg
+    targetRevision: main
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: vova-apps
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
