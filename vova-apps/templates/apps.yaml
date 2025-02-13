@@ -11,7 +11,7 @@ items:
       - resources-finalizer.argocd.argoproj.io
     spec:
       destination:
-        namespace: {{ .name }}
+        namespace: argocd
         server: {{ $.Values.spec.destination.server }}
       project: default
       source:
