@@ -86,7 +86,7 @@ items:
       project: default
       source:
         path: {{ .path_value }}
-        repoURL: https://github.com/.....
+        repoURL: https://github.com/V0vaG/helm_test
         targetRevision: {{ .branch }}
 {{- end }}
 
