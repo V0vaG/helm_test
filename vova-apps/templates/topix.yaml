@@ -1,19 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ include "apps.fullname" . }}-topix
-  labels:
-  {{- include "apps.labels" . | nindent 4 }}
+  name: topix
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: topix
-    server: https://kubernetes.default.svc
+    namespace: argocd
+    server: {{ .Values.spec.destination.server }}
   project: default
   source:
     path: topix/topix
     repoURL: https://github.com/V0vaG/helm_test
-    targetRevision: main
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+    targetRevision: HEAD
