@@ -6,7 +6,7 @@ metadata:
   {{- include "apps.labels" . | nindent 4 }}
 spec:
   destination:
-    namespace: vova-apps
+    namespace: topix
     server: https://kubernetes.default.svc
   project: default
   source:
