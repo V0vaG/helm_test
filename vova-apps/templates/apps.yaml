@@ -6,7 +6,7 @@ items:
     kind: Application
     metadata:
       name: {{ .name }}
-      namespace: argocd
+      namespace: {{ .name }}
       finalizers:
       - resources-finalizer.argocd.argoproj.io
     spec:
