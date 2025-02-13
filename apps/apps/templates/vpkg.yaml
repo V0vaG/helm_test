@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ include "apps.fullname" . }}-vpkg
+  labels:
+  {{- include "apps.labels" . | nindent 4 }}
+spec:
+  destination:
+    namespace: vova-apps
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: vpkg/vpkg
+    repoURL: https://github.com/V0vaG/helm_test
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
