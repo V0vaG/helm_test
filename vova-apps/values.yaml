@@ -5,8 +5,6 @@ spec:
 
 apps:
   - name: weather
-    path_value: weather/weather
-    branch: main
   - name: vpkg
-    path_value: vpkg/vpkg
-    branch: main
+  - name: topix
+  - name: vbank
