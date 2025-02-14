@@ -13,4 +13,4 @@ apps:
   - name: vpkg
   - name: topix
   - name: vbank
-  - name: jellyfin
+  #- name: jellyfin
