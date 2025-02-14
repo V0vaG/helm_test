@@ -9,7 +9,7 @@ default_values:
 apps:
   - name: weather
     # branch: test
-    repoURL: https://github.com/V0vaG/helm_test2
+    # repoURL: https://github.com/V0vaG/helm_test
   - name: vpkg
   - name: topix
   - name: vbank
