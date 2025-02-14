@@ -1,7 +1,7 @@
 #!/bin/bash
 
-app='topix'
-port='30084'
+app='tools'
+port='30085'
 
 # k3s kubectl delete -f ${app}.yaml
 

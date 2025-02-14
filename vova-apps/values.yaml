@@ -14,3 +14,4 @@ apps:
   - name: topix
   - name: vbank
   - name: jellyfin
+  - name: tools
