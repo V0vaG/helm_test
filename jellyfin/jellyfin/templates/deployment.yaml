@@ -31,8 +31,6 @@ spec:
         volumeMounts:
         - mountPath: /config
           name: config-volume
-        - mountPath: /cache
-          name: cache-volume
         - mountPath: /media
           name: media-volume
       hostname: vova-server
@@ -40,9 +38,6 @@ spec:
       - name: config-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-config-pvc
-      - name: cache-volume
-        persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-cache-pvc
       - name: media-volume
         persistentVolumeClaim:
           claimName: {{ include "jellyfin.fullname" . }}-media-pvc
