@@ -15,7 +15,8 @@ items:
         server: {{ $.Values.spec.destination.server }}
       project: default
       source:
-        path: {{ .path | default {{ .name }}/{{ .name }} }} 
+      #  path: {{ .path | default {{ .name }}/{{ .name }} }} 
+        path: {{ .name }}/{{ .name }} 
         repoURL: {{ .repoURL | default $.Values.default_values.repoURL }}
         targetRevision: {{ .branch | default $.Values.default_values.branch }}
 {{- end }}
