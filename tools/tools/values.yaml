@@ -8,7 +8,7 @@ deployment:
   tools:
     image:
       repository: vova0911/tools
-      tag: amd64_0.0.5
+      tag: 333
     resources:
       limits:
         cpu: "1"
@@ -19,8 +19,8 @@ deployment:
 kubernetesClusterDomain: cluster.local
 service:
   ports:
-  - nodePort: 30085
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30085
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
