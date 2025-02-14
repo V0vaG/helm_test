@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 8000Gi
   hostPath:
-    path: /media/vova
+    path: /media
   storageClassName: ""

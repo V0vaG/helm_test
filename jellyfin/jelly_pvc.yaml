@@ -14,20 +14,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/jellyfin/config
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: jellyfin-users-pv
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /home/vova/jellyfin/users
+    path: /home/vova/GIT/jelly/jelly_config/config
   storageClassName: ""
 ---
 apiVersion: v1
@@ -36,11 +23,11 @@ metadata:
   name: jellyfin-media-pv
 spec:
   capacity:
-    storage: 50Gi
+    storage: 8000Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/jellyfin/media
+    path: /media
   storageClassName: ""
 ---
 apiVersion: v1
@@ -60,20 +47,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jellyfin-users-pvc
-  namespace: jellyfin
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
-  volumeName: jellyfin-users-pv
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: jellyfin-media-pvc
   namespace: jellyfin
 spec:
@@ -81,7 +54,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 8000Gi
   volumeName: jellyfin-media-pv
   storageClassName: ""
 ---
@@ -100,25 +73,24 @@ spec:
       labels:
         app: jellyfin
     spec:
+      hostname: vova-server
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:latest
         ports:
         - containerPort: 8096
+        env:
+        - name: JELLYFIN_PublishedServerName
+          value: "vova_server"
         volumeMounts:
         - name: config-volume
           mountPath: /config
-        - name: users-volume
-          mountPath: /data/users
         - name: media-volume
           mountPath: /media
       volumes:
       - name: config-volume
         persistentVolumeClaim:
           claimName: jellyfin-config-pvc
-      - name: users-volume
-        persistentVolumeClaim:
-          claimName: jellyfin-users-pvc
       - name: media-volume
         persistentVolumeClaim:
           claimName: jellyfin-media-pvc
