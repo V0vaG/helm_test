@@ -13,4 +13,4 @@ apps:
   - name: topix
   - name: vbank
   #  branch: test
- # - name: jellyfin
+  - name: jellyfin
