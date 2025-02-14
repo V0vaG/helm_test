@@ -4,7 +4,7 @@ spec:
     server: https://kubernetes.default.svc
 
 default_values:
-  branch: main
+  branch: test
   repoURL: https://github.com/V0vaG/helm_test
 
 apps:
