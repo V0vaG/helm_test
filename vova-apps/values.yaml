@@ -8,4 +8,5 @@ apps:
   - name: vpkg
   - name: topix
   - name: vbank
+    branch: test
  # - name: jellyfin
