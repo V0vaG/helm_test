@@ -1,4 +1,3 @@
-#kubernetesClusterDomain: cluster.local
 spec:
   destination:
     server: https://kubernetes.default.svc
@@ -9,8 +8,9 @@ default_values:
 
 apps:
   - name: weather
+    # branch: test
+    repoURL: https://github.com/V0vaG/helm_test2
   - name: vpkg
   - name: topix
   - name: vbank
-  #  branch: test
   - name: jellyfin
