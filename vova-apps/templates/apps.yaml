@@ -16,6 +16,9 @@ items:
       project: default
       source:
         path: {{ .name }}/{{ .name }}
-        repoURL: https://github.com/V0vaG/helm_test
-        targetRevision: main
+        repoURL: {{ .repoURL | default $.Values.default_values.repoURL }}
+        targetRevision: {{ .branch | default $.Values.default_values.branch }}
 {{- end }}
+
+
+
