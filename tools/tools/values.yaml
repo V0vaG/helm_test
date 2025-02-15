@@ -8,7 +8,7 @@ deployment:
   tools:
     image:
       repository: vova0911/tools
-      tag: amd64_0.0.9
+      tag: amd64_0.0.10
     resources:
       limits:
         cpu: "1"
