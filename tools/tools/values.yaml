@@ -8,7 +8,7 @@ deployment:
   tools:
     image:
       repository: vova0911/tools
-      tag: amd64_0.0.2
+      tag: amd64_0.0.6
     resources:
       limits:
         cpu: "1"
@@ -24,4 +24,3 @@ service:
       protocol: TCP
       targetPort: 5000
   type: NodePort
-
