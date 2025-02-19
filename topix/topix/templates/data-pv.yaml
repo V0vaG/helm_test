@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: ~/script_files/topix
+    path: /home/vova/script_files/topix
   storageClassName: ""
