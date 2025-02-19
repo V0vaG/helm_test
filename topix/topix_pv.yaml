@@ -67,7 +67,7 @@ spec:
             cpu: "1"
         env:
         - name: data-volume
-          mountPath: /home/vova/script_files/topix_test
+          mountPath: ~/script_files/topix
       volumes:
       - name: data-volume
         persistentVolumeClaim:
