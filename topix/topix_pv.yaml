@@ -71,7 +71,7 @@ spec:
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: data-config-pvc
+          claimName: topix-data-pvc
 
 ---
 
