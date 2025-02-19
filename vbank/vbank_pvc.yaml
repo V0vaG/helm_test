@@ -30,33 +30,6 @@ spec:
   volumeName: vbank-data-pv
   storageClassName: ""
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vbank-data-pv
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /home/vova/script_files/vbank
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: vbank-data-pvc
-  namespace: vbank
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  volumeName: vbank-data-pv
-  storageClassName: ""
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -94,7 +67,7 @@ spec:
             cpu: "1"
         volumeMounts:
         - name: data-volume
-          mountPath: /root/script_files/vbank
+          mountPath: /root/script_files/v_bank
       volumes:
       - name: data-volume
         persistentVolumeClaim:
