@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: ~/script_files/vbank
+    path: /home/vova/script_files/vbank
   storageClassName: ""
 ---
 apiVersion: v1
@@ -73,7 +73,6 @@ spec:
         persistentVolumeClaim:
           claimName: vbank-data-pvc
 ---
-
 apiVersion: v1
 kind: Service
 metadata:

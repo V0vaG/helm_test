@@ -72,9 +72,7 @@ spec:
       - name: data-volume
         persistentVolumeClaim:
           claimName: topix-data-pvc
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:

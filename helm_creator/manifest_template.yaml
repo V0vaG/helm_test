@@ -73,7 +73,6 @@ spec:
         persistentVolumeClaim:
           claimName: APP-data-pvc
 ---
-
 apiVersion: v1
 kind: Service
 metadata:

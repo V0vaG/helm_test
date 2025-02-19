@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: ~/script_files/vbank
+    path: /home/vova/script_files/vbank
   storageClassName: ""
