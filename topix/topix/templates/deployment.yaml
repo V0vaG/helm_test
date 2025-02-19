@@ -23,8 +23,6 @@ spec:
     spec:
       containers:
       - env:
-        - name: data-volume
-          value: {{ quote .Values.deployment.topix.env.dataVolume }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.topix.image.repository }}:{{ .Values.deployment.topix.image.tag
@@ -33,6 +31,9 @@ spec:
         ports:
         - containerPort: 5000
         resources: {{- toYaml .Values.deployment.topix.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: ~/script_files/topix
+          name: data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:

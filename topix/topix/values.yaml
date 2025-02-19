@@ -6,8 +6,6 @@ deployment:
       maxUnavailable: 1
     type: RollingUpdate
   topix:
-    env:
-      dataVolume: ""
     image:
       repository: vova0911/topix
       tag: amd64_latest
