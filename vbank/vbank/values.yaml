@@ -7,7 +7,7 @@ deployment:
     type: RollingUpdate
   vbank:
     image:
-      repository: vova0911/vbank
+      repository: vova0911/v_bank
       tag: amd64_latest
     resources:
       limits:
