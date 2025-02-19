@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/topix_test
+    path: /home/vova/script_files/topix
   storageClassName: ""
 ---
 apiVersion: v1
