@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: ~/script_files/APP
+    path: /home/vova/script_files/APP
   storageClassName: ""
 ---
 apiVersion: v1
