@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: ~/script_files/topix
+    path: ~/script_files/topix_test
   storageClassName: ""
