@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: ~/script_files/topix
+    path: ~/script_files/topix_test
   storageClassName: ""
 ---
 apiVersion: v1
@@ -67,7 +67,7 @@ spec:
             cpu: "1"
         env:
         - name: data-volume
-          mountPath: ~/script_files/topix_test
+          mountPath: ~/script_files/topix
       volumes:
       - name: data-volume
         persistentVolumeClaim:
