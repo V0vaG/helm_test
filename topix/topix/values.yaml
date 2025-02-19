@@ -6,6 +6,8 @@ deployment:
       maxUnavailable: 1
     type: RollingUpdate
   topix:
+    env:
+      dataVolume: ""
     image:
       repository: vova0911/topix
       tag: amd64_latest
@@ -17,8 +19,11 @@ deployment:
         cpu: 500m
         memory: 256Mi
 kubernetesClusterDomain: cluster.local
+pvc:
+  dataPvc:
+    storageClass: ""
+    storageRequest: 1Gi
 service:
-  enabled: true
   ports:
   - nodePort: 30084
     port: 80
