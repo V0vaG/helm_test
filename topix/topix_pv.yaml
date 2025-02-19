@@ -65,7 +65,7 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "1"
-        env:
+        volumeMounts:
         - name: data-volume
           mountPath: ~/script_files/topix
       volumes:
