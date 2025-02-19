@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "vbank.fullname" . }}-data-pv
+  labels:
+  {{- include "vbank.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: ~/script_files/vbank
+  storageClassName: ""
