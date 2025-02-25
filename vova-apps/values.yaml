@@ -15,3 +15,4 @@ apps:
   - name: vbank
   - name: jellyfin
   - name: tools
+  - name: vhub
