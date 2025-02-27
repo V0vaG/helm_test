@@ -12,7 +12,7 @@ deployment:
   vhub:
     image:
       repository: vova0911/vhub
-      tag: amd64_1.0.3
+      tag: amd64_latest
     imagePullPolicy: Always
     resources:
       limits:
