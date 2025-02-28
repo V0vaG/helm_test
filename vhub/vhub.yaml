@@ -52,7 +52,7 @@ spec:
     spec:
       initContainers:
       - name: install-git
-        image: debian:latest  # Change this based on your base image (e.g., ubuntu, alpine)
+        image: ubuntu:latest  # Change this based on your base image (e.g., ubuntu, alpine)
         command: ["/bin/sh", "-c", "apt-get update && apt-get install -y git"]
         volumeMounts:
         - name: git-bin
