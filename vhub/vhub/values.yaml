@@ -16,6 +16,9 @@ deployment:
       requests:
         cpu: 500m
         memory: 256Mi
+  tools:
+    image:
+      tag: amd64_1.0.4
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
@@ -23,8 +26,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30087
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30087
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
