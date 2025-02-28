@@ -6,16 +6,11 @@ deployment:
       maxUnavailable: 1
     type: RollingUpdate
   vhub:
+    containerSecurityContext:
+      privileged: true
     image:
       repository: vova0911/vhub
       tag: amd64_1.0.10
-    resources:
-      limits:
-        cpu: "1"
-        memory: 512Mi
-      requests:
-        cpu: 500m
-        memory: 256Mi
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:

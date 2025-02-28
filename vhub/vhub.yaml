@@ -52,26 +52,28 @@ spec:
     spec:
       containers:
       - name: vhub
-        image: vova0911/vhub:amd64_1.0.8
+        image: vova0911/vhub:amd64_1.0.10
         ports:
         - containerPort: 5000
-        # Uncomment if needed
-        # imagePullSecrets:
-        # - name: regcred
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "1"
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vhub
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+        - name: docker-bin
+          mountPath: /usr/bin/docker
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: vhub-data-pvc
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker-bin
+        hostPath:
+          path: /usr/bin/docker
 ---
 apiVersion: v1
 kind: Service
