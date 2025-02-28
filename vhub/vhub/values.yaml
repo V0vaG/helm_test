@@ -1,8 +1,4 @@
 deployment:
-  installGit:
-    image:
-      repository: ubuntu
-      tag: latest
   replicas: 1
   strategy:
     rollingUpdate:
@@ -12,8 +8,7 @@ deployment:
   vhub:
     image:
       repository: vova0911/vhub
-      tag: amd64_latest
-    imagePullPolicy: Always
+      tag: amd64_1.0.4
     resources:
       limits:
         cpu: "1"

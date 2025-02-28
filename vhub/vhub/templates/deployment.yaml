@@ -27,7 +27,6 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.vhub.image.repository }}:{{ .Values.deployment.vhub.image.tag
           | default .Chart.AppVersion }}
-        imagePullPolicy: {{ .Values.deployment.vhub.imagePullPolicy }}
         name: vhub
         ports:
         - containerPort: 5000
@@ -35,26 +34,7 @@ spec:
         volumeMounts:
         - mountPath: /root/script_files/vhub
           name: data-volume
-        - mountPath: /usr/bin/git
-          name: git-bin
-      initContainers:
-      - command:
-        - /bin/sh
-        - -c
-        - apt-get update && apt-get install -y git
-        env:
-        - name: KUBERNETES_CLUSTER_DOMAIN
-          value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.installGit.image.repository }}:{{ .Values.deployment.installGit.image.tag
-          | default .Chart.AppVersion }}
-        name: install-git
-        resources: {}
-        volumeMounts:
-        - mountPath: /usr/bin/git
-          name: git-bin
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: {{ include "vhub.fullname" . }}-data-pvc
-      - emptyDir: {}
-        name: git-bin

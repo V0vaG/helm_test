@@ -50,20 +50,14 @@ spec:
       labels:
         app: vhub
     spec:
-      initContainers:
-      - name: install-git
-        image: ubuntu:latest  # Change this based on your base image (e.g., ubuntu, alpine)
-        command: ["/bin/sh", "-c", "apt-get update && apt-get install -y git"]
-        volumeMounts:
-        - name: git-bin
-          mountPath: /usr/bin/git
-
       containers:
       - name: vhub
         image: vova0911/vhub:amd64_latest
-        imagePullPolicy: Always
         ports:
         - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
         resources:
           requests:
             memory: "256Mi"
@@ -74,16 +68,10 @@ spec:
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vhub
-        - name: git-bin
-          mountPath: /usr/bin/git
-
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: vhub-data-pvc
-      - name: git-bin
-        emptyDir: {}
-
 ---
 apiVersion: v1
 kind: Service
