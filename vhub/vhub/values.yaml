@@ -8,7 +8,7 @@ deployment:
   vhub:
     image:
       repository: vova0911/vhub
-      tag: amd64_1.0.5
+      tag: amd64_1.0.6
     resources:
       limits:
         cpu: "1"
