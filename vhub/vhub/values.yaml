@@ -1,7 +1,7 @@
 deployment:
   installGit:
     image:
-      repository: debian
+      repository: ubuntu
       tag: latest
   replicas: 1
   strategy:
