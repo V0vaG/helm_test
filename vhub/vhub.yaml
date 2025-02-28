@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: vhub
-        image: vova0911/vhub:amd64_latest
+        image: vova0911/vhub:amd64_1.0.8
         ports:
         - containerPort: 5000
         # Uncomment if needed

@@ -8,7 +8,7 @@ deployment:
   vhub:
     image:
       repository: vova0911/vhub
-      tag: amd64_1.0.7
+      tag: amd64_1.0.8
     resources:
       limits:
         cpu: "1"
@@ -16,9 +16,6 @@ deployment:
       requests:
         cpu: 500m
         memory: 256Mi
-  tools:
-    image:
-      tag: amd64_1.0.8
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
@@ -26,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - nodePort: 30087
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30087
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
