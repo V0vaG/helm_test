@@ -18,7 +18,7 @@ deployment:
         memory: 256Mi
   tools:
     image:
-      tag: amd64_1.0.4
+      tag: amd64_1.0.5
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
