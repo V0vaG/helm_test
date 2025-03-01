@@ -40,6 +40,8 @@ spec:
           name: docker-socket
         - mountPath: /usr/bin/docker
           name: docker-bin
+      imagePullSecrets:
+      - name: dockerhub-secret
       volumes:
       - name: data-volume
         persistentVolumeClaim:

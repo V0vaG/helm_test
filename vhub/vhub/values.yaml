@@ -18,8 +18,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - nodePort: 30087
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30087
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort

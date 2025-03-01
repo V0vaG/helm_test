@@ -50,9 +50,11 @@ spec:
       labels:
         app: vhub
     spec:
+      imagePullSecrets:
+      - name: dockerhub-secret 
       containers:
       - name: vhub
-        image: vova0911/vhub:amd64_1.0.10
+        image: vova0911/vhub:amd64_1.0.18
         ports:
         - containerPort: 5000
         securityContext:
