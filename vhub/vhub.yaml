@@ -50,32 +50,28 @@ spec:
       labels:
         app: vhub
     spec:
-      imagePullSecrets:
-      - name: dockerhub-secret 
       containers:
       - name: vhub
-        image: vova0911/vhub:amd64_1.0.18
+        image: vova0911/vhub:amd64_latest
         ports:
         - containerPort: 5000
-        securityContext:
-          privileged: true
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vhub
-        - name: docker-socket
-          mountPath: /var/run/docker.sock
-        - name: docker-bin
-          mountPath: /usr/bin/docker
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: vhub-data-pvc
-      - name: docker-socket
-        hostPath:
-          path: /var/run/docker.sock
-      - name: docker-bin
-        hostPath:
-          path: /usr/bin/docker
 ---
 apiVersion: v1
 kind: Service
@@ -91,33 +87,4 @@ spec:
       targetPort: 5000
       nodePort: 30087
   type: NodePort
----
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: docker-push-job
-spec:
-  template:
-    spec:
-      containers:
-      - name: docker
-        image: docker:latest  # Uses a container with Docker installed
-        command: ["/bin/sh", "-c"]
-        args:
-          - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin &&
-            docker build -t vova0911/topix:latest . &&
-            docker push vova0911/topix:latest
-        env:
-          - name: DOCKER_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: dockerhub-secret
-                key: username
-          - name: DOCKER_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: dockerhub-secret
-                key: password
-      restartPolicy: Never
-  backoffLimit: 1
 
