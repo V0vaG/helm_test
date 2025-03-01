@@ -6,16 +6,11 @@ deployment:
       maxUnavailable: 1
     type: RollingUpdate
   vhub:
+    containerSecurityContext:
+      privileged: true
     image:
       repository: vova0911/vhub
       tag: amd64_1.0.24
-    resources:
-      limits:
-        cpu: "1"
-        memory: 512Mi
-      requests:
-        cpu: 500m
-        memory: 256Mi
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
@@ -23,8 +18,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - nodePort: 30087
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30087
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
