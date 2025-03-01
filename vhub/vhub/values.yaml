@@ -8,7 +8,7 @@ deployment:
   vhub:
     image:
       repository: vova0911/vhub
-      tag: amd64_latest
+      tag: amd64_1.0.19
     resources:
       limits:
         cpu: "1"
@@ -23,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30087
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30087
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
