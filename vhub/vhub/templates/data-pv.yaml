@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "vhub.fullname" . }}-vhub-data-pv
+  name: {{ include "vhub.fullname" . }}-data-pv
   labels:
   {{- include "vhub.labels" . | nindent 4 }}
 spec:
@@ -11,4 +11,4 @@ spec:
     storage: 1Gi
   hostPath:
     path: /home/vova/script_files/vhub
-  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
