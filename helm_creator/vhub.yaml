@@ -87,4 +87,13 @@ spec:
       targetPort: 5000
       nodePort: 30087
   type: NodePort
-
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kaniko-job-manager
+  namespace: vhub
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "list", "create", "delete", "update"]

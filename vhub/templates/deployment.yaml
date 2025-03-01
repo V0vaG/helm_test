@@ -1,16 +1,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "vhub.fullname" . }}-deployment
+  name: {{ include "vhub.fullname" . }}-vhub-deployment
   labels:
   {{- include "vhub.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: {{ .Values.vhubDeployment.replicas }}
   strategy:
     rollingUpdate:
-      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
-      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
-    type: {{ .Values.deployment.strategy.type | quote }}
+      maxSurge: {{ .Values.vhubDeployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.vhubDeployment.strategy.rollingUpdate.maxUnavailable
+        }}
+    type: {{ .Values.vhubDeployment.strategy.type | quote }}
   selector:
     matchLabels:
       app: vhub
@@ -25,16 +26,16 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.vhub.image.repository }}:{{ .Values.deployment.vhub.image.tag
+        image: {{ .Values.vhubDeployment.vhub.image.repository }}:{{ .Values.vhubDeployment.vhub.image.tag
           | default .Chart.AppVersion }}
         name: vhub
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.vhub.resources | nindent 10 }}
+        resources: {{- toYaml .Values.vhubDeployment.vhub.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/vhub
           name: data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: {{ include "vhub.fullname" . }}-data-pvc
+          claimName: {{ include "vhub.fullname" . }}-vhub-data-pvc
