@@ -1,4 +1,9 @@
-deployment:
+kubernetesClusterDomain: cluster.local
+pvc:
+  vhubDataPvc:
+    storageClass: ""
+    storageRequest: 1Gi
+vhubDeployment:
   replicas: 1
   strategy:
     rollingUpdate:
@@ -10,16 +15,11 @@ deployment:
       privileged: true
     image:
       repository: vova0911/vhub
-      tag: amd64_1.0.28
-kubernetesClusterDomain: cluster.local
-pvc:
-  dataPvc:
-    storageClass: ""
-    storageRequest: 1Gi
-service:
+      tag: amd64_1.0.24
+vhubService:
   ports:
-    - nodePort: 30087
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30087
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
