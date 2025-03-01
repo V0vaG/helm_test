@@ -2,7 +2,8 @@ dockerPushJob:
   backoffLimit: 1
   docker:
     args:
-      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin && docker build -t vova0911/topix:latest . && docker push vova0911/topix:latest
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      && docker build -t vova0911/topix:latest . && docker push vova0911/topix:latest
     image:
       repository: docker
       tag: latest
@@ -23,15 +24,11 @@ vhubDeployment:
       privileged: true
     image:
       repository: vova0911/vhub
-      tag: amd64_1.0.18
+      tag: amd64_1.0.19
 vhubService:
   ports:
-    - nodePort: 30087
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30087
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
-deployment:
-  vhub:
-    image:
-      tag: amd64_1.0.19
