@@ -1,9 +1,4 @@
-kubernetesClusterDomain: cluster.local
-pvc:
-  vhubDataPvc:
-    storageClass: ""
-    storageRequest: 1Gi
-vhubDeployment:
+deployment:
   replicas: 1
   strategy:
     rollingUpdate:
@@ -21,7 +16,12 @@ vhubDeployment:
       requests:
         cpu: 500m
         memory: 256Mi
-vhubService:
+kubernetesClusterDomain: cluster.local
+pvc:
+  dataPvc:
+    storageClass: ""
+    storageRequest: 1Gi
+service:
   ports:
   - nodePort: 30087
     port: 80
