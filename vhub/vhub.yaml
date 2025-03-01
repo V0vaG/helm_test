@@ -12,10 +12,9 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain  # Ensure PV is not automatically deleted
   hostPath:
     path: /home/vova/script_files/vhub
-
+  storageClassName: ""
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -53,26 +52,28 @@ spec:
     spec:
       containers:
       - name: vhub
-        image: vova0911/vhub:amd64_latest
+        image: vova0911/vhub:amd64_1.0.9
         ports:
         - containerPort: 5000
-        # Uncomment if needed
-        # imagePullSecrets:
-        # - name: regcred
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "1"
+        securityContext:
+          privileged: true
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vhub
+        - name: docker-socket
+          mountPath: /var/run/docker.sock
+        - name: docker-bin
+          mountPath: /usr/bin/docker
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: vhub-data-pvc
+      - name: docker-socket
+        hostPath:
+          path: /var/run/docker.sock
+      - name: docker-bin
+        hostPath:
+          path: /usr/bin/docker
 ---
 apiVersion: v1
 kind: Service
@@ -88,28 +89,4 @@ spec:
       targetPort: 5000
       nodePort: 30087
   type: NodePort
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: kaniko-job-manager
-  namespace: vhub
-rules:
-  - apiGroups: ["batch"]
-    resources: ["jobs"]
-    verbs: ["get", "list", "create", "delete", "update"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
-  name: kaniko-job-manager-binding
-  namespace: vhub
-subjects:
-  - kind: ServiceAccount
-    name: default
-    namespace: argocd
-roleRef:
-  kind: Role
-  name: kaniko-job-manager
-  apiGroup: rbac.authorization.k8s.io
 

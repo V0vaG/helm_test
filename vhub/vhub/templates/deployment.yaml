@@ -30,11 +30,23 @@ spec:
         name: vhub
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.vhub.resources | nindent 10 }}
+        resources: {}
+        securityContext: {{- toYaml .Values.deployment.vhub.containerSecurityContext |
+          nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/vhub
           name: data-volume
+        - mountPath: /var/run/docker.sock
+          name: docker-socket
+        - mountPath: /usr/bin/docker
+          name: docker-bin
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: {{ include "vhub.fullname" . }}-data-pvc
+      - hostPath:
+          path: /var/run/docker.sock
+        name: docker-socket
+      - hostPath:
+          path: /usr/bin/docker
+        name: docker-bin
