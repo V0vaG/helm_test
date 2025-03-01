@@ -12,9 +12,10 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain  # Ensure PV is not automatically deleted
   hostPath:
     path: /home/vova/script_files/vhub
-  storageClassName: ""
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

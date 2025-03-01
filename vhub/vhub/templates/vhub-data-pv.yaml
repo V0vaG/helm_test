@@ -11,4 +11,4 @@ spec:
     storage: 1Gi
   hostPath:
     path: /home/vova/script_files/vhub
-  storageClassName: ""
+  persistentVolumeReclaimPolicy: Retain
