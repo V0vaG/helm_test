@@ -10,7 +10,7 @@ deployment:
       privileged: true
     image:
       repository: vova0911/vhub
-      tag: amd64_1.0.38
+      tag: amd64_1.0.39
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
