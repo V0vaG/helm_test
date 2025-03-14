@@ -8,7 +8,7 @@ deployment:
   vpkg:
     image:
       repository: vova0911/vpkg
-      tag: amd64_0.0.0
+      tag: amd64_1.0.1
     resources:
       limits:
         cpu: "1"
