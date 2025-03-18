@@ -1,7 +1,7 @@
 #!/bin/bash
 
-app='vhub'
-port='30087'
+app='vvolt'
+port='30088'
 
 # k3s kubectl delete -f ${app}.yaml
 

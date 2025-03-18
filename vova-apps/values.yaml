@@ -16,3 +16,4 @@ apps:
   - name: jellyfin
   - name: tools
   - name: vhub
+  - name: vvolt

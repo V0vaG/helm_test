@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vvolt.fullname" . }}-deployment
+  labels:
+  {{- include "vvolt.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: vvolt
+    {{- include "vvolt.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: vvolt
+      {{- include "vvolt.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.vvolt.image.repository }}:{{ .Values.deployment.vvolt.image.tag
+          | default .Chart.AppVersion }}
+        name: vvolt
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.vvolt.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files/vvolt
+          name: data-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "vvolt.fullname" . }}-data-pvc
