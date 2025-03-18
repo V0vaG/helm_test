@@ -8,7 +8,7 @@ deployment:
   weather:
     image:
       repository: vova0911/weather
-      tag: amd64_1.0.481
+      tag: amd64_1.0.482
     resources:
       limits:
         cpu: "1"
