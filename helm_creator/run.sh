@@ -1,7 +1,7 @@
 #!/bin/bash
 
-app='vvolt'
-port='30088'
+app='v3d'
+port='30089'
 
 # k3s kubectl delete -f ${app}.yaml
 

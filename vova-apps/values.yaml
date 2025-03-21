@@ -17,3 +17,4 @@ apps:
   - name: tools
   - name: vhub
   - name: vvolt
+  - name: v3d

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "v3d.fullname" . }}-deployment
+  labels:
+  {{- include "v3d.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: v3d
+    {{- include "v3d.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: v3d
+      {{- include "v3d.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.v3D.image.repository }}:{{ .Values.deployment.v3D.image.tag
+          | default .Chart.AppVersion }}
+        name: v3d
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.v3D.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files/v3d
+          name: data-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "v3d.fullname" . }}-data-pvc
