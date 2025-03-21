@@ -8,7 +8,7 @@ deployment:
   vvolt:
     image:
       repository: vova0911/vvolt
-      tag: amd64_0.0.20
+      tag: amd64_0.0.21
     resources:
       limits:
         cpu: "1"
