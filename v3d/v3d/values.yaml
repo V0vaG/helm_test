@@ -18,7 +18,8 @@ deployment:
         memory: 256Mi
   v3d:
     image:
-      tag: amd64_0.0.0
+      tag: |
+        amd64_0.0.1
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
