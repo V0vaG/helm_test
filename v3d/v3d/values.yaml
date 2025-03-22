@@ -5,10 +5,10 @@ deployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
-  v3D:
+  v3d:
     image:
       repository: vova0911/v3d
-      tag: amd64_1.0.1
+      tag: amd64_1.0.2
     resources:
       limits:
         cpu: "1"
@@ -16,9 +16,7 @@ deployment:
       requests:
         cpu: 500m
         memory: 256Mi
-  v3d:
-    image:
-      tag: amd64_1.0.2
+
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
