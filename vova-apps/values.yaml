@@ -17,4 +17,4 @@ apps:
   - name: tools
   - name: vhub
   - name: vvolt
-  # - name: vova-stl
+  - name: vova-stl
