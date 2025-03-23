@@ -1,0 +1,33 @@
+deployment:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  vovaStl:
+    image:
+      repository: vova0911/vova-stl
+      tag: amd64_latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
+  vova-stl:
+    image:
+      tag: amd64_1.0.8
+kubernetesClusterDomain: cluster.local
+pvc:
+  dataPvc:
+    storageClass: ""
+    storageRequest: 1Gi
+service:
+  ports:
+    - nodePort: 30089
+      port: 80
+      protocol: TCP
+      targetPort: 5000
+  type: NodePort
