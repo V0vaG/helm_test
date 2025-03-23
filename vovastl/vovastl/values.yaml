@@ -8,7 +8,7 @@ deployment:
   vovastl:
     image:
       repository: vova0911/vovastl
-      tag: amd64_1.0.11
+      tag: amd64_1.0.12
     resources:
       limits:
         cpu: "1"
@@ -23,9 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30089
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30089
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
-
