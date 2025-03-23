@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vova-stl
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vova-stl-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vova/script_files/vova-stl
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vova-stl-data-pvc
+  namespace: vova-stl
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: vova-stl-data-pv
+  storageClassName: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vova-stl-deployment
+  namespace: vova-stl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vova-stl
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: vova-stl
+    spec:
+      containers:
+      - name: vova-stl
+        image: vova0911/vova-stl:amd64_latest
+        ports:
+        - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /root/script_files/vova-stl
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: vova-stl-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vova-stl-service
+  namespace: vova-stl
+spec:
+  selector:
+    app: vova-stl
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30089
+  type: NodePort
+

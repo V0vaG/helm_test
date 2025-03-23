@@ -1,6 +1,6 @@
 #!/bin/bash
 
-app='v3d'
+app='vova-stl'
 port='30089'
 
 # k3s kubectl delete -f ${app}.yaml
