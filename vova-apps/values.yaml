@@ -18,4 +18,4 @@ apps:
   - name: vhub
   - name: vvolt
   - name: vovastl
-  - mane: v3d
+  # - mane: v3d
