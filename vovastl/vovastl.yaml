@@ -1,45 +1,45 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: vova-stl
+  name: vovastl
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: vova-stl-data-pv
+  name: vovastl-data-pv
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/vova-stl
+    path: /home/vova/script_files/vovastl
   storageClassName: ""
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: vova-stl-data-pvc
-  namespace: vova-stl
+  name: vovastl-data-pvc
+  namespace: vovastl
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 1Gi
-  volumeName: vova-stl-data-pv
+  volumeName: vovastl-data-pv
   storageClassName: ""
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vova-stl-deployment
-  namespace: vova-stl
+  name: vovastl-deployment
+  namespace: vovastl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vova-stl
+      app: vovastl
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -48,11 +48,11 @@ spec:
   template:
     metadata:
       labels:
-        app: vova-stl
+        app: vovastl
     spec:
       containers:
-      - name: vova-stl
-        image: vova0911/vova-stl:amd64_latest
+      - name: vovastl
+        image: vova0911/vovastl:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
@@ -67,20 +67,20 @@ spec:
             cpu: "1"
         volumeMounts:
         - name: data-volume
-          mountPath: /root/script_files/vova-stl
+          mountPath: /root/script_files/vovastl
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: vova-stl-data-pvc
+          claimName: vovastl-data-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vova-stl-service
-  namespace: vova-stl
+  name: vovastl-service
+  namespace: vovastl
 spec:
   selector:
-    app: vova-stl
+    app: vovastl
   ports:
     - protocol: TCP
       port: 80

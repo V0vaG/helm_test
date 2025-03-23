@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "vova-stl.fullname" . }}-data-pvc
+  name: {{ include "vovastl.fullname" . }}-data-pvc
   labels:
-  {{- include "vova-stl.labels" . | nindent 4 }}
+  {{- include "vovastl.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce
@@ -11,4 +11,4 @@ spec:
     requests:
       storage: {{ .Values.pvc.dataPvc.storageRequest | quote }}
   storageClassName: {{ .Values.pvc.dataPvc.storageClass | quote }}
-  volumeName: vova-stl-data-pv
+  volumeName: vovastl-data-pv

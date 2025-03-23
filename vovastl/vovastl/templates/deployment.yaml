@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "vova-stl.fullname" . }}-deployment
+  name: {{ include "vovastl.fullname" . }}-deployment
   labels:
-  {{- include "vova-stl.labels" . | nindent 4 }}
+  {{- include "vovastl.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.deployment.replicas }}
   strategy:
@@ -13,28 +13,28 @@ spec:
     type: {{ .Values.deployment.strategy.type | quote }}
   selector:
     matchLabels:
-      app: vova-stl
-    {{- include "vova-stl.selectorLabels" . | nindent 6 }}
+      app: vovastl
+    {{- include "vovastl.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: vova-stl
-      {{- include "vova-stl.selectorLabels" . | nindent 8 }}
+        app: vovastl
+      {{- include "vovastl.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.vovaStl.image.repository }}:{{ .Values.deployment.vovaStl.image.tag
+        image: {{ .Values.deployment.vovastl.image.repository }}:{{ .Values.deployment.vovastl.image.tag
           | default .Chart.AppVersion }}
-        name: vova-stl
+        name: vovastl
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.vovaStl.resources | nindent 10 }}
+        resources: {{- toYaml .Values.deployment.vovastl.resources | nindent 10 }}
         volumeMounts:
-        - mountPath: /root/script_files/vova-stl
+        - mountPath: /root/script_files/vovastl
           name: data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: {{ include "vova-stl.fullname" . }}-data-pvc
+          claimName: {{ include "vovastl.fullname" . }}-data-pvc

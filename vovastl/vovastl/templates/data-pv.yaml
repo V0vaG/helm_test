@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: {{ include "vova-stl.fullname" . }}-data-pv
+  name: {{ include "vovastl.fullname" . }}-data-pv
   labels:
-  {{- include "vova-stl.labels" . | nindent 4 }}
+  {{- include "vovastl.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce
   capacity:
     storage: 1Gi
   hostPath:
-    path: /home/vova/script_files/vova-stl
+    path: /home/vova/script_files/vovastl
   storageClassName: ""
