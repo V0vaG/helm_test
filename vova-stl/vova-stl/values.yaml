@@ -5,7 +5,7 @@ deployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
-  vovaStl:
+  vova-stl:
     image:
       repository: vova0911/vova-stl
       tag: amd64_latest
@@ -16,9 +16,6 @@ deployment:
       requests:
         cpu: 500m
         memory: 256Mi
-  vova-stl:
-    image:
-      tag: amd64_1.0.9
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
