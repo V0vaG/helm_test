@@ -8,7 +8,7 @@ deployment:
   vovastl:
     image:
       repository: vova0911/vovastl
-      tag: amd64_1.0.23
+      tag: amd64_1.0.24
     resources:
       limits:
         cpu: "1"
