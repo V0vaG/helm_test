@@ -27,7 +27,7 @@ vvoltDeployment:
       mongoUrl: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
     image:
       repository: vova0911/vvolt
-      tag: amd64_latest
+      tag: amd64_0.2.2
 vvoltService:
   ports:
   - nodePort: 30088
