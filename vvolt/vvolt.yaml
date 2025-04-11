@@ -3,33 +3,6 @@ kind: Namespace
 metadata:
   name: vvolt
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: vvolt-data-pv
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /home/vova/script_files/vvolt
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: vvolt-data-pvc
-  namespace: vvolt
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  volumeName: vvolt-data-pv
-  storageClassName: ""
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:

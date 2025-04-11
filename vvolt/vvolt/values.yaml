@@ -11,10 +11,6 @@ mongodbService:
     protocol: TCP
     targetPort: 27017
   type: ClusterIP
-pvc:
-  vvoltDataPvc:
-    storageClass: ""
-    storageRequest: 1Gi
 vvoltDeployment:
   replicas: 1
   strategy:

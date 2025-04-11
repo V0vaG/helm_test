@@ -76,4 +76,4 @@ spec:
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: {{ include "vvolt.fullname" . }}-vvolt-data-pvc
+          claimName: vvolt-data-pvc
