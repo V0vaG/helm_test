@@ -72,13 +72,6 @@ spec:
         env:
         - name: MONGO_URL
           value: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
-        volumeMounts:
-        - name: data-volume
-          mountPath: /root/script_files/vvolt
-      volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: vvolt-data-pvc
 ---
 apiVersion: v1
 kind: Service

@@ -70,10 +70,3 @@ spec:
         ports:
         - containerPort: 5000
         resources: {}
-        volumeMounts:
-        - mountPath: /root/script_files/vvolt
-          name: data-volume
-      volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: vvolt-data-pvc
