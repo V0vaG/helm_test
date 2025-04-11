@@ -134,21 +134,28 @@ spec:
         ports:
         - containerPort: 5000
         env:
+          # Set MONGO_URL to use the MongoDB service in the vvolt namespace.
           - name: MONGO_URL
-            value: "mongodb://mongodb-service.vvolt.svc.cluster.local:27017"
+            value: "mongodb://mongodb-service.argocd.svc.cluster.local:27017"
+          # Optionally, if you need to use the root credentials via environment variables, have the secret injected:
+          - name: MONGODB_ROOT_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-root-creds
+                key: MONGODB_ROOT_USER
+          - name: MONGODB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongodb-root-creds
+                key: MONGODB_ROOT_PASSWORD
         volumeMounts:
           - name: data-volume
             mountPath: /root/script_files/vvolt
-          - name: mongo-secret
-            mountPath: /etc/mongo-secret
-            readOnly: true
       volumes:
         - name: data-volume
           persistentVolumeClaim:
             claimName: vvolt-data-pvc
-        - name: mongo-secret
-          secret:
-            secretName: mongodb-root-creds
+
 ---
 # vvolt App Service
 apiVersion: v1
@@ -165,3 +172,4 @@ spec:
       targetPort: 5000
       nodePort: 30088
   type: NodePort
+
