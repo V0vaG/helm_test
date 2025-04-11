@@ -43,7 +43,7 @@ vvoltDeployment:
       mongoUrl: "mongodb://mongodb-service.vvolt.svc.cluster.local:27017"
 
 # vvolt app Service configuration
-vvoltService:
+Service:
   type: NodePort
   ports:
     - port: 80
