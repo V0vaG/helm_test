@@ -55,6 +55,9 @@ spec:
         image: vova0911/vvolt:amd64_0.2.3
         ports:
         - containerPort: 5000
+        env:
+          - name: MONGO_URL
+            value: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
         # Uncomment if needed
         # imagePullSecrets:
         # - name: regcred
