@@ -3,12 +3,10 @@ kind: Namespace
 metadata:
   name: vvolt
 ---
-# PersistentVolume for vvolt app data
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: vvolt-data-pv
-  namespace: vvolt
 spec:
   capacity:
     storage: 1Gi
@@ -18,7 +16,6 @@ spec:
     path: /home/vova/script_files/vvolt
   storageClassName: ""
 ---
-# PersistentVolumeClaim for vvolt app data
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -33,81 +30,6 @@ spec:
   volumeName: vvolt-data-pv
   storageClassName: ""
 ---
-# PersistentVolume for MongoDB data
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: mongodb-pv
-  namespace: vvolt
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /home/vova/mongodb-data  # adjust path as needed
-  storageClassName: ""
----
-# PersistentVolumeClaim for MongoDB data
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mongodb-pvc
-  namespace: vvolt
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  volumeName: mongodb-pv
-  storageClassName: ""
----
-# MongoDB Deployment
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongodb
-  namespace: vvolt
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongodb
-  template:
-    metadata:
-      labels:
-        app: mongodb
-    spec:
-      containers:
-      - name: mongodb
-        image: mongo:5
-        ports:
-        - containerPort: 27017
-        volumeMounts:
-        - name: mongo-storage
-          mountPath: /data/db
-      volumes:
-      - name: mongo-storage
-        persistentVolumeClaim:
-          claimName: mongodb-pvc
----
-# MongoDB Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb-service
-  namespace: vvolt
-spec:
-  selector:
-    app: mongodb
-  ports:
-    - protocol: TCP
-      port: 27017
-      targetPort: 27017
-  type: ClusterIP
----
-# vvolt App Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -134,30 +56,26 @@ spec:
         ports:
         - containerPort: 5000
         env:
-          # Set MONGO_URL to use the MongoDB service in the vvolt namespace.
           - name: MONGO_URL
-            value: "mongodb://mongodb-service.argocd.svc.cluster.local:27017"
-          # Optionally, if you need to use the root credentials via environment variables, have the secret injected:
-          - name: MONGODB_ROOT_USER
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-root-creds
-                key: MONGODB_ROOT_USER
-          - name: MONGODB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongodb-root-creds
-                key: MONGODB_ROOT_PASSWORD
+            value: mongodb://mongodb-service.argocd.svc.cluster.local:27017
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
         volumeMounts:
-          - name: data-volume
-            mountPath: /root/script_files/vvolt
-      volumes:
         - name: data-volume
-          persistentVolumeClaim:
-            claimName: vvolt-data-pvc
-
+          mountPath: /root/script_files/vvolt
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: vvolt-data-pvc
 ---
-# vvolt App Service
 apiVersion: v1
 kind: Service
 metadata:
