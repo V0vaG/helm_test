@@ -10,7 +10,7 @@ deployment:
       mongoUrl: mongodb://mongodb-service.argocd.svc.cluster.local:27017
     image:
       repository: vova0911/vvolt
-      tag: amd64_0.3.3
+      tag: amd64_0.3.4
     resources:
       limits:
         cpu: "1"
