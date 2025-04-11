@@ -63,16 +63,6 @@ spec:
       - env:
         - name: MONGO_URL
           value: {{ quote .Values.vvoltDeployment.vvolt.env.mongoUrl }}
-        - name: MONGODB_ROOT_USER
-          valueFrom:
-            secretKeyRef:
-              key: MONGODB_ROOT_USER
-              name: mongodb-root-creds
-        - name: MONGODB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              key: MONGODB_ROOT_PASSWORD
-              name: mongodb-root-creds
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.vvoltDeployment.vvolt.image.repository }}:{{ .Values.vvoltDeployment.vvolt.image.tag
