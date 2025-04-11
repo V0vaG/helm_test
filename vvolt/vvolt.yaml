@@ -1,21 +1,21 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: vvolt
+  name: argocd
 ---
 # PersistentVolume for vvolt app data
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: vvolt-data-pv
-  namespace: vvolt
+  namespace: argocd
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/vvolt
+    path: /home/vova/script_files/vvolt  # Adjust if needed
   storageClassName: ""
 ---
 # PersistentVolumeClaim for vvolt app data
@@ -23,7 +23,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: vvolt-data-pvc
-  namespace: vvolt
+  namespace: argocd
 spec:
   accessModes:
     - ReadWriteOnce
@@ -38,14 +38,14 @@ apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: mongodb-pv
-  namespace: vvolt
+  namespace: argocd
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/mongodb-data  # adjust path as needed
+    path: /home/vova/mongodb-data  # Adjust path as needed
   storageClassName: ""
 ---
 # PersistentVolumeClaim for MongoDB data
@@ -53,7 +53,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongodb-pvc
-  namespace: vvolt
+  namespace: argocd
 spec:
   accessModes:
     - ReadWriteOnce
@@ -68,7 +68,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb
-  namespace: vvolt
+  namespace: argocd
 spec:
   replicas: 1
   selector:
@@ -97,7 +97,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb-service
-  namespace: vvolt
+  namespace: argocd
 spec:
   selector:
     app: mongodb
@@ -112,7 +112,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: vvolt-deployment
-  namespace: vvolt
+  namespace: argocd
 spec:
   replicas: 1
   selector:
@@ -134,10 +134,10 @@ spec:
         ports:
         - containerPort: 5000
         env:
-          # Set MONGO_URL to use the MongoDB service in the vvolt namespace.
+          # Update MONGO_URL for namespace "argocd"
           - name: MONGO_URL
-            value: "mongodb://mongodb-service.vvolt.svc.cluster.local:27017"
-          # Optionally, if you need to use the root credentials via environment variables, have the secret injected:
+            value: "mongodb://mongodb-service.argocd.svc.cluster.local:27017"
+          # Optionally inject root credentials via environment variables from a secret:
           - name: MONGODB_ROOT_USER
             valueFrom:
               secretKeyRef:
@@ -167,7 +167,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: vvolt-service
-  namespace: vvolt
+  namespace: argocd
 spec:
   selector:
     app: vvolt
