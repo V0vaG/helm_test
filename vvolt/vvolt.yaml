@@ -44,6 +44,36 @@ spec:
       targetPort: 27017
   type: ClusterIP
 ---
+# PersistentVolume definition (if needed)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vvolt-data-pv
+  namespace: vvolt
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vova/script_files/vvolt  # adjust accordingly
+  storageClassName: ""
+---
+# PersistentVolumeClaim definition
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vvolt-data-pvc
+  namespace: vvolt
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: vvolt-data-pv
+  storageClassName: ""
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -72,6 +102,13 @@ spec:
         env:
         - name: MONGO_URL
           value: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
+        volumeMounts:
+        - name: data-volume
+          mountPath: /root/script_files/vvolt
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: vvolt-data-pvc
 ---
 apiVersion: v1
 kind: Service

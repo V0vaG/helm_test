@@ -1,3 +1,16 @@
+deployment:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  vvolt:
+    env:
+      mongoUrl: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
+    image:
+      repository: vova0911/vvolt
+      tag: amd64_0.2.2
 kubernetesClusterDomain: cluster.local
 mongodb:
   mongodb:
@@ -11,20 +24,11 @@ mongodbService:
     protocol: TCP
     targetPort: 27017
   type: ClusterIP
-vvoltDeployment:
-  replicas: 1
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 1
-    type: RollingUpdate
-  vvolt:
-    env:
-      mongoUrl: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
-    image:
-      repository: vova0911/vvolt
-      tag: amd64_0.2.2
-vvoltService:
+pvc:
+  dataPvc:
+    storageClass: ""
+    storageRequest: 1Gi
+service:
   ports:
   - nodePort: 30088
     port: 80
