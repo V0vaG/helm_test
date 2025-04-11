@@ -33,6 +33,47 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: mongodb
+  namespace: vvolt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:5
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongo-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-storage
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service
+  namespace: vvolt
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: vvolt-deployment
   namespace: vvolt
 spec:
@@ -55,16 +96,9 @@ spec:
         image: vova0911/vvolt:amd64_latest
         ports:
         - containerPort: 5000
-        # Uncomment if needed
-        # imagePullSecrets:
-        # - name: regcred
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "1"
+        env:
+        - name: MONGO_URL
+          value: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vvolt

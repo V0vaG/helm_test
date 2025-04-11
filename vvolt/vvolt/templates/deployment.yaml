@@ -1,16 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "vvolt.fullname" . }}-deployment
+  name: {{ include "vvolt.fullname" . }}-mongodb
   labels:
   {{- include "vvolt.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: {{ .Values.mongodb.replicas }}
+  selector:
+    matchLabels:
+      app: mongodb
+    {{- include "vvolt.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: mongodb
+      {{- include "vvolt.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.mongodb.mongodb.image.repository }}:{{ .Values.mongodb.mongodb.image.tag
+          | default .Chart.AppVersion }}
+        name: mongodb
+        ports:
+        - containerPort: 27017
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-storage
+      volumes:
+      - emptyDir: {}
+        name: mongo-storage
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vvolt.fullname" . }}-vvolt-deployment
+  labels:
+  {{- include "vvolt.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.vvoltDeployment.replicas }}
   strategy:
     rollingUpdate:
-      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
-      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
-    type: {{ .Values.deployment.strategy.type | quote }}
+      maxSurge: {{ .Values.vvoltDeployment.strategy.rollingUpdate.maxSurge | quote
+        }}
+      maxUnavailable: {{ .Values.vvoltDeployment.strategy.rollingUpdate.maxUnavailable
+        }}
+    type: {{ .Values.vvoltDeployment.strategy.type | quote }}
   selector:
     matchLabels:
       app: vvolt
@@ -23,18 +60,20 @@ spec:
     spec:
       containers:
       - env:
+        - name: MONGO_URL
+          value: {{ quote .Values.vvoltDeployment.vvolt.env.mongoUrl }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.vvolt.image.repository }}:{{ .Values.deployment.vvolt.image.tag
+        image: {{ .Values.vvoltDeployment.vvolt.image.repository }}:{{ .Values.vvoltDeployment.vvolt.image.tag
           | default .Chart.AppVersion }}
         name: vvolt
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.vvolt.resources | nindent 10 }}
+        resources: {}
         volumeMounts:
         - mountPath: /root/script_files/vvolt
           name: data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: {{ include "vvolt.fullname" . }}-data-pvc
+          claimName: {{ include "vvolt.fullname" . }}-vvolt-data-pvc
