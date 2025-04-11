@@ -6,20 +6,21 @@ metadata:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: vvolt-data-pv
+  name: mongodb-pv
+  namespace: vvolt
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/vvolt
+    path: /home/vova/mongodb-data   # Adjust this path as needed on your node
   storageClassName: ""
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: vvolt-data-pvc
+  name: mongodb-pvc
   namespace: vvolt
 spec:
   accessModes:
@@ -27,67 +28,48 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: vvolt-data-pv
+  volumeName: mongodb-pv
   storageClassName: ""
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vvolt-deployment
+  name: mongodb
   namespace: vvolt
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: vvolt
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 1
+      app: mongodb
   template:
     metadata:
       labels:
-        app: vvolt
+        app: mongodb
     spec:
       containers:
-      - name: vvolt
-        image: vova0911/vvolt:amd64_0.3.7
+      - name: mongodb
+        image: mongo:5
         ports:
-        - containerPort: 5000
-        env:
-          - name: MONGO_URL
-            value: mongodb://mongodb-service.argocd.svc.cluster.local:27017
-        # Uncomment if needed
-        # imagePullSecrets:
-        # - name: regcred
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "1"
+          - containerPort: 27017
         volumeMounts:
-        - name: data-volume
-          mountPath: /root/script_files/vvolt
+          - name: mongo-storage
+            mountPath: /data/db
       volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: vvolt-data-pvc
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: mongodb-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vvolt-service
+  name: mongodb-service
   namespace: vvolt
 spec:
   selector:
-    app: vvolt
+    app: mongodb
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 5000
-      nodePort: 30088
-  type: NodePort
+      port: 27017
+      targetPort: 27017
+  type: ClusterIP
 
