@@ -1,16 +1,24 @@
+# values.yaml
+
+# Global cluster domain (if needed for DNS construction)
 kubernetesClusterDomain: cluster.local
+
+# MongoDB configuration
 mongodb:
-  mongodb:
-    image:
-      repository: mongo
-      tag: "5"
   replicas: 1
+  image:
+    repository: mongo
+    tag: "5"
+
+# MongoDB Service configuration
 mongodbService:
+  type: ClusterIP
   ports:
     - port: 27017
       protocol: TCP
       targetPort: 27017
-  type: ClusterIP
+
+# PVC configuration
 pvc:
   mongodbPvc:
     storageClass: ""
@@ -18,27 +26,34 @@ pvc:
   vvoltDataPvc:
     storageClass: ""
     storageRequest: 1Gi
+
+# vvolt app Deployment configuration
 vvoltDeployment:
   replicas: 1
   strategy:
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 25%
       maxUnavailable: 1
-    type: RollingUpdate
   vvolt:
-    env:
-      mongoUrl: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
     image:
       repository: vova0911/vvolt
-      tag: amd64_0.2.3
+      tag: "amd64_0.2.3"
+    env:
+      mongoUrl: "mongodb://mongodb-service.vvolt.svc.cluster.local:27017"
+
+# vvolt app Service configuration
 vvoltService:
-  ports:
-    - nodePort: 30088
-      port: 80
-      protocol: TCP
-      targetPort: 5000
   type: NodePort
+  ports:
+    - port: 80
+      targetPort: 5000
+      nodePort: 30088
+      protocol: TCP
+
+# Optionally, if you have a deployment section for vvolt that overrides other settings:
 deployment:
   vvolt:
     image:
-      tag: amd64_0.3.7
+      tag: "amd64_0.3.7"
+
