@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mongodb.fullname" . }}-mongodb
+  labels:
+  {{- include "mongodb.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.mongodb.replicas }}
+  selector:
+    matchLabels:
+      app: mongodb
+    {{- include "mongodb.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: mongodb
+      {{- include "mongodb.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.mongodb.mongodb.image.repository }}:{{ .Values.mongodb.mongodb.image.tag
+          | default .Chart.AppVersion }}
+        name: mongodb
+        ports:
+        - containerPort: 27017
+        resources: {}
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-storage
+      volumes:
+      - name: mongo-storage
+        persistentVolumeClaim:
+          claimName: {{ include "mongodb.fullname" . }}-pvc
