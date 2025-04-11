@@ -7,9 +7,9 @@ mongodb:
   replicas: 1
 mongodbService:
   ports:
-    - port: 27017
-      protocol: TCP
-      targetPort: 27017
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
   type: ClusterIP
 pvc:
   mongodbPvc:
@@ -33,12 +33,8 @@ vvoltDeployment:
       tag: amd64_0.2.3
 vvoltService:
   ports:
-    - nodePort: 30088
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30088
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
-deployment:
-  vvolt:
-    image:
-      tag: amd64_0.3.7
