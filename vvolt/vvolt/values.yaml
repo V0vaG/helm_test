@@ -6,31 +6,24 @@ deployment:
       maxUnavailable: 1
     type: RollingUpdate
   vvolt:
-    env:
-      mongoUrl: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
     image:
       repository: vova0911/vvolt
-      tag: amd64_0.2.2
+      tag: amd64_latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
 kubernetesClusterDomain: cluster.local
-mongodb:
-  mongodb:
-    image:
-      repository: mongo
-      tag: "5"
-  replicas: 1
-mongodbService:
-  ports:
-  - port: 27017
-    protocol: TCP
-    targetPort: 27017
-  type: ClusterIP
 pvc:
   dataPvc:
     storageClass: ""
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30088
+  - nodePort: 30089
     port: 80
     protocol: TCP
     targetPort: 5000

@@ -1,41 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "vvolt.fullname" . }}-mongodb
-  labels:
-  {{- include "vvolt.labels" . | nindent 4 }}
-spec:
-  replicas: {{ .Values.mongodb.replicas }}
-  selector:
-    matchLabels:
-      app: mongodb
-    {{- include "vvolt.selectorLabels" . | nindent 6 }}
-  template:
-    metadata:
-      labels:
-        app: mongodb
-      {{- include "vvolt.selectorLabels" . | nindent 8 }}
-    spec:
-      containers:
-      - env:
-        - name: KUBERNETES_CLUSTER_DOMAIN
-          value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.mongodb.mongodb.image.repository }}:{{ .Values.mongodb.mongodb.image.tag
-          | default .Chart.AppVersion }}
-        name: mongodb
-        ports:
-        - containerPort: 27017
-        resources: {}
-        volumeMounts:
-        - mountPath: /data/db
-          name: mongo-storage
-      volumes:
-      - emptyDir: {}
-        name: mongo-storage
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: {{ include "vvolt.fullname" . }}-deployment
   labels:
   {{- include "vvolt.labels" . | nindent 4 }}
@@ -58,8 +23,6 @@ spec:
     spec:
       containers:
       - env:
-        - name: MONGO_URL
-          value: {{ quote .Values.deployment.vvolt.env.mongoUrl }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.vvolt.image.repository }}:{{ .Values.deployment.vvolt.image.tag
@@ -67,7 +30,7 @@ spec:
         name: vvolt
         ports:
         - containerPort: 5000
-        resources: {}
+        resources: {{- toYaml .Values.deployment.vvolt.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/vvolt
           name: data-volume

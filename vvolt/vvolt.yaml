@@ -3,63 +3,19 @@ kind: Namespace
 metadata:
   name: vvolt
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongodb
-  namespace: vvolt
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongodb
-  template:
-    metadata:
-      labels:
-        app: mongodb
-    spec:
-      containers:
-        - name: mongodb
-          image: mongo:5
-          ports:
-            - containerPort: 27017
-          volumeMounts:
-            - name: mongo-storage
-              mountPath: /data/db
-      volumes:
-        - name: mongo-storage
-          emptyDir: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb-service
-  namespace: vvolt
-spec:
-  selector:
-    app: mongodb
-  ports:
-    - protocol: TCP
-      port: 27017
-      targetPort: 27017
-  type: ClusterIP
----
-# PersistentVolume definition (if needed)
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: vvolt-data-pv
-  namespace: vvolt
 spec:
   capacity:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/vvolt  # adjust accordingly
+    path: /home/vova/script_files/vvolt
   storageClassName: ""
 ---
-# PersistentVolumeClaim definition
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -96,12 +52,19 @@ spec:
     spec:
       containers:
       - name: vvolt
-        image: vova0911/vvolt:amd64_0.2.2
+        image: vova0911/vvolt:amd64_latest
         ports:
         - containerPort: 5000
-        env:
-        - name: MONGO_URL
-          value: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vvolt
@@ -122,6 +85,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-      nodePort: 30088
+      nodePort: 30089
   type: NodePort
-
