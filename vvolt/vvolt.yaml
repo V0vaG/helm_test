@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: vvolt
-        image: vova0911/vvolt:amd64_0.3.8
+        image: vova0911/vvolt:amd64_0.2.3
         ports:
         - containerPort: 5000
         env:
