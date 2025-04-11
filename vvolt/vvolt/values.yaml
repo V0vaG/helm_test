@@ -1,4 +1,24 @@
-deployment:
+kubernetesClusterDomain: cluster.local
+mongodb:
+  mongodb:
+    image:
+      repository: mongo
+      tag: "5"
+  replicas: 1
+mongodbService:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  type: ClusterIP
+pvc:
+  mongodbPvc:
+    storageClass: ""
+    storageRequest: 1Gi
+  vvoltDataPvc:
+    storageClass: ""
+    storageRequest: 1Gi
+vvoltDeployment:
   replicas: 1
   strategy:
     rollingUpdate:
@@ -7,26 +27,14 @@ deployment:
     type: RollingUpdate
   vvolt:
     env:
-      mongoUrl: mongodb://mongodb-service.argocd.svc.cluster.local:27017
+      mongoUrl: mongodb://mongodb-service.vvolt.svc.cluster.local:27017
     image:
       repository: vova0911/vvolt
-      tag: amd64_0.3.6
-    resources:
-      limits:
-        cpu: "1"
-        memory: 512Mi
-      requests:
-        cpu: 500m
-        memory: 256Mi
-kubernetesClusterDomain: cluster.local
-pvc:
-  dataPvc:
-    storageClass: ""
-    storageRequest: 1Gi
-service:
+      tag: amd64_0.2.3
+vvoltService:
   ports:
-    - nodePort: 30088
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30088
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
