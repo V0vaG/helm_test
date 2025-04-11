@@ -18,5 +18,5 @@ apps:
   - name: vhub
   - name: vvolt
   - name: vovastl
-  - name: mongodb
+  #- name: mongodb
   # - mane: v3d
