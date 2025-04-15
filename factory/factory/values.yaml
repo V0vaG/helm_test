@@ -1,15 +1,10 @@
 deployment:
   factory:
+    containerSecurityContext:
+      privileged: true
     image:
       repository: vova0911/factory
-      tag: amd64_0.0.1
-    resources:
-      limits:
-        cpu: "1"
-        memory: 512Mi
-      requests:
-        cpu: 500m
-        memory: 256Mi
+      tag: amd64_1.0.9
   replicas: 1
   strategy:
     rollingUpdate:
@@ -23,8 +18,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - nodePort: 30092
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30087
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
