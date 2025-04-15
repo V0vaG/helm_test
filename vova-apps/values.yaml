@@ -19,4 +19,4 @@ apps:
   - name: vvolt
   - name: factory
   - name: mongodb
- # - mane: factory
+  - name: vovastl
