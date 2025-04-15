@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "factory.fullname" . }}-data-pv
+  labels:
+  {{- include "factory.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /home/vova/script_files/factory
+  storageClassName: ""
