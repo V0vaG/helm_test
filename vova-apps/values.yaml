@@ -17,6 +17,6 @@ apps:
   - name: tools
   - name: vhub
   - name: vvolt
-  #- name: vovastl
+  - name: factory
   - name: mongodb
-  - mane: factory
+ # - mane: factory
