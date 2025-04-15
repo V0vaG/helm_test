@@ -30,23 +30,11 @@ spec:
         name: factory
         ports:
         - containerPort: 5000
-        resources: {}
-        securityContext: {{- toYaml .Values.deployment.factory.containerSecurityContext
-          | nindent 10 }}
+        resources: {{- toYaml .Values.deployment.factory.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/factory
           name: data-volume
-        - mountPath: /var/run/docker.sock
-          name: docker-socket
-        - mountPath: /usr/bin/docker
-          name: docker-bin
       volumes:
       - name: data-volume
         persistentVolumeClaim:
           claimName: {{ include "factory.fullname" . }}-data-pvc
-      - hostPath:
-          path: /var/run/docker.sock
-        name: docker-socket
-      - hostPath:
-          path: /usr/bin/docker
-        name: docker-bin

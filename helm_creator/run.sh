@@ -1,7 +1,7 @@
 #!/bin/bash
 
-app='vovastl'
-port='30089'
+app='factory'
+port='30095'
 
 # k3s kubectl delete -f ${app}.yaml
 
