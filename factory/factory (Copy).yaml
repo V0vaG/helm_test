@@ -52,9 +52,12 @@ spec:
     spec:
       containers:
       - name: factory
-        image: vova0911/factory:amd64_0.0.3
+        image: vova0911/factory:amd64_latest
         ports:
         - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
         resources:
           requests:
             memory: "256Mi"
@@ -82,24 +85,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: factory-ingress
-  namespace: factory
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /factory(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: factory-service
-            port:
-              number: 80
+      nodePort: 30090
+  type: NodePort
 
