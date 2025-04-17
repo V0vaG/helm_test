@@ -40,11 +40,6 @@ spec:
   selector:
     matchLabels:
       app: factory
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -52,7 +47,7 @@ spec:
     spec:
       containers:
       - name: factory
-        image: vova0911/factory:amd64_0.0.3
+        image: vova0911/factory:amd64_0.0.4
         ports:
         - containerPort: 5000
         resources:
@@ -90,7 +85,7 @@ metadata:
   name: factory-ingress
   namespace: factory
   annotations:
-    traefik.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - http:
@@ -102,5 +97,4 @@ spec:
             name: factory-service
             port:
               number: 80
-
 
