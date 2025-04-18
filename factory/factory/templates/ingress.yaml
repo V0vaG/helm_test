@@ -4,8 +4,6 @@ metadata:
   name: {{ include "factory.fullname" . }}-ingress
   labels:
   {{- include "factory.labels" . | nindent 4 }}
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
   rules:
@@ -17,5 +15,5 @@ spec:
             name: '{{ include "factory.fullname" . }}-service'
             port:
               number: 80
-        path: /?(.*)
+        path: /
         pathType: Prefix
