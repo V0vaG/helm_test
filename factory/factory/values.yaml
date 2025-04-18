@@ -2,7 +2,7 @@ deployment:
   factory:
     image:
       repository: vova0911/factory
-      tag: amd64_0.0.16
+      tag: amd64_latest
     resources:
       limits:
         cpu: "1"
@@ -11,6 +11,11 @@ deployment:
         cpu: 500m
         memory: 256Mi
   replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
@@ -18,7 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 5000
-  type: ClusterIP
+  - nodePort: 30090
+    port: 80
+    protocol: TCP
+    targetPort: 5000
+  type: NodePort
