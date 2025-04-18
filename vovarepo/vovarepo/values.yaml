@@ -26,5 +26,5 @@ service:
   - nodePort: 30091
     port: 80
     protocol: TCP
-    targetPort: 5000
+    targetPort: 9090
   type: NodePort
