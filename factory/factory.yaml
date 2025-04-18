@@ -85,18 +85,19 @@ metadata:
   name: factory-ingress
   namespace: factory
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /  # rewrite to root
 spec:
-  ingressClassName: nginx  # <-- Add this line
+  ingressClassName: nginx
   rules:
   - host: factory.vova-g.tplinkdns.com
     http:
       paths:
-      - path: /factory(/|$)(.*)
+      - path: /?(.*)
         pathType: Prefix
         backend:
           service:
             name: factory-service
             port:
               number: 80
+
 
