@@ -2,7 +2,7 @@ deployment:
   factory:
     image:
       repository: vova0911/factory
-      tag: amd64_0.0.9
+      tag: amd64_0.0.11
     resources:
       limits:
         cpu: "1"
