@@ -9,8 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: factory.vova-g.tplinkdns.com
-    http:
+  - http:
       paths:
       - backend:
           service:
