@@ -87,15 +87,16 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
-  ingressClassName: nginx 
   rules:
-  - http:
+  - host: factory.vova-g.tplinkdns.com
+    http:
       paths:
-      - path: /factory(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: factory-service
-            port:
-              number: 80
+        - path: /factory(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: factory-service
+              port:
+                number: 80
+
 

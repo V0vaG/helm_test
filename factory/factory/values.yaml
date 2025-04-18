@@ -2,7 +2,7 @@ deployment:
   factory:
     image:
       repository: vova0911/factory
-      tag: amd64_0.0.14
+      tag: amd64_0.0.4
     resources:
       limits:
         cpu: "1"
@@ -18,7 +18,7 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 5000
+  - port: 80
+    protocol: TCP
+    targetPort: 5000
   type: ClusterIP
