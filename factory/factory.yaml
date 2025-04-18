@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: factory
-        image: vova0911/factory:amd64_0.0.4
+        image: vova0911/factory:amd64_0.0.14
         ports:
         - containerPort: 5000
         resources:
