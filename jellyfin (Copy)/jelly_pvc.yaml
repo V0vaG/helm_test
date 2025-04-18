@@ -104,8 +104,9 @@ spec:
   selector:
     app: jellyfin
   ports:
-    - protocol: TCP
-      port: 8096
-      targetPort: 8096
-  type: ClusterIP
+  - protocol: TCP
+    port: 8096
+    targetPort: 8096
+    nodePort: 30080
+  type: NodePort
 

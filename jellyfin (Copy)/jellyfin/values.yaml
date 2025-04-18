@@ -6,11 +6,12 @@ jellyfin:
       repository: jellyfin/jellyfin
       tag: latest
   ports:
-  - port: 8096
+  - nodePort: 30080
+    port: 8096
     protocol: TCP
     targetPort: 8096
   replicas: 1
-  type: ClusterIP
+  type: NodePort
 kubernetesClusterDomain: cluster.local
 pvc:
   configPvc:
