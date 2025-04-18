@@ -112,13 +112,13 @@ spec:
     - name: http
       port: 80
       targetPort: 80
-      nodePort: 31376
+      nodePort: 30095
     - name: http-alt
       port: 95
       targetPort: 80
-      nodePort: 31995
+      nodePort: 30096
     - name: https
       port: 443
       targetPort: 443
-      nodePort: 31187
+      nodePort: 30097
 
