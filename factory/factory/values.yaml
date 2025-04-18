@@ -1,8 +1,8 @@
-factoryDeployment:
+deployment:
   factory:
     image:
       repository: vova0911/factory
-      tag: amd64_0.0.16
+      tag: amd64_0.0.15
     resources:
       limits:
         cpu: "1"
@@ -16,29 +16,15 @@ factoryDeployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
-factoryService:
-  ports:
-  - port: 80
-    protocol: TCP
-    targetPort: 5000
-  type: ClusterIP
-ingressNginxController:
-  ports:
-  - name: http
-    nodePort: 30095
-    port: 80
-    targetPort: 80
-  - name: http-alt
-    nodePort: 30096
-    port: 95
-    targetPort: 80
-  - name: https
-    nodePort: 30097
-    port: 443
-    targetPort: 443
-  type: NodePort
 kubernetesClusterDomain: cluster.local
 pvc:
-  factoryDataPvc:
+  dataPvc:
     storageClass: ""
     storageRequest: 1Gi
+service:
+  ports:
+    - nodePort: 30090
+      port: 80
+      protocol: TCP
+      targetPort: 5000
+  type: NodePort
