@@ -29,7 +29,7 @@ spec:
           | default .Chart.AppVersion }}
         name: vovarepo
         ports:
-        - containerPort: 9090
+        - containerPort: 5000
         resources: {{- toYaml .Values.deployment.vovarepo.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/vovarepo
