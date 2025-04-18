@@ -2,7 +2,7 @@ factoryDeployment:
   factory:
     image:
       repository: vova0911/factory
-      tag: amd64_latest
+      tag: amd64_0.0.16
     resources:
       limits:
         cpu: "1"
