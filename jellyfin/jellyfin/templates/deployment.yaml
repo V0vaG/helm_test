@@ -37,7 +37,7 @@ spec:
       volumes:
       - name: config-volume
         persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-config-pvc
+          claimName: {{ include "jellyfin.fullname" . }}-jellyfin-config-pvc
       - name: media-volume
         persistentVolumeClaim:
-          claimName: {{ include "jellyfin.fullname" . }}-media-pvc
+          claimName: {{ include "jellyfin.fullname" . }}-jellyfin-media-pvc

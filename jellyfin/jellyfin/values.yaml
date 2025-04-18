@@ -11,11 +11,17 @@ jellyfin:
     targetPort: 8096
   replicas: 1
   type: ClusterIP
+jellyfinProxy:
+  ports:
+  - port: 8096
+    protocol: TCP
+    targetPort: 8096
+  type: ClusterIP
 kubernetesClusterDomain: cluster.local
 pvc:
-  configPvc:
+  jellyfinConfigPvc:
     storageClass: ""
     storageRequest: 5Gi
-  mediaPvc:
+  jellyfinMediaPvc:
     storageClass: ""
     storageRequest: 8000Gi

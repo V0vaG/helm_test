@@ -8,22 +8,20 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - http:
-      paths:
-        - path: /factory(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: factory-service
-              port:
-                number: 80
-        - path: /(/|$)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: jellyfin-jellyfin
-              namespace: argocd
-              port:
-                number: 8096
-
+    - http:
+        paths:
+          - path: /factory(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: factory-service
+                port:
+                  number: 80
+          - path: /(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  number: 8096
 

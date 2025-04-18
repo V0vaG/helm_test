@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "jellyfin.fullname" . }}-main-ingress
+  labels:
+  {{- include "jellyfin.labels" . | nindent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: factory-service
+            port:
+              number: 80
+        path: /factory(/|$)(.*)
+        pathType: Prefix
+      - backend:
+          service:
+            name: '{{ include "jellyfin.fullname" . }}-jellyfin-proxy'
+            port:
+              number: 8096
+        path: /(/|$)(.*)
+        pathType: Prefix
