@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: factory
-        image: vova0911/factory:amd64_0.0.14
+        image: vova0911/factory:amd64_0.0.16
         ports:
         - containerPort: 5000
         resources:
@@ -87,7 +87,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
-  ingressClassName: nginx  # <-- required!
+  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -98,4 +98,5 @@ spec:
             name: factory-service
             port:
               number: 80
+
 
