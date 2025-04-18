@@ -133,13 +133,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /factory(/|$)(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: factory-service
-                port:
-                  number: 80
           - path: /(/|$)(.*)
             pathType: Prefix
             backend:

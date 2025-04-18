@@ -13,13 +13,6 @@ spec:
       paths:
       - backend:
           service:
-            name: factory-service
-            port:
-              number: 80
-        path: /factory(/|$)(.*)
-        pathType: Prefix
-      - backend:
-          service:
             name: '{{ include "jellyfin.fullname" . }}-jellyfin-proxy'
             port:
               number: 8096
