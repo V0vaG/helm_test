@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: vovarepo
-        image: vova0911/vovarepo:amd64_0.0.2
+        image: vova0911/vovarepo:amd64_0.0.4
         ports:
         - containerPort: 5000
         # Uncomment if needed
