@@ -4,8 +4,6 @@ metadata:
   name: {{ include "factory.fullname" . }}-ingress
   labels:
   {{- include "factory.labels" . | nindent 4 }}
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:

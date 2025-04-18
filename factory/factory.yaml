@@ -84,8 +84,6 @@ kind: Ingress
 metadata:
   name: factory-ingress
   namespace: factory
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
