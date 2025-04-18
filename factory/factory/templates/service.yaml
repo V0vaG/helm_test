@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "factory.fullname" . }}-factory-service
+  name: {{ include "factory.fullname" . }}-service
   labels:
   {{- include "factory.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.factoryService.type }}
+  type: {{ .Values.service.type }}
   selector:
     app: factory
     {{- include "factory.selectorLabels" . | nindent 4 }}
   ports:
-  {{- .Values.factoryService.ports | toYaml | nindent 2 }}
+  {{- .Values.service.ports | toYaml | nindent 2 }}

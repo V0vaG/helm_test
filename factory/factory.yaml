@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: factory
-        image: vova0911/factory:amd64_0.0.16
+        image: vova0911/factory:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
@@ -85,48 +85,5 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-  type: ClusterIP
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: factory-ingress
-  namespace: factory
-spec:
-  ingressClassName: nginx
-  rules:
-  - http:
-      paths:
-      - path: /factory
-        pathType: Prefix
-        backend:
-          service:
-            name: factory-service
-            port:
-              number: 80
----
-# Additional manifest for exposing Ingress Controller on port 95 via NodePort
-apiVersion: v1
-kind: Service
-metadata:
-  name: ingress-nginx-controller
-  namespace: ingress-nginx
-spec:
+      nodePort: 30090
   type: NodePort
-  selector:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/component: controller
-  ports:
-    - name: http
-      port: 80
-      targetPort: 80
-      nodePort: 30095
-    - name: http-alt
-      port: 95
-      targetPort: 80
-      nodePort: 30096
-    - name: https
-      port: 443
-      targetPort: 443
-      nodePort: 30097
-

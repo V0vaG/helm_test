@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "factory.fullname" . }}-factory-data-pvc
+  name: {{ include "factory.fullname" . }}-data-pvc
   labels:
   {{- include "factory.labels" . | nindent 4 }}
 spec:
@@ -9,6 +9,6 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: {{ .Values.pvc.factoryDataPvc.storageRequest | quote }}
-  storageClassName: {{ .Values.pvc.factoryDataPvc.storageClass | quote }}
+      storage: {{ .Values.pvc.dataPvc.storageRequest | quote }}
+  storageClassName: {{ .Values.pvc.dataPvc.storageClass | quote }}
   volumeName: factory-data-pv
