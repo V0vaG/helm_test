@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "factory.fullname" . }}-deployment
+  name: {{ include "factory.fullname" . }}-factory-deployment
   labels:
   {{- include "factory.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: {{ .Values.factoryDeployment.replicas }}
   selector:
     matchLabels:
       app: factory
@@ -20,16 +20,17 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.factory.image.repository }}:{{ .Values.deployment.factory.image.tag
+        image: {{ .Values.factoryDeployment.factory.image.repository }}:{{ .Values.factoryDeployment.factory.image.tag
           | default .Chart.AppVersion }}
         name: factory
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.factory.resources | nindent 10 }}
+        resources: {{- toYaml .Values.factoryDeployment.factory.resources | nindent 10
+          }}
         volumeMounts:
         - mountPath: /root/script_files/factory
           name: data-volume
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: {{ include "factory.fullname" . }}-data-pvc
+          claimName: {{ include "factory.fullname" . }}-factory-data-pvc

@@ -1,4 +1,4 @@
-deployment:
+factoryDeployment:
   factory:
     image:
       repository: vova0911/factory
@@ -11,14 +11,29 @@ deployment:
         cpu: 500m
         memory: 256Mi
   replicas: 1
-kubernetesClusterDomain: cluster.local
-pvc:
-  dataPvc:
-    storageClass: ""
-    storageRequest: 1Gi
-service:
+factoryService:
   ports:
   - port: 80
     protocol: TCP
     targetPort: 5000
   type: ClusterIP
+ingressNginxController:
+  ports:
+  - name: http
+    nodePort: 31376
+    port: 80
+    targetPort: 80
+  - name: http-alt
+    nodePort: 31995
+    port: 95
+    targetPort: 80
+  - name: https
+    nodePort: 31187
+    port: 443
+    targetPort: 443
+  type: NodePort
+kubernetesClusterDomain: cluster.local
+pvc:
+  factoryDataPvc:
+    storageClass: ""
+    storageRequest: 1Gi

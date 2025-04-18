@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "factory.fullname" . }}-ingress
+  name: {{ include "factory.fullname" . }}-factory-ingress
   labels:
   {{- include "factory.labels" . | nindent 4 }}
 spec:
@@ -11,8 +11,8 @@ spec:
       paths:
       - backend:
           service:
-            name: '{{ include "factory.fullname" . }}-service'
+            name: '{{ include "factory.fullname" . }}-factory-service'
             port:
               number: 80
-        path: /factory(/|$)(.*)
+        path: /factory
         pathType: Prefix
