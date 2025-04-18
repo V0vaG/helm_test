@@ -21,7 +21,9 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: jellyfin
+              name: jellyfin-jellyfin
+              namespace: argocd
               port:
                 number: 8096
+
 
