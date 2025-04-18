@@ -40,6 +40,11 @@ spec:
   selector:
     matchLabels:
       app: factory
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
   template:
     metadata:
       labels:
@@ -47,9 +52,12 @@ spec:
     spec:
       containers:
       - name: factory
-        image: vova0911/factory:amd64_0.0.16
+        image: vova0911/factory:amd64_latest
         ports:
         - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
         resources:
           requests:
             memory: "256Mi"

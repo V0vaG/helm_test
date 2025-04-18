@@ -6,6 +6,13 @@ metadata:
   {{- include "factory.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.factoryDeployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.factoryDeployment.strategy.rollingUpdate.maxSurge | quote
+        }}
+      maxUnavailable: {{ .Values.factoryDeployment.strategy.rollingUpdate.maxUnavailable
+        }}
+    type: {{ .Values.factoryDeployment.strategy.type | quote }}
   selector:
     matchLabels:
       app: factory
