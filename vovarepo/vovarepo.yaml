@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vovarepo
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: vovarepo-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vova/script_files/vovarepo
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vovarepo-data-pvc
+  namespace: vovarepo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: vovarepo-data-pv
+  storageClassName: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vovarepo-deployment
+  namespace: vovarepo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vovarepo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: vovarepo
+    spec:
+      containers:
+      - name: vovarepo
+        image: vova0911/vovarepo:amd64_latest
+        ports:
+        - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /root/script_files/vovarepo
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: vovarepo-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vovarepo-service
+  namespace: vovarepo
+spec:
+  selector:
+    app: vovarepo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30091
+  type: NodePort
