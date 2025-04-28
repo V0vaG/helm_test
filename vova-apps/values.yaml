@@ -21,3 +21,4 @@ apps:
   - name: mongodb
   - name: vovastl
   - name: vovarepo
+  - name: weprintcloud
