@@ -1,8 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: weprintcloud
 ---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: weprintcloud-postgres-pv
+  name: postgres-pv
   namespace: weprintcloud
 spec:
   capacity:
@@ -16,7 +20,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: weprintcloud-postgres-pvc
+  name: postgres-pvc
   namespace: weprintcloud
 spec:
   accessModes:
@@ -24,7 +28,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  volumeName: weprintcloud-postgres-pv
+  volumeName: postgres-pv
   storageClassName: ""
 ---
 apiVersion: v1
@@ -73,5 +77,5 @@ spec:
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
-          claimName: weprintcloud-postgres-pvc
+          claimName: postgres-pvc
 
