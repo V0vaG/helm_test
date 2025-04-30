@@ -35,7 +35,29 @@ spec:
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: postgres-storage
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - "echo \"\U0001F527 Patching PV to clear claimRef...\"\nkubectl patch pv weprintcloud-postgres-pv
+          -p '{\"spec\":{\"claimRef\": null}}' || true\n"
+        env:
+        - name: KUBECONFIG
+          value: {{ quote .Values.postgres.unbindPv.env.kubeconfig }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.postgres.unbindPv.image.repository }}:{{ .Values.postgres.unbindPv.image.tag
+          | default .Chart.AppVersion }}
+        name: unbind-pv
+        resources: {}
+        volumeMounts:
+        - mountPath: /root/.kube
+          name: kubeconfig
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
           claimName: {{ include "postgresql.fullname" . }}-weprintcloud-postgres-pvc
+      - hostPath:
+          path: /root/.kube
+          type: Directory
+        name: kubeconfig

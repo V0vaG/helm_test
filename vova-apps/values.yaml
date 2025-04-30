@@ -22,4 +22,4 @@ apps:
   - name: vovastl
   - name: vovarepo
   - name: weprintcloud
-  #- name: postgresql
+  - name: postgresql
