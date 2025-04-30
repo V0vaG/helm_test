@@ -17,7 +17,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: postgresql-weprintcloud-postgres-pvc
-  namespace: argocd
+  namespace: weprintcloud
 spec:
   accessModes:
     - ReadWriteOnce
