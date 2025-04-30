@@ -10,7 +10,7 @@ postgres:
       tag: "14"
   replicas: 1
 pvc:
-  qlWeprintcloudPostgresPvc:
+  weprintcloudPostgresPvc:
     storageClass: ""
     storageRequest: 1Gi
 service:

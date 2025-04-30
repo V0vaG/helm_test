@@ -16,7 +16,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgresql-weprintcloud-postgres-pvc
+  name: weprintcloud-postgres-pvc
   namespace: weprintcloud
 spec:
   accessModes:
