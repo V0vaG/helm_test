@@ -52,7 +52,7 @@ spec:
         - containerPort: 5000
         env:
         - name: POSTGRES_URL
-          value: postgresql://postgres:password@postgres-service:5432/appdb
+          value: postgresql://postgres:password@postgres-service.weprintcloud.svc.cluster.local:5432/appdb
         - name: VERSION
           value: "1.0.0"
         volumeMounts:
