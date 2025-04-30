@@ -6,7 +6,7 @@ deployment:
       version: 1.0.0
     image:
       repository: vova0911/weprintcloud
-      tag: amd64_0.0.15
+      tag: amd64_0.0.20
     resources:
       limits:
         cpu: "1"
