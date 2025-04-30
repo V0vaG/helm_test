@@ -9,13 +9,13 @@ postgres:
       repository: postgres
       tag: "14"
   replicas: 1
-pvc:
-  pvc:
-    storageClass: ""
-    storageRequest: 1Gi
-service:
+postgresService:
   ports:
   - port: 5432
     protocol: TCP
     targetPort: 5432
   type: ClusterIP
+pvc:
+  weprintcloudPostgresPvc:
+    storageClass: ""
+    storageRequest: 1Gi

@@ -38,4 +38,4 @@ spec:
       volumes:
       - name: postgres-storage
         persistentVolumeClaim:
-          claimName: {{ include "postgresql.fullname" . }}-pvc
+          claimName: {{ include "postgresql.fullname" . }}-weprintcloud-postgres-pvc
