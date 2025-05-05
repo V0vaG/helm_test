@@ -9,12 +9,6 @@ postgres:
       repository: postgres
       tag: "14"
   replicas: 1
-  unbindPv:
-    env:
-      kubeconfig: /root/.kube/config
-    image:
-      repository: bitnami/kubectl
-      tag: latest
 postgresService:
   ports:
   - port: 5432

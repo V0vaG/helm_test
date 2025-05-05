@@ -10,5 +10,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.weprintcloudPostgresPvc.storageRequest | quote }}
+  selector:
+    matchLabels:
+      app: weprintcloud-postgres
   storageClassName: {{ .Values.pvc.weprintcloudPostgresPvc.storageClass | quote }}
-  volumeName: weprintcloud-postgres-pv

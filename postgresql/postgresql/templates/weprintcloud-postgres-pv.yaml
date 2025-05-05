@@ -3,6 +3,7 @@ kind: PersistentVolume
 metadata:
   name: {{ include "postgresql.fullname" . }}-weprintcloud-postgres-pv
   labels:
+    app: weprintcloud-postgres
   {{- include "postgresql.labels" . | nindent 4 }}
 spec:
   accessModes:
@@ -11,4 +12,5 @@ spec:
     storage: 1Gi
   hostPath:
     path: /home/vova/script_files/weprintcloud_pg
+  persistentVolumeReclaimPolicy: Retain
   storageClassName: ""
