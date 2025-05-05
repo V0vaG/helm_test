@@ -29,6 +29,12 @@ spec:
         name: weprintcloud
         ports:
         - containerPort: 5000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 10
         resources: {{- toYaml .Values.deployment.weprintcloud.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/weprintcloud

@@ -52,7 +52,7 @@ spec:
         - containerPort: 5000
         env:
         - name: POSTGRES_URL
-          value: postgresql://postgres:password@postgresql-postgres-service.argocd.svc.cluster.local:5432/appdb
+          value: postgresql://postgres:password@postgres-service.argocd.svc.cluster.local:5432/appdb
         - name: VERSION
           value: "1.0.0"
         volumeMounts:
@@ -65,12 +65,6 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "1"
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 5000
-          initialDelaySeconds: 10
-          periodSeconds: 10
       volumes:
       - name: data-volume
         persistentVolumeClaim:
@@ -85,9 +79,8 @@ spec:
   selector:
     app: weprintcloud
   ports:
-  - protocol: TCP
-    port: 80
-    targetPort: 5000
-    nodePort: 30093
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30093
   type: NodePort
-
