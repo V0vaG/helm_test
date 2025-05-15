@@ -8,7 +8,7 @@ deployment:
   vhide:
     image:
       repository: vova0911/vhide
-      tag: amd64_1.1.0
+      tag: amd64_1.1.1
     resources:
       limits:
         cpu: "1"
@@ -23,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30095
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30095
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
