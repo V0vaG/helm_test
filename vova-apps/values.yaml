@@ -24,3 +24,4 @@ apps:
   - name: weprintcloud
   - name: postgresql
   - name: vhide
+  - name: vvault
