@@ -6,7 +6,7 @@ metadata:
   {{- include "kiwix.labels" . | nindent 4 }}
 spec:
   accessModes:
-  - ReadOnlyMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: {{ .Values.pvc.zimPvc.storageRequest | quote }}

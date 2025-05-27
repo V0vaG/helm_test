@@ -6,7 +6,7 @@ spec:
   capacity:
     storage: 120Gi
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   hostPath:
     path: /home/vova/Downloads
 ---
@@ -16,7 +16,7 @@ metadata:
   name: kiwix-zim-pvc
 spec:
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 120Gi
