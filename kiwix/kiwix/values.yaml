@@ -1,7 +1,8 @@
 kiwix:
   kiwix:
     args:
-    - /data/wikipedia_en_all_maxi.zim
+ #   - /data/wikipedia_en_all_maxi.zim
+    - /data/wikipedia_he_all_nopic_2024-06.zim
     image:
       repository: ghcr.io/kiwix/kiwix-serve
       tag: latest

@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/Downloads
+    path: /media/vova/1TB
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -38,7 +38,8 @@ spec:
       containers:
         - name: kiwix
           image: ghcr.io/kiwix/kiwix-serve:latest
-          args: ["/data/wikipedia_en_all_maxi.zim"]
+          # args: ["/data/wikipedia_en_all_maxi.zim"]  
+          args: ["/data/wikipedia_he_all_nopic_2024-06.zim"]
           ports:
             - containerPort: 80
           volumeMounts:
