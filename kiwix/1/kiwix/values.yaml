@@ -1,0 +1,13 @@
+image:
+  repository: ghcr.io/kiwix/kiwix-serve
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+pvc:
+  name: kiwix-zim
+  mountPath: /data
+  size: 120Gi

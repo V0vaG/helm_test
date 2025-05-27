@@ -1,0 +1,18 @@
+kiwix:
+  kiwix:
+    args:
+    - /data/wikipedia_en_all_maxi.zim
+    image:
+      repository: ghcr.io/kiwix/kiwix-serve
+      tag: latest
+  replicas: 1
+kubernetesClusterDomain: cluster.local
+pvc:
+  zimPvc:
+    storageRequest: 120Gi
+service:
+  ports:
+  - nodePort: 30098
+    port: 80
+    targetPort: 80
+  type: NodePort

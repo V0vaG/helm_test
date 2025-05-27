@@ -25,3 +25,4 @@ apps:
   - name: postgresql
   - name: vhide
   - name: vvault
+  - name: kiwix

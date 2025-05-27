@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kiwix.fullname" . }}-kiwix
+  labels:
+  {{- include "kiwix.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.kiwix.replicas }}
+  selector:
+    matchLabels:
+      app: kiwix
+    {{- include "kiwix.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: kiwix
+      {{- include "kiwix.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - args: {{- toYaml .Values.kiwix.kiwix.args | nindent 8 }}
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.kiwix.kiwix.image.repository }}:{{ .Values.kiwix.kiwix.image.tag
+          | default .Chart.AppVersion }}
+        name: kiwix
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: zim-volume
+          readOnly: true
+      volumes:
+      - name: zim-volume
+        persistentVolumeClaim:
+          claimName: {{ include "kiwix.fullname" . }}-zim-pvc

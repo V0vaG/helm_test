@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: kiwix-zim-pv
+spec:
+  capacity:
+    storage: 120Gi
+  accessModes:
+    - ReadOnlyMany
+  hostPath:
+    path: /home/vova/Downloads
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kiwix-zim-pvc
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 120Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kiwix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kiwix
+  template:
+    metadata:
+      labels:
+        app: kiwix
+    spec:
+      containers:
+        - name: kiwix
+          image: ghcr.io/kiwix/kiwix-serve:latest
+          args: ["/data/wikipedia_en_all_maxi.zim"]
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: zim-volume
+              mountPath: /data
+              readOnly: true
+      volumes:
+        - name: zim-volume
+          persistentVolumeClaim:
+            claimName: kiwix-zim-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kiwix-service
+spec:
+  type: NodePort
+  selector:
+    app: kiwix
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30098
