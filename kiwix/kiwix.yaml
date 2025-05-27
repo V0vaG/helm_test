@@ -8,7 +8,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /media/vova/1TB
+    path: /media/vova/1TB/kiwix
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

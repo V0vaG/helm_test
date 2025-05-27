@@ -10,4 +10,4 @@ spec:
   capacity:
     storage: 120Gi
   hostPath:
-    path: /media/vova/1TB
+    path: /media/vova/1TB/kiwix
