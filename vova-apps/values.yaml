@@ -12,17 +12,17 @@ apps:
     # repoURL: https://github.com/V0vaG/helm_test
   - name: vpkg
   - name: topix
-  - name: vbank
+  #- name: vbank
   - name: jellyfin
-  - name: tools
-  - name: vhub
-  - name: vvolt
-  - name: factory
-  - name: mongodb
+  #- name: tools
+  #- name: vhub
+  #- name: vvolt
+  #- name: factory
+  #- name: mongodb
   - name: vovastl
-  - name: vovarepo
-  - name: weprintcloud
-  - name: postgresql
-  - name: vhide
+  #- name: vovarepo
+  #- name: weprintcloud
+  #- name: postgresql
+  #- name: vhide
   - name: vvault
-  - name: kiwix
+  #- name: kiwix
