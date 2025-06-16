@@ -1,0 +1,17 @@
+gitea:
+  gitea:
+    env:
+      userGid: "1000"
+      userUid: "1000"
+    image:
+      repository: gitea/gitea
+      tag: latest
+  replicas: 1
+kubernetesClusterDomain: cluster.local
+service:
+  ports:
+  - name: http
+    nodePort: 30099
+    port: 3000
+    targetPort: 3000
+  type: NodePort

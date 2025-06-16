@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gitea.fullname" . }}-gitea
+  labels:
+  {{- include "gitea.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.gitea.replicas }}
+  selector:
+    matchLabels:
+      app: gitea
+    {{- include "gitea.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: gitea
+      {{- include "gitea.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: USER_UID
+          value: {{ quote .Values.gitea.gitea.env.userUid }}
+        - name: USER_GID
+          value: {{ quote .Values.gitea.gitea.env.userGid }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.gitea.gitea.image.repository }}:{{ .Values.gitea.gitea.image.tag
+          | default .Chart.AppVersion }}
+        name: gitea
+        ports:
+        - containerPort: 3000
+        - containerPort: 22
+        resources: {}
+        volumeMounts:
+        - mountPath: /data
+          name: gitea-data
+      volumes:
+      - hostPath:
+          path: /home/vova/script_files/gitea
+          type: DirectoryOrCreate
+        name: gitea-data
