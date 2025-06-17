@@ -6,15 +6,8 @@ app:
       mysqlPassword: nextcloudpass
       mysqlUser: nextcloud
     image:
-      repository: nextcloud
-      tag: 28.0.4-apache
-    resources:
-      limits:
-        cpu: "1"
-        memory: 1Gi
-      requests:
-        cpu: 100m
-        memory: 512Mi
+      repository: docker.io/library/nextcloud
+      tag: latest
   replicas: 1
 db:
   mariadb:
@@ -24,15 +17,8 @@ db:
       mysqlRootPassword: rootpass
       mysqlUser: nextcloud
     image:
-      repository: mariadb
-      tag: "10.6"
-    resources:
-      limits:
-        cpu: 500m
-        memory: 512Mi
-      requests:
-        cpu: 100m
-        memory: 256Mi
+      repository: docker.io/library/mariadb
+      tag: latest
   ports:
   - port: 3306
     targetPort: 3306
