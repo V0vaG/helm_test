@@ -28,3 +28,4 @@ apps:
   #- name: kiwix
   #- name: gitlab
   - name: gitea
+  - name: nextcloud

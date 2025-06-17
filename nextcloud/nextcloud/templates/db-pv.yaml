@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "nextcloud.fullname" . }}-db-pv
+  labels:
+  {{- include "nextcloud.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  hostPath:
+    path: /home/vova/script_files/nextcloud/db
+  persistentVolumeReclaimPolicy: Retain

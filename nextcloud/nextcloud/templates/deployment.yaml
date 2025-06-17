@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nextcloud.fullname" . }}-db
+  labels:
+  {{- include "nextcloud.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.db.replicas }}
+  selector:
+    matchLabels:
+      app: nextcloud-db
+    {{- include "nextcloud.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: nextcloud-db
+      {{- include "nextcloud.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: {{ quote .Values.db.mariadb.env.mysqlRootPassword }}
+        - name: MYSQL_DATABASE
+          value: {{ quote .Values.db.mariadb.env.mysqlDatabase }}
+        - name: MYSQL_USER
+          value: {{ quote .Values.db.mariadb.env.mysqlUser }}
+        - name: MYSQL_PASSWORD
+          value: {{ quote .Values.db.mariadb.env.mysqlPassword }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.db.mariadb.image.repository }}:{{ .Values.db.mariadb.image.tag
+          | default .Chart.AppVersion }}
+        name: mariadb
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: db-volume
+      volumes:
+      - name: db-volume
+        persistentVolumeClaim:
+          claimName: {{ include "nextcloud.fullname" . }}-db-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "nextcloud.fullname" . }}-app
+  labels:
+  {{- include "nextcloud.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: nextcloud-app
+    {{- include "nextcloud.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: nextcloud-app
+      {{- include "nextcloud.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_PASSWORD
+          value: {{ quote .Values.app.nextcloud.env.mysqlPassword }}
+        - name: MYSQL_DATABASE
+          value: {{ quote .Values.app.nextcloud.env.mysqlDatabase }}
+        - name: MYSQL_USER
+          value: {{ quote .Values.app.nextcloud.env.mysqlUser }}
+        - name: MYSQL_HOST
+          value: {{ quote .Values.app.nextcloud.env.mysqlHost }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.app.nextcloud.image.repository }}:{{ .Values.app.nextcloud.image.tag
+          | default .Chart.AppVersion }}
+        name: nextcloud
+        ports:
+        - containerPort: 80
+        resources: {}
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: html-volume
+        - mountPath: /var/www/html/data
+          name: data-volume
+      volumes:
+      - name: html-volume
+        persistentVolumeClaim:
+          claimName: {{ include "nextcloud.fullname" . }}-html-pvc
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "nextcloud.fullname" . }}-files-pvc

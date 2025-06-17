@@ -1,0 +1,40 @@
+app:
+  nextcloud:
+    env:
+      mysqlDatabase: nextcloud
+      mysqlHost: nextcloud-db
+      mysqlPassword: nextcloudpass
+      mysqlUser: nextcloud
+    image:
+      repository: docker.io/library/nextcloud
+      tag: latest
+  replicas: 1
+db:
+  mariadb:
+    env:
+      mysqlDatabase: nextcloud
+      mysqlPassword: nextcloudpass
+      mysqlRootPassword: rootpass
+      mysqlUser: nextcloud
+    image:
+      repository: docker.io/library/mariadb
+      tag: latest
+  ports:
+  - port: 3306
+    targetPort: 3306
+  replicas: 1
+  type: ClusterIP
+kubernetesClusterDomain: cluster.local
+pvc:
+  dbPvc:
+    storageRequest: 5Gi
+  filesPvc:
+    storageRequest: 10Gi
+  htmlPvc:
+    storageRequest: 5Gi
+service:
+  ports:
+  - nodePort: 30088
+    port: 80
+    targetPort: 80
+  type: NodePort
