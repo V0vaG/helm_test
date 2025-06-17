@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mariadb
+    container_name: nextcloud-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: nextcloudpass
+    volumes:
+      - /home/vova/script_files/nextcloud/db:/var/lib/mysql
+
+  app:
+    image: nextcloud
+    container_name: nextcloud-app
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    environment:
+      MYSQL_PASSWORD: nextcloudpass
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_HOST: db
+    volumes:
+      - /home/vova/script_files/nextcloud/html:/var/www/html
+      - /home/vova/script_files/nextcloud/files:/var/www/html/data
+
