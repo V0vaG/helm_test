@@ -30,6 +30,7 @@ pvc:
     storageClass: ""
     storageRequest: 5Gi
   filesPvc:
+    storageClass: ""
     storageRequest: 10Gi
   htmlPvc:
     storageClass: ""

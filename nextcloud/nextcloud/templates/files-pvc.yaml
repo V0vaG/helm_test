@@ -10,4 +10,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.filesPvc.storageRequest | quote }}
+  storageClassName: {{ .Values.pvc.filesPvc.storageClass | quote }}
   volumeName: nextcloud-files-pv
