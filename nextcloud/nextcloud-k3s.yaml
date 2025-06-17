@@ -28,6 +28,7 @@ spec:
     requests:
       storage: 5Gi
   volumeName: nextcloud-db-pv
+  storageClassName: "" 
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -54,6 +55,7 @@ spec:
     requests:
       storage: 5Gi
   volumeName: nextcloud-html-pv
+  storageClassName: "" 
 ---
 apiVersion: v1
 kind: PersistentVolume

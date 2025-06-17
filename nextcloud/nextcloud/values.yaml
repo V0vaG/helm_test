@@ -27,10 +27,12 @@ db:
 kubernetesClusterDomain: cluster.local
 pvc:
   dbPvc:
+    storageClass: ""
     storageRequest: 5Gi
   filesPvc:
     storageRequest: 10Gi
   htmlPvc:
+    storageClass: ""
     storageRequest: 5Gi
 service:
   ports:
