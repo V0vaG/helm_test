@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 5Gi
   hostPath:
-    path: /home/vova/script_files/nextcloud/db
+    path: /media/vova/2TB/nextcloud/db
   persistentVolumeReclaimPolicy: Retain

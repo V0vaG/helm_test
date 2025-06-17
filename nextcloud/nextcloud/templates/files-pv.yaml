@@ -10,5 +10,5 @@ spec:
   capacity:
     storage: 10Gi
   hostPath:
-    path: /home/vova/script_files/nextcloud/files
+    path: /media/vova/2TB/nextcloud/files
   persistentVolumeReclaimPolicy: Retain

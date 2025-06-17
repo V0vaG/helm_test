@@ -13,7 +13,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/nextcloud/db
+    path: /media/vova/2TB/nextcloud/db
   persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
@@ -40,7 +40,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/nextcloud/html
+    path: /media/vova/2TB/nextcloud/html
   persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
@@ -67,7 +67,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /home/vova/script_files/nextcloud/files
+    path: /media/vova/2TB/nextcloud/files
   persistentVolumeReclaimPolicy: Retain
 ---
 apiVersion: v1
