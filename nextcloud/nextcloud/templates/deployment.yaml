@@ -31,7 +31,7 @@ spec:
         image: {{ .Values.db.mariadb.image.repository }}:{{ .Values.db.mariadb.image.tag
           | default .Chart.AppVersion }}
         name: mariadb
-        resources: {}
+        resources: {{- toYaml .Values.db.mariadb.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /var/lib/mysql
           name: db-volume
@@ -72,10 +72,22 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.app.nextcloud.image.repository }}:{{ .Values.app.nextcloud.image.tag
           | default .Chart.AppVersion }}
+        livenessProbe:
+          httpGet:
+            path: /status.php
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 30
         name: nextcloud
         ports:
         - containerPort: 80
-        resources: {}
+        readinessProbe:
+          httpGet:
+            path: /status.php
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        resources: {{- toYaml .Values.app.nextcloud.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /var/www/html
           name: html-volume

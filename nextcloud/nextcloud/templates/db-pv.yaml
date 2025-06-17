@@ -12,3 +12,4 @@ spec:
   hostPath:
     path: /media/vova/2TB/nextcloud/db
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
