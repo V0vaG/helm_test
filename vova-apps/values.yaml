@@ -10,7 +10,7 @@ apps:
   - name: weather
     # branch: test
     # repoURL: https://github.com/V0vaG/helm_test
-  - name: vpkg
+  # - name: vpkg
   - name: topix
   #- name: vbank
   - name: jellyfin
@@ -25,7 +25,7 @@ apps:
   #- name: postgresql
   #- name: vhide
   - name: vvault
-  #- name: kiwix
-  #- name: gitlab
-  - name: gitea
+  # - name: kiwix
+  # - name: gitlab
+  # - name: gitea
   # - name: nextcloud
