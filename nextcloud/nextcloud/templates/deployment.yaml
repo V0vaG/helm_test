@@ -81,10 +81,6 @@ spec:
           name: html-volume
         - mountPath: /var/www/html/data
           name: data-volume
-        - mountPath: /var/nc_backup
-          name: backup-volume
-        - mountPath: /var/nc_config
-          name: config-volume
       volumes:
       - name: html-volume
         persistentVolumeClaim:
@@ -92,11 +88,3 @@ spec:
       - name: data-volume
         persistentVolumeClaim:
           claimName: {{ include "nextcloud.fullname" . }}-files-pvc
-      - hostPath:
-          path: /media/vova/2TB/nextcloud/backup
-          type: DirectoryOrCreate
-        name: backup-volume
-      - hostPath:
-          path: /home/vova/script_files/nextcloud
-          type: DirectoryOrCreate
-        name: config-volume
