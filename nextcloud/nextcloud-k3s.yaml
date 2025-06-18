@@ -165,10 +165,6 @@ spec:
               mountPath: /var/www/html
             - name: data-volume
               mountPath: /var/www/html/data
-            - name: backup-volume
-              mountPath: /var/nc_backup
-            - name: config-volume
-              mountPath: /var/nc_config
       volumes:
         - name: html-volume
           persistentVolumeClaim:
@@ -176,14 +172,6 @@ spec:
         - name: data-volume
           persistentVolumeClaim:
             claimName: nextcloud-files-pvc
-        - name: backup-volume
-          hostPath:
-            path: /media/vova/2TB/nextcloud/backup
-            type: DirectoryOrCreate
-        - name: config-volume
-          hostPath:
-            path: /home/vova/script_files/nextcloud
-            type: DirectoryOrCreate
 ---
 apiVersion: v1
 kind: Service
@@ -198,4 +186,3 @@ spec:
     - port: 80
       targetPort: 80
       nodePort: 30088
-
