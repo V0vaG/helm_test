@@ -27,5 +27,5 @@ apps:
   - name: vvault
   # - name: kiwix
   # - name: gitlab
-  # - name: gitea
+  - name: gitea
   - name: nextcloud
