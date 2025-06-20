@@ -25,6 +25,7 @@ apps:
   #- name: postgresql
   #- name: vhide
   - name: vvault
+  - name: list
   # - name: kiwix
   # - name: gitlab
   - name: gitea

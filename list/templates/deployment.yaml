@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "list.fullname" . }}-deployment
+  labels:
+  {{- include "list.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: list
+    {{- include "list.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: list
+      {{- include "list.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.list.image.repository }}:{{ .Values.deployment.list.image.tag
+          | default .Chart.AppVersion }}
+        name: list
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.list.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files/list
+          name: data-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "list.fullname" . }}-data-pvc
