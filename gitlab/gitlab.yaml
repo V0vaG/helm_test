@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: gitlab
-          image: gitlab/gitlab-ce:16.11.10
+          image: gitlab/gitlab-ce:18.1.0
           ports:
             - containerPort: 80
           env:
