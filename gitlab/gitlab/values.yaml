@@ -8,6 +8,8 @@ gitlab:
       tag: 16.11.1-ce.0
   replicas: 1
 kubernetesClusterDomain: cluster.local
+rootSecret:
+  password: ""
 service:
   ports:
   - name: http

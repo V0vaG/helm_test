@@ -20,13 +20,30 @@ spec:
       - env:
         - name: GITLAB_OMNIBUS_CONFIG
           value: {{ quote .Values.gitlab.gitlab.env.gitlabOmnibusConfig }}
+        - name: GITLAB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: {{ include "gitlab.fullname" . }}-root-secret
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.gitlab.gitlab.image.repository }}:{{ .Values.gitlab.gitlab.image.tag
           | default .Chart.AppVersion }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 120
+          timeoutSeconds: 10
         name: gitlab
         ports:
         - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          timeoutSeconds: 5
         resources: {}
         volumeMounts:
         - mountPath: /etc/gitlab
@@ -35,6 +52,10 @@ spec:
           name: logs
         - mountPath: /var/opt/gitlab
           name: data
+      hostAliases:
+      - hostnames:
+        - gitlab.local
+        ip: 127.0.0.1
       volumes:
       - hostPath:
           path: /home/vova/script_files/gitlab/config
