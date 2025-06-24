@@ -1,3 +1,1 @@
 kubernetesClusterDomain: cluster.local
-rootSecret:
-  password: ""

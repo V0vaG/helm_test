@@ -5,16 +5,6 @@ metadata:
   name: gitlab
 
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: gitlab-root-secret
-  namespace: gitlab
-type: Opaque
-data:
-  password: c3VwZXJfc2VjdXJlX3Jvb3Q=  # base64 for 'super_secure_root'
-
----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -30,6 +20,7 @@ spec:
       values: |
         global:
           edition: ce
+          initialRootPassword: "super_secure_root"
           hosts:
             domain: local
             https: false
@@ -42,11 +33,6 @@ spec:
             service:
               type: NodePort
               nodePort: 30099
-
-        root:
-          password:
-            secret: gitlab-root-secret
-            key: password
 
   destination:
     server: https://kubernetes.default.svc

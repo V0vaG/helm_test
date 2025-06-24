@@ -15,6 +15,7 @@ spec:
       values: |
         global:
           edition: ce
+          initialRootPassword: "super_secure_root"
           hosts:
             domain: local
             https: false
@@ -27,11 +28,6 @@ spec:
             service:
               type: NodePort
               nodePort: 30099
-
-        root:
-          password:
-            secret: gitlab-root-secret
-            key: password
     repoURL: https://charts.gitlab.io
     targetRevision: 7.11.1
   syncPolicy:
