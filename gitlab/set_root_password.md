@@ -1,6 +1,5 @@
 # get container name
 kubectl get pods -n argocd -l app=gitlab
-kubectl get pods -n argocd -l app.kubernetes.io/name=gitlab
 
 # enter container
 kubectl exec -n argocd -it <gitlab-pod-name> -- bash
