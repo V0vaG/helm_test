@@ -2,7 +2,7 @@ deployment:
   list:
     image:
       repository: vova0911/list
-      tag: amd64_0.1.22
+      tag: amd64_0.1.23
     resources:
       limits:
         cpu: "1"
