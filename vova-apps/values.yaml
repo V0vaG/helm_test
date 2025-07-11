@@ -14,7 +14,7 @@ apps:
   - name: topix
   #- name: vbank
   - name: jellyfin
-  #- name: tools
+  - name: tools
   #- name: vhub
   #- name: vvolt
   #- name: factory
