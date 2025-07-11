@@ -5,40 +5,6 @@ metadata:
 
 ---
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: custom-nginx-config
-  namespace: custom-nginx
-data:
-  default.conf: |
-    server {
-        listen 80;
-        server_name vova-g.tplinkdns.com;
-
-        location /tools/ {
-            rewrite ^/tools(/.*)$ $1 break;
-            proxy_pass http://tools-service.tools.svc.cluster.local:80;
-
-            proxy_http_version 1.1;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-
-            sub_filter_once off;
-            sub_filter_types text/html;
-            sub_filter '<head>' '<base href="/tools/"><head>';
-        }
-
-        location /healthz {
-            return 200 'OK';
-            add_header Content-Type text/plain;
-        }
-    }
-
----
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -58,14 +24,50 @@ spec:
       - name: nginx
         image: nginx:alpine
         ports:
-        - containerPort: 80
+        - containerPort: 443
         volumeMounts:
         - name: nginx-conf
           mountPath: /etc/nginx/conf.d
+        - name: nginx-tls
+          mountPath: /etc/nginx/ssl
+          readOnly: true
       volumes:
       - name: nginx-conf
         configMap:
           name: custom-nginx-config
+      - name: nginx-tls
+        secret:
+          secretName: custom-nginx-tls
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-nginx-config
+  namespace: custom-nginx
+data:
+  default.conf: |
+    server {
+        listen 443 ssl;
+        server_name vova-g.tplinkdns.com;
+
+        ssl_certificate /etc/nginx/ssl/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+
+        location / {
+            proxy_pass http://tools-service.tools.svc.cluster.local:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /healthz {
+            return 200 'OK';
+            add_header Content-Type text/plain;
+        }
+    }
 
 ---
 
@@ -79,29 +81,7 @@ spec:
     app: custom-nginx
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: ClusterIP
-
----
-
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: custom-nginx
-  namespace: custom-nginx
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: vova-g.tplinkdns.com
-    http:
-      paths:
-      - path: /tools
-        pathType: Prefix
-        backend:
-          service:
-            name: custom-nginx
-            port:
-              number: 80
+      port: 443
+      targetPort: 443
+      nodePort: 30443
+  type: NodePort

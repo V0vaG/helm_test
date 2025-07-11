@@ -24,12 +24,18 @@ spec:
           | default .Chart.AppVersion }}
         name: nginx
         ports:
-        - containerPort: 80
+        - containerPort: 443
         resources: {}
         volumeMounts:
         - mountPath: /etc/nginx/conf.d
           name: nginx-conf
+        - mountPath: /etc/nginx/ssl
+          name: nginx-tls
+          readOnly: true
       volumes:
       - configMap:
           name: {{ include "nginx.fullname" . }}-config
         name: nginx-conf
+      - name: nginx-tls
+        secret:
+          secretName: custom-nginx-tls

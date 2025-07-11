@@ -11,25 +11,3 @@ spec:
     {{- include "nginx.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.customNginx.ports | toYaml | nindent 2 }}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ include "nginx.fullname" . }}-custom-nginx
-  labels:
-  {{- include "nginx.labels" . | nindent 4 }}
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: vova-g.tplinkdns.com
-    http:
-      paths:
-      - backend:
-          service:
-            name: '{{ include "nginx.fullname" . }}-custom-nginx'
-            port:
-              number: 80
-        path: /tools
-        pathType: Prefix

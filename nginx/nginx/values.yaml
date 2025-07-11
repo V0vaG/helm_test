@@ -1,19 +1,16 @@
 config:
   defaultConf: |-
     server {
-        listen 80;
+        listen 443 ssl;
         server_name vova-g.tplinkdns.com;
-        location /tools/ {
-            rewrite ^/tools(/.*)$ $1 break;
+        ssl_certificate /etc/nginx/ssl/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+        location / {
             proxy_pass http://tools-service.tools.svc.cluster.local:80;
-            proxy_http_version 1.1;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
-            sub_filter_once off;
-            sub_filter_types text/html;
-            sub_filter '<head>' '<base href="/tools/"><head>';
         }
         location /healthz {
             return 200 'OK';
@@ -26,9 +23,10 @@ customNginx:
       repository: nginx
       tag: alpine
   ports:
-  - port: 80
+  - nodePort: 30443
+    port: 443
     protocol: TCP
-    targetPort: 80
+    targetPort: 443
   replicas: 1
-  type: ClusterIP
+  type: NodePort
 kubernetesClusterDomain: cluster.local
