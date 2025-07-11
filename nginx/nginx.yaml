@@ -5,6 +5,31 @@ metadata:
 
 ---
 
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: custom-nginx-config
+  namespace: custom-nginx
+data:
+  default.conf: |
+    server {
+        listen 443 ssl;
+        server_name vova-g.tplinkdns.com;
+
+        ssl_certificate /etc/ssl/fullchain.pem;
+        ssl_certificate_key /etc/ssl/privkey.pem;
+
+        location / {
+            proxy_pass http://tools-service.tools.svc.cluster.local:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -29,7 +54,7 @@ spec:
         - name: nginx-conf
           mountPath: /etc/nginx/conf.d
         - name: nginx-tls
-          mountPath: /etc/nginx/ssl
+          mountPath: /etc/ssl
           readOnly: true
       volumes:
       - name: nginx-conf
@@ -38,36 +63,6 @@ spec:
       - name: nginx-tls
         secret:
           secretName: custom-nginx-tls
-
----
-
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: custom-nginx-config
-  namespace: custom-nginx
-data:
-  default.conf: |
-    server {
-        listen 443 ssl;
-        server_name vova-g.tplinkdns.com;
-
-        ssl_certificate /etc/nginx/ssl/fullchain.pem;
-        ssl_certificate_key /etc/nginx/ssl/privkey.pem;
-
-        location / {
-            proxy_pass http://tools-service.tools.svc.cluster.local:80;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
-
-        location /healthz {
-            return 200 'OK';
-            add_header Content-Type text/plain;
-        }
-    }
 
 ---
 

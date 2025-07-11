@@ -29,7 +29,7 @@ spec:
         volumeMounts:
         - mountPath: /etc/nginx/conf.d
           name: nginx-conf
-        - mountPath: /etc/nginx/ssl
+        - mountPath: /etc/ssl
           name: nginx-tls
           readOnly: true
       volumes:
