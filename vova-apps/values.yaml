@@ -30,4 +30,4 @@ apps:
   - name: gitlab
   # - name: gitea
   - name: nextcloud
-  - name: nginx
+  #- name: nginx
