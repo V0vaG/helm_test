@@ -16,12 +16,19 @@ data:
         listen 80;
         server_name vova-g.tplinkdns.com;
 
-        location / {
-            proxy_pass http://example-service.default.svc.cluster.local:80;
+        location /tools/ {
+            rewrite ^/tools(/.*)$ $1 break;
+            proxy_pass http://tools-service.tools.svc.cluster.local:80;
+
+            proxy_http_version 1.1;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
+
+            sub_filter_once off;
+            sub_filter_types text/html;
+            sub_filter '<head>' '<base href="/tools/"><head>';
         }
 
         location /healthz {
@@ -91,7 +98,7 @@ spec:
   - host: vova-g.tplinkdns.com
     http:
       paths:
-      - path: /
+      - path: /tools
         pathType: Prefix
         backend:
           service:
