@@ -7,14 +7,14 @@ default_values:
   repoURL: https://github.com/V0vaG/helm_test
 
 apps:
-  - name: weather
+  # - name: weather
     # branch: test
     # repoURL: https://github.com/V0vaG/helm_test
   # - name: vpkg
   - name: topix
   #- name: vbank
   - name: jellyfin
-  - name: tools
+  # - name: tools
   #- name: vhub
   #- name: vvolt
   #- name: factory
@@ -27,7 +27,7 @@ apps:
   - name: vvault
   - name: list
   # - name: kiwix
-  - name: gitlab
+  # - name: gitlab
   # - name: gitea
   - name: nextcloud
   #- name: nginx
