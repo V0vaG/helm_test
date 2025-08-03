@@ -21,7 +21,7 @@ apps:
   #- name: mongodb
   - name: vovastl
   #- name: vovarepo
-  #- name: weprintcloud
+  - name: weprintcloud
   #- name: postgresql
   #- name: vhide
   - name: vvault
