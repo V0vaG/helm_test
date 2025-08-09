@@ -18,7 +18,7 @@ apps:
   #- name: vhub
   #- name: vvolt
   #- name: factory
-  #- name: mongodb
+  - name: mongodb
   - name: vovastl
   #- name: vovarepo
   #- name: weprintcloud
