@@ -31,3 +31,4 @@ apps:
   # - name: gitea
   - name: nextcloud
   #- name: nginx
+  - name: coldvaultmanager

@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: coldvaultmanager
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: coldvaultmanager-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vova/script_files/coldvaultmanager
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: coldvaultmanager-data-pvc
+  namespace: coldvaultmanager
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: coldvaultmanager-data-pv
+  storageClassName: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coldvaultmanager-deployment
+  namespace: coldvaultmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coldvaultmanager
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: coldvaultmanager
+    spec:
+      containers:
+      - name: coldvaultmanager
+        image: vova0911/coldvaultmanager:amd64_latest
+        ports:
+        - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /root/script_files/coldvaultmanager
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: coldvaultmanager-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coldvaultmanager-service
+  namespace: coldvaultmanager
+spec:
+  selector:
+    app: coldvaultmanager
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 91
+  type: NodePort

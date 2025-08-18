@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "coldvaultmanager.fullname" . }}-deployment
+  labels:
+  {{- include "coldvaultmanager.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: coldvaultmanager
+    {{- include "coldvaultmanager.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: coldvaultmanager
+      {{- include "coldvaultmanager.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.coldvaultmanager.image.repository }}:{{ .Values.deployment.coldvaultmanager.image.tag
+          | default .Chart.AppVersion }}
+        name: coldvaultmanager
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.coldvaultmanager.resources | nindent 10
+          }}
+        volumeMounts:
+        - mountPath: /root/script_files/coldvaultmanager
+          name: data-volume
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "coldvaultmanager.fullname" . }}-data-pvc
