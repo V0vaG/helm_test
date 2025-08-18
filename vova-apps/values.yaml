@@ -18,17 +18,17 @@ apps:
   #- name: vhub
   #- name: vvolt
   #- name: factory
-  #- name: mongodb
+  - name: mongodb
   - name: vovastl
   #- name: vovarepo
-  - name: weprintcloud
-  - name: postgresql
+  #- name: weprintcloud
+  #- name: postgresql
   #- name: vhide
   - name: vvault
   - name: list
   # - name: kiwix
   # - name: gitlab
   # - name: gitea
-  - name: nextcloud
+  #- name: nextcloud
   #- name: nginx
   - name: coldvaultmanager
