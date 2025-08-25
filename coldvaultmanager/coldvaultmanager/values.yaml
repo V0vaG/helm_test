@@ -2,7 +2,7 @@ deployment:
   coldvaultmanager:
     image:
       repository: vova0911/coldvaultmanager
-      tag: amd64_0.1.15
+      tag: amd64_0.1.16
     resources:
       limits:
         cpu: "1"
