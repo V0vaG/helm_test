@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "artifactory.fullname" . }}-pv-artifactory-postgres
+  labels:
+    pv: pv-artifactory-postgres
+  {{- include "artifactory.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 20Gi
+  hostPath:
+    path: /home/vova/script_files/artifactory/postgres
+    type: DirectoryOrCreate
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual

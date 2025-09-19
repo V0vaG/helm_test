@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "artifactory.fullname" . }}-postgres-pv
+  labels:
+  {{- include "artifactory.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.postgresPv.storageRequest | quote }}
+  selector:
+    matchLabels:
+      pv: pv-artifactory-postgres
+  storageClassName: {{ .Values.pvc.postgresPv.storageClass | quote }}

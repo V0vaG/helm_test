@@ -1,0 +1,162 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "artifactory.fullname" . }}-postgres
+  labels:
+  {{- include "artifactory.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.postgres.replicas }}
+  selector:
+    matchLabels:
+      app: artifactory-postgres
+    {{- include "artifactory.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: artifactory-postgres
+      {{- include "artifactory.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: {{ quote .Values.postgres.postgres.env.postgresDb }}
+        - name: POSTGRES_USER
+          value: {{ quote .Values.postgres.postgres.env.postgresUser }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artifactory-password
+              name: {{ include "artifactory.fullname" . }}-db
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.postgres.postgres.image.repository }}:{{ .Values.postgres.postgres.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.postgres.postgres.imagePullPolicy }}
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: postgres
+        resources: {{- toYaml .Values.postgres.postgres.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.postgres.postgres.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 999:999 /var/lib/postgresql/data
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.postgres.fixPerms.image.repository }}:{{ .Values.postgres.fixPerms.image.tag
+          | default .Chart.AppVersion }}
+        name: fix-perms
+        resources: {}
+        securityContext: {{- toYaml .Values.postgres.fixPerms.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+      securityContext: {{- toYaml .Values.postgres.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: pgdata
+        persistentVolumeClaim:
+          claimName: {{ include "artifactory.fullname" . }}-postgres-pv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "artifactory.fullname" . }}-artifactory
+  labels:
+  {{- include "artifactory.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.artifactory.replicas }}
+  selector:
+    matchLabels:
+      app: artifactory
+    {{- include "artifactory.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: artifactory
+      {{- include "artifactory.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: EXTRA_JAVA_OPTIONS
+          value: {{ quote .Values.artifactory.artifactory.env.extraJavaOptions }}
+        - name: JF_SHARED_DATABASE_TYPE
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseType }}
+        - name: JF_SHARED_DATABASE_DRIVER
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseDriver }}
+        - name: JF_SHARED_DATABASE_URL
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseUrl }}
+        - name: JF_SHARED_DATABASE_USERNAME
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseUsername
+            }}
+        - name: JF_SHARED_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artifactory-password
+              name: {{ include "artifactory.fullname" . }}-db
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.artifactory.artifactory.image.repository }}:{{ .Values.artifactory.artifactory.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.artifactory.artifactory.imagePullPolicy }}
+        livenessProbe:
+          failureThreshold: 15
+          httpGet:
+            path: /
+            port: router
+          initialDelaySeconds: 300
+          periodSeconds: 20
+          timeoutSeconds: 5
+        name: artifactory
+        ports:
+        - containerPort: 8082
+          name: router
+        readinessProbe:
+          failureThreshold: 36
+          httpGet:
+            path: /
+            port: router
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources: {{- toYaml .Values.artifactory.artifactory.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/opt/jfrog/artifactory
+          name: data
+        - mountPath: /var/opt/jfrog/artifactory/var/etc/security/master.key
+          name: master-key
+          readOnly: true
+          subPath: master.key
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 1030:1030 /var/opt/jfrog/artifactory || true
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.artifactory.fixPerms.image.repository }}:{{ .Values.artifactory.fixPerms.image.tag
+          | default .Chart.AppVersion }}
+        name: fix-perms
+        resources: {}
+        securityContext: {{- toYaml .Values.artifactory.fixPerms.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/opt/jfrog/artifactory
+          name: data
+      securityContext: {{- toYaml .Values.artifactory.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "artifactory.fullname" . }}-data
+      - name: master-key
+        secret:
+          defaultMode: 288
+          secretName: {{ include "artifactory.fullname" . }}-master-key

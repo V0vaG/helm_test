@@ -1,3 +1,6 @@
+# ============================
+# kubernetes manifests (apply with kubectl)
+# ============================
 apiVersion: v1
 kind: Namespace
 metadata:
