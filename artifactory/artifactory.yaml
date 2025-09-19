@@ -3,6 +3,17 @@ kind: Namespace
 metadata:
   name: argocd
 ---
+# Secret for PostgreSQL credentials (replace the password!)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: artifactory-db
+  namespace: argocd
+type: Opaque
+stringData:
+  # choose your own strong password instead of P@ssw0rd!
+  artifactory-password: "P@ssw0rd!"
+---
 # -------------------------
 # PostgreSQL for Artifactory
 # -------------------------
