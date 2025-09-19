@@ -13,7 +13,7 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: ""   # <= if your cluster has a default StorageClass, you can omit this line
+  storageClassName: local-path    # <= if your cluster has a default StorageClass, you can omit this line
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -26,5 +26,5 @@ artifactory:
 kubernetesClusterDomain: cluster.local
 pvc:
   data:
-    storageClass: ""
+    storageClass: local-path
     storageRequest: 50Gi
