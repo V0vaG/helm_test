@@ -1,0 +1,30 @@
+artifactory:
+  artifactory:
+    env:
+      extraJavaOptions: -Xms1g -Xmx1g
+    image:
+      repository: releases-docker.jfrog.io/jfrog/artifactory-oss
+      tag: latest
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 2Gi
+  podSecurityContext:
+    fsGroup: 1030
+    fsGroupChangePolicy: OnRootMismatch
+    runAsGroup: 1030
+    runAsUser: 1030
+  ports:
+  - name: http
+    port: 8082
+    targetPort: router
+  replicas: 1
+  type: ClusterIP
+kubernetesClusterDomain: cluster.local
+pvc:
+  data:
+    storageClass: ""
+    storageRequest: 50Gi

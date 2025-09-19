@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: artifactory
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: artifactory-data
+  namespace: artifactory
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: ""   # <= if your cluster has a default StorageClass, you can omit this line
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifactory
+  namespace: artifactory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifactory
+  template:
+    metadata:
+      labels:
+        app: artifactory
+    spec:
+      securityContext:
+        runAsUser: 1030     # Artifactory user inside the container
+        runAsGroup: 1030
+        fsGroup: 1030
+        fsGroupChangePolicy: "OnRootMismatch"
+      containers:
+        - name: artifactory
+          image: releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: EXTRA_JAVA_OPTIONS
+              value: "-Xms1g -Xmx1g"
+          ports:
+            - name: router
+              containerPort: 8082          # JFrog Router (UI + APIs)
+          volumeMounts:
+            - name: data
+              mountPath: /var/opt/jfrog/artifactory
+            # Mount the secret directly as the expected file path
+            - name: master-key
+              mountPath: /var/opt/jfrog/artifactory/var/etc/security/master.key
+              subPath: master.key
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /
+              port: router
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /
+              port: router
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+            periodSeconds: 20
+            failureThreshold: 15
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "2Gi"
+            limits:
+              memory: "4Gi"
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: artifactory-data
+        - name: master-key
+          secret:
+            secretName: artifactory-master-key
+            defaultMode: 0400
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artifactory
+  namespace: artifactory
+spec:
+  selector:
+    app: artifactory
+  ports:
+    - name: http
+      port: 8082
+      targetPort: router
+  type: ClusterIP
+---
+# Ingress via Traefik (k3s default). Adjust host as you like.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: artifactory
+  namespace: artifactory
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+    - host: artifactory.localtest.me   # resolves to 127.0.0.1 automatically; change if needed
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: artifactory
+                port:
+                  number: 8082

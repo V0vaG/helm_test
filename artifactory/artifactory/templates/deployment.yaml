@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "artifactory.fullname" . }}-artifactory
+  labels:
+  {{- include "artifactory.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.artifactory.replicas }}
+  selector:
+    matchLabels:
+      app: artifactory
+    {{- include "artifactory.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: artifactory
+      {{- include "artifactory.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: EXTRA_JAVA_OPTIONS
+          value: {{ quote .Values.artifactory.artifactory.env.extraJavaOptions }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.artifactory.artifactory.image.repository }}:{{ .Values.artifactory.artifactory.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.artifactory.artifactory.imagePullPolicy }}
+        livenessProbe:
+          failureThreshold: 15
+          httpGet:
+            path: /
+            port: router
+          initialDelaySeconds: 60
+          periodSeconds: 20
+          timeoutSeconds: 5
+        name: artifactory
+        ports:
+        - containerPort: 8082
+          name: router
+        readinessProbe:
+          failureThreshold: 30
+          httpGet:
+            path: /
+            port: router
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources: {{- toYaml .Values.artifactory.artifactory.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/opt/jfrog/artifactory
+          name: data
+        - mountPath: /var/opt/jfrog/artifactory/var/etc/security/master.key
+          name: master-key
+          readOnly: true
+          subPath: master.key
+      securityContext: {{- toYaml .Values.artifactory.podSecurityContext | nindent 8 }}
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "artifactory.fullname" . }}-data
+      - name: master-key
+        secret:
+          defaultMode: 256
+          secretName: artifactory-master-key

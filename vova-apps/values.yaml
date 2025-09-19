@@ -32,3 +32,4 @@ apps:
   #- name: nextcloud
   #- name: nginx
   - name: coldvaultmanager
+  - name: artifactory
