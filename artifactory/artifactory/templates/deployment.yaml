@@ -1,6 +1,53 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "artifactory.fullname" . }}-postgres
+  labels:
+  {{- include "artifactory.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.postgres.replicas }}
+  selector:
+    matchLabels:
+      app: artifactory-postgres
+    {{- include "artifactory.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: artifactory-postgres
+      {{- include "artifactory.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_DB
+          value: {{ quote .Values.postgres.postgres.env.postgresDb }}
+        - name: POSTGRES_USER
+          value: {{ quote .Values.postgres.postgres.env.postgresUser }}
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artifactory-password
+              name: artifactory-db
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.postgres.postgres.image.repository }}:{{ .Values.postgres.postgres.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.postgres.postgres.imagePullPolicy }}
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: postgres
+        resources: {{- toYaml .Values.postgres.postgres.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+      volumes:
+      - name: pgdata
+        persistentVolumeClaim:
+          claimName: {{ include "artifactory.fullname" . }}-postgres-pv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: {{ include "artifactory.fullname" . }}-artifactory
   labels:
   {{- include "artifactory.labels" . | nindent 4 }}
@@ -20,6 +67,20 @@ spec:
       - env:
         - name: EXTRA_JAVA_OPTIONS
           value: {{ quote .Values.artifactory.artifactory.env.extraJavaOptions }}
+        - name: JF_SHARED_DATABASE_TYPE
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseType }}
+        - name: JF_SHARED_DATABASE_DRIVER
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseDriver }}
+        - name: JF_SHARED_DATABASE_URL
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseUrl }}
+        - name: JF_SHARED_DATABASE_USERNAME
+          value: {{ quote .Values.artifactory.artifactory.env.jfSharedDatabaseUsername
+            }}
+        - name: JF_SHARED_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: artifactory-password
+              name: artifactory-db
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.artifactory.artifactory.image.repository }}:{{ .Values.artifactory.artifactory.image.tag
@@ -30,7 +91,7 @@ spec:
           httpGet:
             path: /
             port: router
-          initialDelaySeconds: 240
+          initialDelaySeconds: 300
           periodSeconds: 20
           timeoutSeconds: 5
         name: artifactory
@@ -38,11 +99,11 @@ spec:
         - containerPort: 8082
           name: router
         readinessProbe:
-          failureThreshold: 30
+          failureThreshold: 36
           httpGet:
             path: /
             port: router
-          initialDelaySeconds: 90
+          initialDelaySeconds: 120
           periodSeconds: 10
           timeoutSeconds: 5
         resources: {{- toYaml .Values.artifactory.artifactory.resources | nindent 10 }}

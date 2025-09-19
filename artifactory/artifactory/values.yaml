@@ -2,6 +2,10 @@ artifactory:
   artifactory:
     env:
       extraJavaOptions: -Xms1g -Xmx1g
+      jfSharedDatabaseDriver: org.postgresql.Driver
+      jfSharedDatabaseType: postgresql
+      jfSharedDatabaseUrl: jdbc:postgresql://artifactory-postgres.argocd.svc.cluster.local:5432/artifactory
+      jfSharedDatabaseUsername: artifactory
     image:
       repository: releases-docker.jfrog.io/jfrog/artifactory-oss
       tag: latest
@@ -25,7 +29,31 @@ artifactory:
   replicas: 1
   type: NodePort
 kubernetesClusterDomain: cluster.local
+postgres:
+  ports:
+  - name: postgres
+    port: 5432
+    targetPort: postgres
+  postgres:
+    env:
+      postgresDb: artifactory
+      postgresUser: artifactory
+    image:
+      repository: docker.io/postgres
+      tag: "15"
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: 1Gi
+      requests:
+        cpu: 250m
+        memory: 512Mi
+  replicas: 1
+  type: ClusterIP
 pvc:
   data:
     storageClass: local-path
     storageRequest: 50Gi
+  postgresPv:
+    storageClass: local-path
+    storageRequest: 20Gi

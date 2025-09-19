@@ -3,6 +3,84 @@ kind: Namespace
 metadata:
   name: argocd
 ---
+# -------------------------
+# PostgreSQL for Artifactory
+# -------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: artifactory-postgres-pv
+  namespace: argocd
+spec:
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: local-path
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifactory-postgres
+  namespace: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifactory-postgres
+  template:
+    metadata:
+      labels:
+        app: artifactory-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: docker.io/postgres:15
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POSTGRES_DB
+              value: artifactory
+            - name: POSTGRES_USER
+              value: artifactory
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: artifactory-db
+                  key: artifactory-password
+          ports:
+            - containerPort: 5432
+              name: postgres
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              memory: "1Gi"
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: artifactory-postgres-pv
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artifactory-postgres
+  namespace: argocd
+spec:
+  selector:
+    app: artifactory-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+  type: ClusterIP
+---
+# -------------------------
+# Artifactory (wired to Postgres)
+# -------------------------
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -42,6 +120,22 @@ spec:
           env:
             - name: EXTRA_JAVA_OPTIONS
               value: "-Xms1g -Xmx1g"
+
+            # ----- JFrog Shared DB (PostgreSQL) via env vars -----
+            - name: JF_SHARED_DATABASE_TYPE
+              value: "postgresql"
+            - name: JF_SHARED_DATABASE_DRIVER
+              value: "org.postgresql.Driver"
+            - name: JF_SHARED_DATABASE_URL
+              value: "jdbc:postgresql://artifactory-postgres.argocd.svc.cluster.local:5432/artifactory"
+            - name: JF_SHARED_DATABASE_USERNAME
+              value: "artifactory"
+            - name: JF_SHARED_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: artifactory-db
+                  key: artifactory-password
+
           ports:
             - name: router
               containerPort: 8082
@@ -56,15 +150,15 @@ spec:
             httpGet:
               path: /
               port: router
-            initialDelaySeconds: 90   # more startup time
+            initialDelaySeconds: 120
             periodSeconds: 10
             timeoutSeconds: 5
-            failureThreshold: 30
+            failureThreshold: 36
           livenessProbe:
             httpGet:
               path: /
               port: router
-            initialDelaySeconds: 240  # even more time before killing
+            initialDelaySeconds: 300
             periodSeconds: 20
             timeoutSeconds: 5
             failureThreshold: 15
@@ -81,7 +175,7 @@ spec:
         - name: master-key
           secret:
             secretName: artifactory-master-key
-            defaultMode: 0440   # <-- group-readable so fsGroup: 1030 can access
+            defaultMode: 0440   # group-readable for fsGroup
 ---
 apiVersion: v1
 kind: Service
