@@ -36,9 +36,10 @@ artifactory:
   type: NodePort
 db:
   artifactoryPassword: ""
+  artifactoryPassword: "REPLACE_DB_PASSWORD"
 kubernetesClusterDomain: cluster.local
 masterKey:
-  masterKey: ""
+  masterKey: "1234567890abcdef1234567890abcdef"
 postgres:
   fixPerms:
     containerSecurityContext:
