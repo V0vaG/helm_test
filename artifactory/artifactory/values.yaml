@@ -37,6 +37,8 @@ artifactory:
 db:
   artifactoryPassword: ""
 kubernetesClusterDomain: cluster.local
+masterKey:
+  masterKey: ""
 postgres:
   fixPerms:
     containerSecurityContext:

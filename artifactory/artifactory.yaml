@@ -14,6 +14,17 @@ stringData:
   # choose your own strong password instead of P@ssw0rd!
   artifactory-password: "P@ssw0rd!"
 ---
+# Master key MUST be exactly 32 ASCII characters
+# Replace the example with your own 32-char key before applying.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: artifactory-master-key
+  namespace: argocd
+type: Opaque
+stringData:
+  master.key: "1234567890abcdef1234567890abcdef"  # 32 chars
+---
 # -------------------------
 # HostPath PersistentVolumes (store data on the node)
 # -------------------------
@@ -84,11 +95,9 @@ spec:
       labels:
         app: artifactory-postgres
     spec:
-      # ensure group perms are set inside the volume by kubelet
       securityContext:
         fsGroup: 999
         fsGroupChangePolicy: OnRootMismatch
-      # chown hostPath dir to 999:999 before Postgres starts
       initContainers:
         - name: fix-perms
           image: busybox:1.36
@@ -184,7 +193,6 @@ spec:
         runAsGroup: 1030
         fsGroup: 1030
         fsGroupChangePolicy: OnRootMismatch
-      # chown hostPath dir to 1030:1030 before Artifactory starts
       initContainers:
         - name: fix-perms
           image: busybox:1.36
@@ -201,7 +209,6 @@ spec:
           env:
             - name: EXTRA_JAVA_OPTIONS
               value: "-Xms1g -Xmx1g"
-            # ----- JFrog Shared DB (PostgreSQL) via env vars -----
             - name: JF_SHARED_DATABASE_TYPE
               value: "postgresql"
             - name: JF_SHARED_DATABASE_DRIVER

@@ -159,4 +159,4 @@ spec:
       - name: master-key
         secret:
           defaultMode: 288
-          secretName: artifactory-master-key
+          secretName: {{ include "artifactory.fullname" . }}-master-key
