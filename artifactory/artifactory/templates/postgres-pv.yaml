@@ -10,4 +10,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.postgresPv.storageRequest | quote }}
+  selector:
+    matchLabels:
+      pv: pv-artifactory-postgres
   storageClassName: {{ .Values.pvc.postgresPv.storageClass | quote }}

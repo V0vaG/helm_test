@@ -15,6 +15,43 @@ stringData:
   artifactory-password: "P@ssw0rd!"
 ---
 # -------------------------
+# HostPath PersistentVolumes (store data on the node)
+# -------------------------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-artifactory-postgres
+  labels:
+    pv: pv-artifactory-postgres
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /home/vova/script_files/artifactory/postgres
+    type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-artifactory-data
+  labels:
+    pv: pv-artifactory-data
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  hostPath:
+    path: /home/vova/script_files/artifactory/data
+    type: DirectoryOrCreate
+---
+# -------------------------
 # PostgreSQL for Artifactory
 # -------------------------
 apiVersion: v1
@@ -27,7 +64,10 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  storageClassName: local-path
+  storageClassName: manual
+  selector:
+    matchLabels:
+      pv: pv-artifactory-postgres
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -44,10 +84,27 @@ spec:
       labels:
         app: artifactory-postgres
     spec:
+      # ensure group perms are set inside the volume by kubelet
+      securityContext:
+        fsGroup: 999
+        fsGroupChangePolicy: OnRootMismatch
+      # chown hostPath dir to 999:999 before Postgres starts
+      initContainers:
+        - name: fix-perms
+          image: busybox:1.36
+          command: ["sh","-c","chown -R 999:999 /var/lib/postgresql/data"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
       containers:
         - name: postgres
           image: docker.io/postgres:15
           imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
           env:
             - name: POSTGRES_DB
               value: artifactory
@@ -102,7 +159,10 @@ spec:
   resources:
     requests:
       storage: 50Gi
-  storageClassName: local-path
+  storageClassName: manual
+  selector:
+    matchLabels:
+      pv: pv-artifactory-data
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -123,7 +183,17 @@ spec:
         runAsUser: 1030
         runAsGroup: 1030
         fsGroup: 1030
-        fsGroupChangePolicy: "OnRootMismatch"
+        fsGroupChangePolicy: OnRootMismatch
+      # chown hostPath dir to 1030:1030 before Artifactory starts
+      initContainers:
+        - name: fix-perms
+          image: busybox:1.36
+          command: ["sh","-c","chown -R 1030:1030 /var/opt/jfrog/artifactory || true"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /var/opt/jfrog/artifactory
       containers:
         - name: artifactory
           image: releases-docker.jfrog.io/jfrog/artifactory-oss:latest
@@ -131,7 +201,6 @@ spec:
           env:
             - name: EXTRA_JAVA_OPTIONS
               value: "-Xms1g -Xmx1g"
-
             # ----- JFrog Shared DB (PostgreSQL) via env vars -----
             - name: JF_SHARED_DATABASE_TYPE
               value: "postgresql"
@@ -146,7 +215,6 @@ spec:
                 secretKeyRef:
                   name: artifactory-db
                   key: artifactory-password
-
           ports:
             - name: router
               containerPort: 8082
@@ -186,7 +254,7 @@ spec:
         - name: master-key
           secret:
             secretName: artifactory-master-key
-            defaultMode: 0440   # group-readable for fsGroup
+            defaultMode: 0440
 ---
 apiVersion: v1
 kind: Service

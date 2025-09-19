@@ -10,4 +10,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.data.storageRequest | quote }}
+  selector:
+    matchLabels:
+      pv: pv-artifactory-data
   storageClassName: {{ .Values.pvc.data.storageClass | quote }}

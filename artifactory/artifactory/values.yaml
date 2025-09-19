@@ -16,6 +16,12 @@ artifactory:
       requests:
         cpu: 500m
         memory: 2Gi
+  fixPerms:
+    containerSecurityContext:
+      runAsUser: 0
+    image:
+      repository: busybox
+      tag: "1.36"
   podSecurityContext:
     fsGroup: 1030
     fsGroupChangePolicy: OnRootMismatch
@@ -28,13 +34,27 @@ artifactory:
     targetPort: router
   replicas: 1
   type: NodePort
+db:
+  artifactoryPassword: ""
 kubernetesClusterDomain: cluster.local
 postgres:
+  fixPerms:
+    containerSecurityContext:
+      runAsUser: 0
+    image:
+      repository: busybox
+      tag: "1.36"
+  podSecurityContext:
+    fsGroup: 999
+    fsGroupChangePolicy: OnRootMismatch
   ports:
   - name: postgres
     port: 5432
     targetPort: postgres
   postgres:
+    containerSecurityContext:
+      runAsGroup: 999
+      runAsUser: 999
     env:
       postgresDb: artifactory
       postgresUser: artifactory
@@ -52,8 +72,8 @@ postgres:
   type: ClusterIP
 pvc:
   data:
-    storageClass: local-path
+    storageClass: manual
     storageRequest: 50Gi
   postgresPv:
-    storageClass: local-path
+    storageClass: manual
     storageRequest: 20Gi

@@ -26,7 +26,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: artifactory-password
-              name: artifactory-db
+              name: {{ include "artifactory.fullname" . }}-db
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.postgres.postgres.image.repository }}:{{ .Values.postgres.postgres.image.tag
@@ -37,9 +37,29 @@ spec:
         - containerPort: 5432
           name: postgres
         resources: {{- toYaml .Values.postgres.postgres.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.postgres.postgres.containerSecurityContext
+          | nindent 10 }}
         volumeMounts:
         - mountPath: /var/lib/postgresql/data
           name: pgdata
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 999:999 /var/lib/postgresql/data
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.postgres.fixPerms.image.repository }}:{{ .Values.postgres.fixPerms.image.tag
+          | default .Chart.AppVersion }}
+        name: fix-perms
+        resources: {}
+        securityContext: {{- toYaml .Values.postgres.fixPerms.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+      securityContext: {{- toYaml .Values.postgres.podSecurityContext | nindent 8 }}
       volumes:
       - name: pgdata
         persistentVolumeClaim:
@@ -80,7 +100,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: artifactory-password
-              name: artifactory-db
+              name: {{ include "artifactory.fullname" . }}-db
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.artifactory.artifactory.image.repository }}:{{ .Values.artifactory.artifactory.image.tag
@@ -114,6 +134,23 @@ spec:
           name: master-key
           readOnly: true
           subPath: master.key
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - chown -R 1030:1030 /var/opt/jfrog/artifactory || true
+        env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.artifactory.fixPerms.image.repository }}:{{ .Values.artifactory.fixPerms.image.tag
+          | default .Chart.AppVersion }}
+        name: fix-perms
+        resources: {}
+        securityContext: {{- toYaml .Values.artifactory.fixPerms.containerSecurityContext
+          | nindent 10 }}
+        volumeMounts:
+        - mountPath: /var/opt/jfrog/artifactory
+          name: data
       securityContext: {{- toYaml .Values.artifactory.podSecurityContext | nindent 8 }}
       volumes:
       - name: data
