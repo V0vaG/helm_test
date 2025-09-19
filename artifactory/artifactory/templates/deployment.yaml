@@ -30,7 +30,7 @@ spec:
           httpGet:
             path: /
             port: router
-          initialDelaySeconds: 180
+          initialDelaySeconds: 240
           periodSeconds: 20
           timeoutSeconds: 5
         name: artifactory
@@ -42,7 +42,7 @@ spec:
           httpGet:
             path: /
             port: router
-          initialDelaySeconds: 60
+          initialDelaySeconds: 90
           periodSeconds: 10
           timeoutSeconds: 5
         resources: {{- toYaml .Values.artifactory.artifactory.resources | nindent 10 }}
@@ -60,5 +60,5 @@ spec:
           claimName: {{ include "artifactory.fullname" . }}-data
       - name: master-key
         secret:
-          defaultMode: 256
+          defaultMode: 288
           secretName: artifactory-master-key

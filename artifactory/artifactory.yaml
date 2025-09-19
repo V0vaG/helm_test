@@ -56,7 +56,7 @@ spec:
             httpGet:
               path: /
               port: router
-            initialDelaySeconds: 60
+            initialDelaySeconds: 90   # more startup time
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 30
@@ -64,7 +64,7 @@ spec:
             httpGet:
               path: /
               port: router
-            initialDelaySeconds: 180
+            initialDelaySeconds: 240  # even more time before killing
             periodSeconds: 20
             timeoutSeconds: 5
             failureThreshold: 15
@@ -81,7 +81,7 @@ spec:
         - name: master-key
           secret:
             secretName: artifactory-master-key
-            defaultMode: 0400
+            defaultMode: 0440   # <-- group-readable so fsGroup: 1030 can access
 ---
 apiVersion: v1
 kind: Service
