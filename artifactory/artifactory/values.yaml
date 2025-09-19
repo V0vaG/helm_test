@@ -19,10 +19,11 @@ artifactory:
     runAsUser: 1030
   ports:
   - name: http
+    nodePort: 30092
     port: 8082
     targetPort: router
   replicas: 1
-  type: ClusterIP
+  type: NodePort
 kubernetesClusterDomain: cluster.local
 pvc:
   data:

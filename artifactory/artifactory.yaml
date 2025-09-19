@@ -1,25 +1,25 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: artifactory
+  name: argocd
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: artifactory-data
-  namespace: artifactory
+  namespace: argocd
 spec:
   accessModes: ["ReadWriteOnce"]
   resources:
     requests:
       storage: 50Gi
-  storageClassName: local-path    # <= if your cluster has a default StorageClass, you can omit this line
+  storageClassName: local-path
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: artifactory
-  namespace: artifactory
+  namespace: argocd
 spec:
   replicas: 1
   selector:
@@ -31,7 +31,7 @@ spec:
         app: artifactory
     spec:
       securityContext:
-        runAsUser: 1030     # Artifactory user inside the container
+        runAsUser: 1030
         runAsGroup: 1030
         fsGroup: 1030
         fsGroupChangePolicy: "OnRootMismatch"
@@ -44,11 +44,10 @@ spec:
               value: "-Xms1g -Xmx1g"
           ports:
             - name: router
-              containerPort: 8082          # JFrog Router (UI + APIs)
+              containerPort: 8082
           volumeMounts:
             - name: data
               mountPath: /var/opt/jfrog/artifactory
-            # Mount the secret directly as the expected file path
             - name: master-key
               mountPath: /var/opt/jfrog/artifactory/var/etc/security/master.key
               subPath: master.key
@@ -57,17 +56,17 @@ spec:
             httpGet:
               path: /
               port: router
-            initialDelaySeconds: 30
-            timeoutSeconds: 5
+            initialDelaySeconds: 60
             periodSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 30
           livenessProbe:
             httpGet:
               path: /
               port: router
-            initialDelaySeconds: 60
-            timeoutSeconds: 5
+            initialDelaySeconds: 180
             periodSeconds: 20
+            timeoutSeconds: 5
             failureThreshold: 15
           resources:
             requests:
@@ -88,33 +87,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: artifactory
-  namespace: artifactory
+  namespace: argocd
 spec:
   selector:
     app: artifactory
+  type: NodePort
   ports:
     - name: http
       port: 8082
       targetPort: router
-  type: ClusterIP
----
-# Ingress via Traefik (k3s default). Adjust host as you like.
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: artifactory
-  namespace: artifactory
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-spec:
-  rules:
-    - host: artifactory.localtest.me   # resolves to 127.0.0.1 automatically; change if needed
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: artifactory
-                port:
-                  number: 8082
+      nodePort: 30092

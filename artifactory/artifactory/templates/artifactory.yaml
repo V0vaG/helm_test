@@ -11,24 +11,3 @@ spec:
     {{- include "artifactory.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.artifactory.ports | toYaml | nindent 2 }}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ include "artifactory.fullname" . }}-artifactory
-  labels:
-  {{- include "artifactory.labels" . | nindent 4 }}
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
-spec:
-  rules:
-  - host: artifactory.localtest.me
-    http:
-      paths:
-      - backend:
-          service:
-            name: '{{ include "artifactory.fullname" . }}-artifactory'
-            port:
-              number: 8082
-        path: /
-        pathType: Prefix
