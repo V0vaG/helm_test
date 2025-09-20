@@ -1,8 +1,8 @@
 deployment:
   minihub:
     image:
-      repository: minihub
-      tag: amd64_0.0.2
+      repository: 192.168.68.64:5000/minihub
+      tag: amd64_latest
     resources:
       limits:
         cpu: "1"
@@ -23,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - nodePort: 30093
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30093
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
