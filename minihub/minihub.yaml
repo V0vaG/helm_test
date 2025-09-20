@@ -54,7 +54,7 @@ spec:
         - name: regcred
       containers:
       - name: minihub
-        image: minihub:amd64_latest
+        image: 192.168.68.64:5000/minihub:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
