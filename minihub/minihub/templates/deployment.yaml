@@ -34,6 +34,8 @@ spec:
         volumeMounts:
         - mountPath: /root/script_files/minihub
           name: data-volume
+      imagePullSecrets:
+      - name: regcred
       volumes:
       - name: data-volume
         persistentVolumeClaim:
