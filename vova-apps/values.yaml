@@ -33,3 +33,4 @@ apps:
   #- name: nginx
   - name: coldvaultmanager
   # - name: artifactory
+  - name: minihub
