@@ -2,7 +2,7 @@ deployment:
   minihub:
     image:
       repository: 192.168.68.64:5000/minihub
-      tag: amd64_0.0.6
+      tag: amd64_0.0.7
     resources:
       limits:
         cpu: "1"
