@@ -1,7 +1,7 @@
 deployment:
   minihub:
     image:
-      repository: vova0911/minihub
+      repository: minihub
       tag: amd64_0.0.2
     resources:
       limits:
