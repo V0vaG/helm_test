@@ -50,11 +50,9 @@ spec:
       labels:
         app: coldvaultmanager
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
-      - name: coldvaultmanagers
-        image: 192.168.68.64:5000/coldvaultmanager:amd64_latest
+      - name: coldvaultmanager
+        image: vova0911/coldvaultmanager:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
