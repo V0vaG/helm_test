@@ -1,3 +1,23 @@
+deployment:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+  vvault:
+    env:
+      mongoUrl: mongodb://mongodb-service.argocd.svc.cluster.local:27017
+    image:
+      repository: 192.168.68.64:5000/vvault
+      tag: amd64_latest
+    resources:
+      limits:
+        cpu: "1"
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 256Mi
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:

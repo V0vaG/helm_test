@@ -53,27 +53,27 @@ spec:
       imagePullSecrets:
         - name: regcred
       containers:
-      - name: vvault
-        image: 192.168.68.64:5000/vvault:amd64_latest
-        ports:
-        - containerPort: 5000
-        env:
-		  - name: MONGO_URL
-            value: mongodb://mongodb-service.argocd.svc.cluster.local:27017
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "500m"
-          limits:
-            memory: "512Mi"
-            cpu: "1"
-        volumeMounts:
-        - name: data-volume
-          mountPath: /root/script_files/vvault
+        - name: vvault
+          image: 192.168.68.64:5000/vvault:amd64_latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URL
+              value: "mongodb://mongodb-service.argocd.svc.cluster.local:27017"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
+          volumeMounts:
+            - name: data-volume
+              mountPath: /root/script_files/vvault
       volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: vvault-data-pvc
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: vvault-data-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -89,3 +89,4 @@ spec:
       targetPort: 5000
       nodePort: 30096
   type: NodePort
+
