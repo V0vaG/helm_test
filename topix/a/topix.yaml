@@ -2,34 +2,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: topix
+
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: topix-data-pv
-spec:
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /home/vova/script_files/topix
-  storageClassName: ""
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: topix-data-pvc
-  namespace: topix
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  volumeName: topix-data-pv
-  storageClassName: ""
----
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -50,11 +25,9 @@ spec:
       labels:
         app: topix
     spec:
-      imagePullSecrets:
-        - name: regcred
       containers:
-      - name: topixs
-        image: 192.168.68.64:5000/topix:amd64_latest
+      - name: topix
+        image: vova0911/topix:amd64_latest
         ports:
         - containerPort: 5000
         # Uncomment if needed
@@ -67,13 +40,6 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "1"
-        volumeMounts:
-        - name: data-volume
-          mountPath: /root/script_files/topix
-      volumes:
-      - name: data-volume
-        persistentVolumeClaim:
-          claimName: topix-data-pvc
 ---
 apiVersion: v1
 kind: Service
@@ -89,3 +55,4 @@ spec:
       targetPort: 5000
       nodePort: 30084
   type: NodePort
+

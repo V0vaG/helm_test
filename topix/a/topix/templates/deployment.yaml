@@ -25,17 +25,15 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.topixs.image.repository }}:{{ .Values.deployment.topixs.image.tag
+        image: {{ .Values.deployment.topix.image.repository }}:{{ .Values.deployment.topix.image.tag
           | default .Chart.AppVersion }}
-        name: topixs
+        name: topix
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.topixs.resources | nindent 10 }}
+        resources: {{- toYaml .Values.deployment.topix.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/topix
           name: data-volume
-      imagePullSecrets:
-      - name: regcred
       volumes:
       - name: data-volume
         persistentVolumeClaim:

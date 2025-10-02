@@ -5,10 +5,10 @@ deployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
-  topixs:
+  topix:
     image:
-      repository: 192.168.68.64:5000/topix
-      tag: amd64_latest
+      repository: vova0911/topix
+      tag: amd64_1.0.1
     resources:
       limits:
         cpu: "1"
@@ -23,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30084
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30084
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
