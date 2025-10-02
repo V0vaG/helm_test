@@ -57,9 +57,9 @@ spec:
         image: 192.168.68.64:5000/vvault:amd64_latest
         ports:
         - containerPort: 5000
-        # Uncomment if needed
-        # imagePullSecrets:
-        # - name: regcred
+        env:
+		  - name: MONGO_URL
+            value: mongodb://mongodb-service.argocd.svc.cluster.local:27017
         resources:
           requests:
             memory: "256Mi"
