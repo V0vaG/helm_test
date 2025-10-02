@@ -34,6 +34,8 @@ spec:
         volumeMounts:
         - mountPath: /root/script_files/vvault
           name: data-volume
+      imagePullSecrets:
+      - name: regcred
       volumes:
       - name: data-volume
         persistentVolumeClaim:

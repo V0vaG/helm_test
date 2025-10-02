@@ -50,6 +50,8 @@ spec:
       labels:
         app: vvault
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - name: vvault
         image: 192.168.68.64:5000/vvault:amd64_latest
