@@ -6,11 +6,9 @@ deployment:
       maxUnavailable: 1
     type: RollingUpdate
   vvault:
-    env:
-      mongoUrl: mongodb://mongodb-service.argocd.svc.cluster.local:27017
     image:
-      repository: vova0911/vvault
-      tag: amd64_0.2.13
+      repository: 192.168.68.64:5000/vvault
+      tag: amd64_latest
     resources:
       limits:
         cpu: "1"
@@ -25,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-    - nodePort: 30096
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30096
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort

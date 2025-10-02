@@ -52,12 +52,9 @@ spec:
     spec:
       containers:
       - name: vvault
-        image: vova0911/vvault:amd64_0.2.3
+        image: 192.168.68.64:5000/vvault:amd64_latest
         ports:
         - containerPort: 5000
-        env:
-          - name: MONGO_URL
-            value: mongodb://mongodb-service.argocd.svc.cluster.local:27017
         # Uncomment if needed
         # imagePullSecrets:
         # - name: regcred

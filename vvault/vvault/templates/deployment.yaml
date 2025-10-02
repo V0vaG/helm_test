@@ -23,8 +23,6 @@ spec:
     spec:
       containers:
       - env:
-        - name: MONGO_URL
-          value: {{ quote .Values.deployment.vvault.env.mongoUrl }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.vvault.image.repository }}:{{ .Values.deployment.vvault.image.tag
