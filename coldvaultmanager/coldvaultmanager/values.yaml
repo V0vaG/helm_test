@@ -2,7 +2,7 @@ deployment:
   coldvaultmanager:
     image:
       repository: 192.168.68.64:5000/coldvaultmanager
-      tag: amd64_0.1.23
+      tag: amd64_0.1.24
     resources:
       limits:
         cpu: "1"
