@@ -18,7 +18,7 @@ deployment:
     type: RollingUpdate
   coldvaultmanager:
     image:
-      tag: amd64_0.1.19
+      tag: amd64_0.1.20
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
