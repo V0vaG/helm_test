@@ -16,6 +16,9 @@ deployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
+  coldvaultmanager:
+    image:
+      tag: amd64_0.1.2
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
@@ -23,8 +26,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30091
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30091
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
