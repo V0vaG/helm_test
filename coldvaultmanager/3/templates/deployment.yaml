@@ -25,13 +25,13 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.coldvaultmanager.image.repository }}:{{ .Values.deployment.coldvaultmanager.image.tag
+        image: {{ .Values.deployment.coldvaultmanagers.image.repository }}:{{ .Values.deployment.coldvaultmanagers.image.tag
           | default .Chart.AppVersion }}
-        name: coldvaultmanager
+        name: coldvaultmanagers
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.coldvaultmanager.resources | nindent 10
-          }}
+        resources: {{- toYaml .Values.deployment.coldvaultmanagers.resources | nindent
+          10 }}
         volumeMounts:
         - mountPath: /root/script_files/coldvaultmanager
           name: data-volume
