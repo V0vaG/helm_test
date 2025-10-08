@@ -2,7 +2,7 @@ deployment:
   coldvaultmanagers:
     image:
       repository: 192.168.68.64:5000/coldvaultmanager
-      tag: amd64_0.1.16
+      tag: amd64_0.1.17
     resources:
       limits:
         cpu: "1"
@@ -18,7 +18,7 @@ deployment:
     type: RollingUpdate
   coldvaultmanager:
     image:
-      tag: amd64_0.1.16
+      tag: amd64_0.1.17
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
