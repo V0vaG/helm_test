@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: vovagpt
-        image: vova0911/vovagpt:amd64_latest
+        image: vova0911/vovagpt:amd64_0.0.11
         ports:
         - containerPort: 5000
         env:
