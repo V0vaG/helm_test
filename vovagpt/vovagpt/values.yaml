@@ -9,7 +9,7 @@ deployment:
     env:
       ollamaHost: http://localhost:11434
       ollamaModels: /root/script_files/vovagpt/data/models
-      version: 0.0.15
+      version: 0.0.14
     image:
       repository: vova0911/vovagpt
       tag: amd64_0.0.14
