@@ -8,7 +8,7 @@ deployment:
   vovagpt:
     image:
       repository: vova0911/vovagpt
-      tag: amd64_latest
+      tag: amd64_0.0.1
     resources:
       limits:
         cpu: "1"
@@ -23,8 +23,8 @@ pvc:
     storageRequest: 1Gi
 service:
   ports:
-  - nodePort: 30099
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30099
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
