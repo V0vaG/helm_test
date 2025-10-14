@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "vovagpt.fullname" . }}-data-pv
+  labels:
+  {{- include "vovagpt.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: /home/vova/script_files/vovagpt
+  storageClassName: ""

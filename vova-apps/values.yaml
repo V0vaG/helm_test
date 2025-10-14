@@ -34,3 +34,4 @@ apps:
   - name: coldvaultmanager
   # - name: artifactory
   - name: minihub
+  - name: vovagpt
