@@ -9,7 +9,7 @@ metadata:
   name: vovagpt-data-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: 50Gi  # Increased for models
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -26,7 +26,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 50Gi  # Increased for models
   volumeName: vovagpt-data-pv
   storageClassName: ""
 ---
@@ -55,16 +55,23 @@ spec:
         image: vova0911/vovagpt:amd64_latest
         ports:
         - containerPort: 5000
+        env:
+        - name: OLLAMA_HOST
+          value: "http://localhost:11434"
+        - name: OLLAMA_MODELS
+          value: "/root/script_files/vovagpt/data/models"
+        - name: VERSION
+          value: "0.0.11"
         # Uncomment if needed
         # imagePullSecrets:
         # - name: regcred
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "500m"
+            memory: "2Gi"    # Increased for Ollama
+            cpu: "1000m"     # Increased for Ollama
           limits:
-            memory: "512Mi"
-            cpu: "1"
+            memory: "8Gi"    # Increased for models
+            cpu: "4000m"     # Increased for processing
         volumeMounts:
         - name: data-volume
           mountPath: /root/script_files/vovagpt
@@ -87,3 +94,5 @@ spec:
       targetPort: 5000
       nodePort: 30099
   type: NodePort
+
+

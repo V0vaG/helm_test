@@ -23,6 +23,12 @@ spec:
     spec:
       containers:
       - env:
+        - name: OLLAMA_HOST
+          value: {{ quote .Values.deployment.vovagpt.env.ollamaHost }}
+        - name: OLLAMA_MODELS
+          value: {{ quote .Values.deployment.vovagpt.env.ollamaModels }}
+        - name: VERSION
+          value: {{ quote .Values.deployment.vovagpt.env.version }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.vovagpt.image.repository }}:{{ .Values.deployment.vovagpt.image.tag
