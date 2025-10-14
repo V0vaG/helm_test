@@ -12,7 +12,7 @@ deployment:
       version: 0.0.15
     image:
       repository: vova0911/vovagpt
-      tag: amd64_0.0.15
+      tag: amd64_0.0.14
     resources:
       limits:
         cpu: "4"
