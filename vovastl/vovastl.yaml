@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: vovastl
-        image: vova0911/vovastl:amd64_1.1.11
+        image: vova0911/vovastl:amd64_1.1.14
         ports:
         - containerPort: 5000
         # Uncomment if needed
