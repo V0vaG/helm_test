@@ -35,3 +35,4 @@ apps:
   # - name: artifactory
   - name: minihub
   # - name: vovagpt
+  - name: otacd
