@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "otacd.fullname" . }}-deployment
+  labels:
+  {{- include "otacd.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: otacd
+    {{- include "otacd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: otacd
+      {{- include "otacd.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.otacd.image.repository }}:{{ .Values.deployment.otacd.image.tag
+          | default .Chart.AppVersion }}
+        name: otacd
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.otacd.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files/otacd
+          name: data-volume
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "otacd.fullname" . }}-data-pvc

@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otacd
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: otacd-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vova/script_files/otacd
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: otacd-data-pvc
+  namespace: otacd
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: otacd-data-pv
+  storageClassName: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otacd-deployment
+  namespace: otacd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otacd
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: otacd
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: otacd
+        image: 192.168.68.64:5000/otacd:amd64_latest
+        ports:
+        - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /root/script_files/otacd
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: otacd-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otacd-service
+  namespace: otacd
+spec:
+  selector:
+    app: otacd
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30092
+  type: NodePort
