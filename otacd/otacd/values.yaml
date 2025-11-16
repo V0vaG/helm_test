@@ -62,4 +62,4 @@ pvc:
 deployment:
   otacd:
     image:
-      tag: amd64_1.0.0
+      tag: amd64_0.0.23
