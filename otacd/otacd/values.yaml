@@ -1,8 +1,37 @@
-deployment:
+kubernetesClusterDomain: cluster.local
+mongodbDeployment:
+  mongodb:
+    env:
+      mongoInitdbDatabase: otacd
+    image:
+      repository: mongo
+      tag: "7"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+  replicas: 1
+mongodbService:
+  ports:
+  - port: 27017
+    protocol: TCP
+    targetPort: 27017
+  type: ClusterIP
+otacdDeployment:
   otacd:
+    env:
+      branch: local
+      flaskSecretKey: change-me-in-prod
+      ip: 0.0.0.0
+      mongoDbName: otacd
+      mongoUrl: mongodb://mongodb-service.otacd.svc.cluster.local:27017
+      version: dev
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.0.22
+      tag: amd64_0.0.23
     resources:
       limits:
         cpu: "1"
@@ -16,15 +45,17 @@ deployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
-kubernetesClusterDomain: cluster.local
-pvc:
-  dataPvc:
-    storageClass: ""
-    storageRequest: 1Gi
-service:
+otacdService:
   ports:
-    - nodePort: 30092
-      port: 80
-      protocol: TCP
-      targetPort: 5000
+  - nodePort: 30096
+    port: 80
+    protocol: TCP
+    targetPort: 5000
   type: NodePort
+pvc:
+  otacdDataPvc:
+    storageClass: ""
+    storageRequest: 10Gi
+  otacdMongoPvc:
+    storageClass: ""
+    storageRequest: 5Gi
