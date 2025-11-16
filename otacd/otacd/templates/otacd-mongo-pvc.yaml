@@ -11,4 +11,3 @@ spec:
     requests:
       storage: {{ .Values.pvc.otacdMongoPvc.storageRequest | quote }}
   storageClassName: {{ .Values.pvc.otacdMongoPvc.storageClass | quote }}
-  volumeName: otacd-mongo-pv

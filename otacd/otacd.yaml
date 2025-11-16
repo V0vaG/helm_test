@@ -27,7 +27,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  volumeName: otacd-data-pv
   storageClassName: ""
 ---
 apiVersion: v1
@@ -54,7 +53,6 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  volumeName: otacd-mongo-pv
   storageClassName: ""
 ---
 apiVersion: apps/v1
