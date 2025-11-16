@@ -137,7 +137,7 @@ spec:
             - name: FLASK_SECRET_KEY
               value: "change-me-in-prod"
             - name: MONGO_URL
-              value: "mongodb://otacd-mongodb-service.otacd.svc.cluster.local:27017"
+              value: "mongodb://otacd-mongodb-service.argocd.svc.cluster.local:27017"
             - name: MONGO_DB_NAME
               value: "otacd"
             - name: VERSION
