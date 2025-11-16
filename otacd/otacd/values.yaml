@@ -34,11 +34,11 @@ otacdDeployment:
       tag: amd64_0.0.30
     resources:
       limits:
-        cpu: "2"
-        memory: 2Gi
+        cpu: "4"
+        memory: 3Gi
       requests:
-        cpu: 500m
-        memory: 512Mi
+        cpu: "1"
+        memory: 1Gi
   replicas: 1
   strategy:
     rollingUpdate:
@@ -62,4 +62,4 @@ pvc:
 deployment:
   otacd:
     image:
-      tag: amd64_0.0.30
+      tag: amd64_0.0.31
