@@ -47,7 +47,7 @@ otacdDeployment:
     type: RollingUpdate
 otacdService:
   ports:
-  - nodePort: 30096
+  - nodePort: 30092
     port: 80
     protocol: TCP
     targetPort: 5000

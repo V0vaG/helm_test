@@ -173,6 +173,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-      nodePort: 30096
+      nodePort: 30092
   type: NodePort
 
