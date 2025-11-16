@@ -16,9 +16,9 @@ mongodbDeployment:
   replicas: 1
 mongodbService:
   ports:
-  - port: 27017
-    protocol: TCP
-    targetPort: 27017
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
   type: ClusterIP
 otacdDeployment:
   otacd:
@@ -47,10 +47,10 @@ otacdDeployment:
     type: RollingUpdate
 otacdService:
   ports:
-  - nodePort: 30092
-    port: 80
-    protocol: TCP
-    targetPort: 5000
+    - nodePort: 30092
+      port: 80
+      protocol: TCP
+      targetPort: 5000
   type: NodePort
 pvc:
   otacdDataPvc:
@@ -59,3 +59,7 @@ pvc:
   otacdMongoPvc:
     storageClass: ""
     storageRequest: 5Gi
+deployment:
+  otacd:
+    image:
+      tag: amd64_0.0.24
