@@ -130,7 +130,7 @@ spec:
         - name: regcred
       containers:
         - name: otacd
-          image: 192.168.68.64:5000/otacd:amd64_0.0.23
+          image: 192.168.68.64:5000/otacd:amd64_0.0.29
           ports:
             - containerPort: 5000
           env:
@@ -148,11 +148,11 @@ spec:
               value: "0.0.0.0"
           resources:
             requests:
-              memory: "256Mi"
+              memory: "512Mi"
               cpu: "500m"
             limits:
-              memory: "512Mi"
-              cpu: "1"
+              memory: "2Gi"
+              cpu: "2"
           volumeMounts:
             - name: data-volume
               mountPath: /root/script_files
