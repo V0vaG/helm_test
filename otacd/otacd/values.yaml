@@ -36,7 +36,7 @@ otacdDeployment:
       requests:
         cpu: "1"
         memory: 1Gi
-  replicas: 3
+  replicas: 1
   strategy:
     rollingUpdate:
       maxSurge: 25%
