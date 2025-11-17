@@ -31,7 +31,7 @@ otacdDeployment:
       version: dev
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.0.39
+      tag: amd64_0.0.41
     resources:
       limits:
         cpu: "4"
