@@ -20,7 +20,7 @@ mongodbService:
       protocol: TCP
       targetPort: 27017
   type: ClusterIP
-otacdDeployment:
+deployment:
   otacd:
     env:
       flaskSecretKey: change-me-in-prod
@@ -28,7 +28,7 @@ otacdDeployment:
       mongoUrl: mongodb://otacd-mongodb-service.argocd.svc.cluster.local:27017
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.0.51
+      tag: amd64_0.0.52
     resources:
       limits:
         cpu: "4"
@@ -56,7 +56,5 @@ pvc:
   otacdMongoPvc:
     storageClass: ""
     storageRequest: 5Gi
-deployment:
-  otacd:
-    image:
-      tag: amd64_0.0.52
+
+
