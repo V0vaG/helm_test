@@ -28,7 +28,7 @@ otacdDeployment:
       mongoUrl: mongodb://otacd-mongodb-service.argocd.svc.cluster.local:27017
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.0.58
+      tag: amd64_0.0.59
     resources:
       limits:
         cpu: "4"
