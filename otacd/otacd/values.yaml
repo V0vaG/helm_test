@@ -20,7 +20,7 @@ mongodbService:
       protocol: TCP
       targetPort: 27017
   type: ClusterIP
-deployment:
+otacdDeployment:
   otacd:
     env:
       flaskSecretKey: change-me-in-prod
@@ -56,5 +56,7 @@ pvc:
   otacdMongoPvc:
     storageClass: ""
     storageRequest: 5Gi
-
-
+deployment:
+  otacd:
+    image:
+      tag: amd64_0.0.52

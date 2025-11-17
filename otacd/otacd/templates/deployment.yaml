@@ -44,14 +44,14 @@ metadata:
   labels:
   {{- include "otacd.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.Deployment.replicas }}
+  replicas: {{ .Values.otacdDeployment.replicas }}
   strategy:
     rollingUpdate:
-      maxSurge: {{ .Values.Deployment.strategy.rollingUpdate.maxSurge | quote
+      maxSurge: {{ .Values.otacdDeployment.strategy.rollingUpdate.maxSurge | quote
         }}
-      maxUnavailable: {{ .Values.Deployment.strategy.rollingUpdate.maxUnavailable
+      maxUnavailable: {{ .Values.otacdDeployment.strategy.rollingUpdate.maxUnavailable
         }}
-    type: {{ .Values.Deployment.strategy.type | quote }}
+    type: {{ .Values.otacdDeployment.strategy.type | quote }}
   selector:
     matchLabels:
       app: otacd
@@ -65,19 +65,19 @@ spec:
       containers:
       - env:
         - name: FLASK_SECRET_KEY
-          value: {{ quote .Values.Deployment.otacd.env.flaskSecretKey }}
+          value: {{ quote .Values.otacdDeployment.otacd.env.flaskSecretKey }}
         - name: MONGO_URL
-          value: {{ quote .Values.Deployment.otacd.env.mongoUrl }}
+          value: {{ quote .Values.otacdDeployment.otacd.env.mongoUrl }}
         - name: MONGO_DB_NAME
-          value: {{ quote .Values.Deployment.otacd.env.mongoDbName }}
+          value: {{ quote .Values.otacdDeployment.otacd.env.mongoDbName }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.Deployment.otacd.image.repository }}:{{ .Values.Deployment.otacd.image.tag
+        image: {{ .Values.otacdDeployment.otacd.image.repository }}:{{ .Values.otacdDeployment.otacd.image.tag
           | default .Chart.AppVersion }}
         name: otacd
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.Deployment.otacd.resources | nindent 10 }}
+        resources: {{- toYaml .Values.otacdDeployment.otacd.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files
           name: data-volume
