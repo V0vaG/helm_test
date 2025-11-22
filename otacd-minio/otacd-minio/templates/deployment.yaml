@@ -32,7 +32,8 @@ spec:
         - |
           mkdir -p /data
           chown -R 1000:1000 /data
-          chmod -R 755 /data
+          chmod -R 770 /data
+          echo "MinIO data directory initialized"
           ls -la /data
         volumeMounts:
         - mountPath: /data
@@ -46,11 +47,11 @@ spec:
           runAsGroup: 1000
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: false
-        command:
-        - /bin/sh
-        - -c
-        - |
-          minio server /data --console-address ":9001"
+        args:
+        - server
+        - /data
+        - --console-address
+        - ":9001"
         env:
         - name: MINIO_ROOT_USER
           value: {{ quote .Values.minioDeployment.minio.env.rootUser }}
