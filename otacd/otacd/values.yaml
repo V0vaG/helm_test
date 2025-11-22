@@ -1,5 +1,5 @@
 kubernetesClusterDomain: cluster.local
-namespace: otacd
+namespace: argocd
 # MongoDB is deployed separately via otacd-db chart
 # Reference the MongoDB service from otacd-db chart
 mongodbService:
