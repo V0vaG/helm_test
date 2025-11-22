@@ -11,3 +11,4 @@ spec:
     requests:
       storage: {{ .Values.pvc.otacdDataPvc.storageRequest | quote }}
   storageClassName: {{ .Values.pvc.otacdDataPvc.storageClass | quote }}
+

@@ -11,3 +11,4 @@ spec:
     {{- include "otacd.selectorLabels" . | nindent 4 }}
   ports:
   {{- .Values.otacdService.ports | toYaml | nindent 2 }}
+
