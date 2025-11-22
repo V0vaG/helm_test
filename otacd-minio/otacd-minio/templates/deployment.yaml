@@ -16,24 +16,19 @@ spec:
         app: minio
       {{- include "otacd-minio.selectorLabels" . | nindent 8 }}
     spec:
-      securityContext:
-        fsGroup: 1000
-        runAsUser: 1000
-        runAsGroup: 1000
       initContainers:
       - name: minio-init
         image: busybox:latest
         securityContext:
           runAsUser: 0
           runAsGroup: 0
+          fsGroup: 0
         command:
         - /bin/sh
         - -c
         - |
           mkdir -p /data
-          chown -R 1000:1000 /data
-          chmod -R 770 /data
-          echo "MinIO data directory initialized"
+          chmod 777 /data
           ls -la /data
         volumeMounts:
         - mountPath: /data
@@ -42,16 +37,11 @@ spec:
       - name: minio
         image: {{ .Values.minioDeployment.minio.image.repository }}:{{ .Values.minioDeployment.minio.image.tag
           | default .Chart.AppVersion }}
-        securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
-        args:
-        - server
-        - /data
-        - --console-address
-        - ":9001"
+        command:
+        - /bin/sh
+        - -c
+        - |
+          minio server /data --console-address ":9001"
         env:
         - name: MINIO_ROOT_USER
           value: {{ quote .Values.minioDeployment.minio.env.rootUser }}
