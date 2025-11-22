@@ -10,7 +10,7 @@ otacdDeployment:
       email: admin@example.com
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.1.6
+      tag: amd64_0.1.7
     resources:
       limits:
         cpu: "4"
