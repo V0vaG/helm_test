@@ -34,6 +34,8 @@ spec:
         app: otacd
       {{- include "otacd.selectorLabels" . | nindent 8 }}
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
       - env:
         - name: FLASK_SECRET_KEY

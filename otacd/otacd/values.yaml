@@ -20,7 +20,7 @@ otacdDeployment:
       mongoUrl: "mongodb://otacd-db-mongodb-service:27017"
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.2.1
+      tag: amd64_0.2.3
     resources:
       limits:
         cpu: "4"
