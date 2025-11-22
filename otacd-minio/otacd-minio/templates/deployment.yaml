@@ -19,6 +19,10 @@ spec:
       initContainers:
       - name: minio-init
         image: busybox:latest
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          fsGroup: 0
         command:
         - /bin/sh
         - -c
