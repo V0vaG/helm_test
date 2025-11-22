@@ -1,0 +1,32 @@
+kubernetesClusterDomain: cluster.local
+namespace: otacd
+mongodbDeployment:
+  mongodb:
+    env:
+      mongoInitdbDatabase: otacd
+    image:
+      repository: mongo
+      tag: "7"
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+  replicas: 1
+mongodbService:
+  ports:
+    - port: 27017
+      protocol: TCP
+      targetPort: 27017
+  type: ClusterIP
+pvc:
+  otacdMongoPvc:
+    storageClass: ""
+    storageRequest: 5Gi
+pv:
+  otacdMongoPv:
+    capacity: 5Gi
+    hostPath: /home/vova/script_files/otacd/mongo
+
