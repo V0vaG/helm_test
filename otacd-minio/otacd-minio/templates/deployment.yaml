@@ -29,10 +29,17 @@ spec:
         - -c
         - |
           mkdir -p /data
+          # Remove any existing MinIO data if corrupted
+          if [ -d /data/.minio.sys ] && [ ! -f /data/.minio.sys/format.json ]; then
+            echo "Removing corrupted MinIO data"
+            rm -rf /data/.minio.sys
+          fi
           chown -R 1000:1000 /data
-          chmod -R 755 /data
+          chmod -R 770 /data
           echo "MinIO data directory initialized"
           ls -la /data
+          echo "Directory permissions:"
+          stat -c "%a %U:%G %n" /data
         volumeMounts:
         - mountPath: /data
           name: minio-data

@@ -11,7 +11,7 @@ apps:
     # branch: test
     # repoURL: https://github.com/V0vaG/helm_test
   # - name: vpkg
-  - name: topix
+  # - name: topix
   #- name: vbank
   - name: jellyfin
   # - name: tools
