@@ -37,4 +37,6 @@ apps:
   # - name: vovagpt
   #- name: otacd
   - name: otacd-app
+    path: otacd-app
   - name: otacd-db
+    path: otacd-db/otacd-db
