@@ -39,4 +39,4 @@ apps:
   - name: otacd-app
     path: otacd-app
   - name: otacd-db
-    path: otacd-db/otacd-db
+    path: otacd-db
