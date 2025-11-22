@@ -13,8 +13,8 @@ otacdDeployment:
     env:
       flaskSecretKey: change-me-in-prod
       mongoDbName: otacd
-      # MONGO_URL will be constructed in deployment template from mongodbService values
-      mongoUrl: ""
+      # MONGO_URL - defaults to mongodbService connection, can be overridden
+      mongoUrl: "mongodb://otacd-db-mongodb-service.otacd.svc.cluster.local:27017"
     image:
       repository: 192.168.68.64:5000/otacd
       tag: amd64_0.2.1

@@ -39,7 +39,7 @@ spec:
         - name: FLASK_SECRET_KEY
           value: {{ quote .Values.otacdDeployment.otacd.env.flaskSecretKey }}
         - name: MONGO_URL
-          value: {{ if .Values.otacdDeployment.otacd.env.mongoUrl }}{{ quote .Values.otacdDeployment.otacd.env.mongoUrl }}{{ else }}{{ printf "mongodb://%s.%s.svc.%s:%d" .Values.mongodbService.name .Values.mongodbService.namespace .Values.kubernetesClusterDomain .Values.mongodbService.port | quote }}{{ end }}
+          value: {{ quote .Values.otacdDeployment.otacd.env.mongoUrl }}
         - name: MONGO_DB_NAME
           value: {{ quote .Values.otacdDeployment.otacd.env.mongoDbName }}
         - name: KUBERNETES_CLUSTER_DOMAIN
