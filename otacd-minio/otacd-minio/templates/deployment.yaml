@@ -16,6 +16,19 @@ spec:
         app: minio
       {{- include "otacd-minio.selectorLabels" . | nindent 8 }}
     spec:
+      initContainers:
+      - name: minio-init
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          mkdir -p /data
+          chmod 777 /data
+          ls -la /data
+        volumeMounts:
+        - mountPath: /data
+          name: minio-data
       containers:
       - name: minio
         image: {{ .Values.minioDeployment.minio.image.repository }}:{{ .Values.minioDeployment.minio.image.tag
@@ -23,7 +36,8 @@ spec:
         command:
         - /bin/sh
         - -c
-        - minio server /data --console-address ":9001"
+        - |
+          minio server /data --console-address ":9001"
         env:
         - name: MINIO_ROOT_USER
           value: {{ quote .Values.minioDeployment.minio.env.rootUser }}

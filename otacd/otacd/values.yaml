@@ -10,7 +10,7 @@ otacdDeployment:
       email: admin@example.com
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.1.7
+      tag: amd64_0.1.2
     resources:
       limits:
         cpu: "4"
@@ -48,3 +48,4 @@ pv:
   otacdDataPv:
     capacity: 10Gi
     hostPath: /home/vova/script_files
+
