@@ -35,9 +35,9 @@ apps:
   # - name: artifactory
   - name: minihub
   # - name: vovagpt
-  #- name: otacd
-  - name: otacd-app
+  - name: otacd
+ # - name: otacd-app
 
-  - name: otacd-db
-    path: otacd-db
+ # - name: otacd-db
+  #  path: otacd-db
 
