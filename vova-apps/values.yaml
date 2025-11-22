@@ -37,6 +37,5 @@ apps:
   # - name: vovagpt
   - name: otacd
   - name: otacd-db
-  - name: otacd-minio
 
 
