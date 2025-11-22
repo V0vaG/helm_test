@@ -1,5 +1,5 @@
 kubernetesClusterDomain: cluster.local
-namespace: argocd
+namespace: otacd
 mongodbDeployment:
   mongodb:
     env:
