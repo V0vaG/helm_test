@@ -18,14 +18,16 @@ minioDeployment:
 minioService:
   api:
     ports:
-      - nodePort: 30900
+      - name: api
+        nodePort: 30900
         port: 9000
         protocol: TCP
         targetPort: 9000
     type: NodePort
   console:
     ports:
-      - nodePort: 30901
+      - name: console
+        nodePort: 30901
         port: 9001
         protocol: TCP
         targetPort: 9001
