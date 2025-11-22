@@ -36,3 +36,5 @@ apps:
   - name: minihub
   # - name: vovagpt
   - name: otacd
+  - name: otacd-app
+  - name: otacd-db

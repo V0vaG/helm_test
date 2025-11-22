@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "otacd-app.fullname" . }}-otacd-deployment
+  labels:
+  {{- include "otacd-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.otacdDeployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.otacdDeployment.strategy.rollingUpdate.maxSurge | quote
+        }}
+      maxUnavailable: {{ .Values.otacdDeployment.strategy.rollingUpdate.maxUnavailable
+        }}
+    type: {{ .Values.otacdDeployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: otacd
+    {{- include "otacd-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: otacd
+      {{- include "otacd-app.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: FLASK_SECRET_KEY
+          value: {{ quote .Values.otacdDeployment.otacd.env.flaskSecretKey }}
+        - name: MONGO_URL
+          value: {{ quote .Values.otacdDeployment.otacd.env.mongoUrl }}
+        - name: MONGO_DB_NAME
+          value: {{ quote .Values.otacdDeployment.otacd.env.mongoDbName }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.otacdDeployment.otacd.image.repository }}:{{ .Values.otacdDeployment.otacd.image.tag
+          | default .Chart.AppVersion }}
+        name: otacd
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.otacdDeployment.otacd.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files
+          name: data-volume
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "otacd-app.fullname" . }}-otacd-data-pvc
+
