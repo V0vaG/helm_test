@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "otacd-app.fullname" . }}-otacd-deployment
+  name: {{ include "otacd.fullname" . }}-otacd-deployment
   labels:
-  {{- include "otacd-app.labels" . | nindent 4 }}
+  {{- include "otacd.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.otacdDeployment.replicas }}
   strategy:
@@ -16,12 +16,12 @@ spec:
   selector:
     matchLabels:
       app: otacd
-    {{- include "otacd-app.selectorLabels" . | nindent 6 }}
+    {{- include "otacd.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
         app: otacd
-      {{- include "otacd-app.selectorLabels" . | nindent 8 }}
+      {{- include "otacd.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - env:
@@ -47,5 +47,5 @@ spec:
       volumes:
       - name: data-volume
         persistentVolumeClaim:
-          claimName: {{ include "otacd-app.fullname" . }}-otacd-data-pvc
+          claimName: {{ include "otacd.fullname" . }}-otacd-data-pvc
 

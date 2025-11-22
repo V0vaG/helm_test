@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "otacd-app.fullname" . }}-otacd-data-pvc
+  name: {{ include "otacd.fullname" . }}-otacd-data-pvc
   labels:
-  {{- include "otacd-app.labels" . | nindent 4 }}
+  {{- include "otacd.labels" . | nindent 4 }}
 spec:
   accessModes:
   - ReadWriteOnce

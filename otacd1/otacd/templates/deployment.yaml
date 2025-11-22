@@ -1,6 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: {{ include "otacd.fullname" . }}-mongodb-deployment
+  labels:
+  {{- include "otacd.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.mongodbDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: mongodb
+    {{- include "otacd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: mongodb
+      {{- include "otacd.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_DATABASE
+          value: {{ quote .Values.mongodbDeployment.mongodb.env.mongoInitdbDatabase }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.mongodbDeployment.mongodb.image.repository }}:{{ .Values.mongodbDeployment.mongodb.image.tag
+          | default .Chart.AppVersion }}
+        name: mongodb
+        ports:
+        - containerPort: 27017
+        resources: {{- toYaml .Values.mongodbDeployment.mongodb.resources | nindent 10
+          }}
+        volumeMounts:
+        - mountPath: /data/db
+          name: mongo-data
+      volumes:
+      - name: mongo-data
+        persistentVolumeClaim:
+          claimName: {{ include "otacd.fullname" . }}-otacd-mongo-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: {{ include "otacd.fullname" . }}-otacd-deployment
   labels:
   {{- include "otacd.labels" . | nindent 4 }}
@@ -48,4 +87,3 @@ spec:
       - name: data-volume
         persistentVolumeClaim:
           claimName: {{ include "otacd.fullname" . }}-otacd-data-pvc
-

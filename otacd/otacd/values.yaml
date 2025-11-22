@@ -1,31 +1,12 @@
 kubernetesClusterDomain: cluster.local
-mongodbDeployment:
-  mongodb:
-    env:
-      mongoInitdbDatabase: otacd
-    image:
-      repository: mongo
-      tag: "7"
-    resources:
-      limits:
-        cpu: 500m
-        memory: 512Mi
-      requests:
-        cpu: 250m
-        memory: 256Mi
-  replicas: 1
-mongodbService:
-  ports:
-    - port: 27017
-      protocol: TCP
-      targetPort: 27017
-  type: ClusterIP
 otacdDeployment:
   otacd:
     env:
       flaskSecretKey: change-me-in-prod
       mongoDbName: otacd
-      mongoUrl: mongodb://otacd-mongodb-service.argocd.svc.cluster.local:27017
+      # MongoDB service name - update this to match your otacd-db release name
+      # Format: <release-name>-mongodb-service.<namespace>.svc.cluster.local:27017
+      mongoUrl: mongodb://otacd-db-mongodb-service.argocd.svc.cluster.local:27017
     image:
       repository: 192.168.68.64:5000/otacd
       tag: amd64_0.1.2
@@ -53,10 +34,8 @@ pvc:
   otacdDataPvc:
     storageClass: ""
     storageRequest: 10Gi
-  otacdMongoPvc:
-    storageClass: ""
-    storageRequest: 5Gi
-deployment:
-  otacd:
-    image:
-      tag: amd64_0.1.2
+pv:
+  otacdDataPv:
+    capacity: 10Gi
+    hostPath: /home/vova/script_files
+
