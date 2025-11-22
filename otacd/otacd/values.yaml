@@ -48,3 +48,4 @@ pv:
   otacdDataPv:
     capacity: 10Gi
     hostPath: /home/vova/script_files
+
