@@ -1,0 +1,41 @@
+kubernetesClusterDomain: cluster.local
+minioDeployment:
+  minio:
+    env:
+      rootUser: minioadmin
+      rootPassword: minioadmin
+    image:
+      repository: minio/minio
+      tag: "latest"
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+      requests:
+        cpu: 500m
+        memory: 512Mi
+  replicas: 1
+minioService:
+  api:
+    ports:
+      - nodePort: 30900
+        port: 9000
+        protocol: TCP
+        targetPort: 9000
+    type: NodePort
+  console:
+    ports:
+      - nodePort: 30901
+        port: 9001
+        protocol: TCP
+        targetPort: 9001
+    type: NodePort
+pvc:
+  minioDataPvc:
+    storageClass: ""
+    storageRequest: 20Gi
+pv:
+  minioDataPv:
+    capacity: 20Gi
+    hostPath: /home/vova/script_files/minio
+

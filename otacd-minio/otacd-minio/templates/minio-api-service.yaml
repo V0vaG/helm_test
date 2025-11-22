@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "otacd-minio.fullname" . }}-minio-api-service
+  labels:
+  {{- include "otacd-minio.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.minioService.api.type }}
+  selector:
+    app: minio
+    {{- include "otacd-minio.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.minioService.api.ports | toYaml | nindent 2 }}
+
