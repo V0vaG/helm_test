@@ -32,7 +32,7 @@ otacdService:
       targetPort: 5000
   type: NodePort
 # External MinIO service configuration
-# Update these values to match your MinIO deployment
+# Update these values to match your MinIO deployment xxxx
 minio:
   # MinIO service endpoint
   # Format: <release-name>-minio-api-service.<namespace>.svc.cluster.local:9000
