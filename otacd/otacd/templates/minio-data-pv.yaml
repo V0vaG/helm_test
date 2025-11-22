@@ -1,0 +1,18 @@
+{{- if .Values.minioDeployment.enabled }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "otacd.fullname" . }}-minio-data-pv
+  labels:
+  {{- include "otacd.labels" . | nindent 4 }}
+    app: minio
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: {{ .Values.pv.minioDataPv.capacity }}
+  hostPath:
+    path: {{ .Values.pv.minioDataPv.hostPath }}
+  storageClassName: ""
+{{- end }}
+

@@ -31,6 +31,18 @@ spec:
           value: {{ quote .Values.otacdDeployment.otacd.env.mongoUrl }}
         - name: MONGO_DB_NAME
           value: {{ quote .Values.otacdDeployment.otacd.env.mongoDbName }}
+        {{- if .Values.minioDeployment.enabled }}
+        - name: MINIO_ENDPOINT
+          value: {{ include "otacd.fullname" . }}-minio-service.{{ .Release.Namespace }}.svc.{{ .Values.kubernetesClusterDomain }}:9000
+        - name: MINIO_ACCESS_KEY
+          value: {{ quote .Values.minioDeployment.minio.env.rootUser }}
+        - name: MINIO_SECRET_KEY
+          value: {{ quote .Values.minioDeployment.minio.env.rootPassword }}
+        - name: MINIO_SECURE
+          value: "false"
+        {{- end }}
+        - name: EMAIL
+          value: {{ quote .Values.otacdDeployment.otacd.env.email }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.otacdDeployment.otacd.image.repository }}:{{ .Values.otacdDeployment.otacd.image.tag

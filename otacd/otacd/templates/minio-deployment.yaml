@@ -1,0 +1,60 @@
+{{- if .Values.minioDeployment.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "otacd.fullname" . }}-minio-deployment
+  labels:
+  {{- include "otacd.labels" . | nindent 4 }}
+    app: minio
+spec:
+  replicas: {{ .Values.minioDeployment.replicas }}
+  selector:
+    matchLabels:
+      app: minio
+      {{- include "otacd.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: minio
+        {{- include "otacd.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: minio
+          image: {{ .Values.minioDeployment.minio.image.repository }}:{{ .Values.minioDeployment.minio.image.tag }}
+          args:
+            - server
+            - /data
+            - --console-address
+            - ":9001"
+          ports:
+            - containerPort: 9000
+              name: api
+            - containerPort: 9001
+              name: console
+          env:
+            - name: MINIO_ROOT_USER
+              value: {{ quote .Values.minioDeployment.minio.env.rootUser }}
+            - name: MINIO_ROOT_PASSWORD
+              value: {{ quote .Values.minioDeployment.minio.env.rootPassword }}
+          volumeMounts:
+            - name: minio-data
+              mountPath: /data
+          resources: {{- toYaml .Values.minioDeployment.minio.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /minio/health/live
+              port: 9000
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /minio/health/ready
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: minio-data
+          persistentVolumeClaim:
+            claimName: {{ include "otacd.fullname" . }}-minio-data-pvc
+{{- end }}
+

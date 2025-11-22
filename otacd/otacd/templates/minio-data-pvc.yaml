@@ -1,0 +1,17 @@
+{{- if .Values.minioDeployment.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "otacd.fullname" . }}-minio-data-pvc
+  labels:
+  {{- include "otacd.labels" . | nindent 4 }}
+    app: minio
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.minioDataPvc.storageRequest | quote }}
+  storageClassName: {{ .Values.pvc.minioDataPvc.storageClass | quote }}
+{{- end }}
+

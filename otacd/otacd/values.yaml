@@ -7,6 +7,7 @@ otacdDeployment:
       # MongoDB service name - update this to match your otacd-db release name
       # Format: <release-name>-mongodb-service.<namespace>.svc.cluster.local:27017
       mongoUrl: mongodb://otacd-db-mongodb-service.argocd.svc.cluster.local:27017
+      email: admin@example.com
     image:
       repository: 192.168.68.64:5000/otacd
       tag: amd64_0.1.2
@@ -30,12 +31,47 @@ otacdService:
       protocol: TCP
       targetPort: 5000
   type: NodePort
+minioDeployment:
+  enabled: true
+  minio:
+    image:
+      repository: minio/minio
+      tag: latest
+    env:
+      rootUser: minioadmin
+      rootPassword: minioadmin
+    resources:
+      limits:
+        cpu: "500m"
+        memory: 1Gi
+      requests:
+        cpu: "250m"
+        memory: 512Mi
+  replicas: 1
+minioService:
+  enabled: true
+  ports:
+    - name: api
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+    - name: console
+      port: 9001
+      protocol: TCP
+      targetPort: 9001
+  type: ClusterIP
 pvc:
   otacdDataPvc:
     storageClass: ""
     storageRequest: 10Gi
+  minioDataPvc:
+    storageClass: ""
+    storageRequest: 50Gi
 pv:
   otacdDataPv:
     capacity: 10Gi
     hostPath: /home/vova/script_files
+  minioDataPv:
+    capacity: 50Gi
+    hostPath: /home/vova/script_files/otacd/minio
 
