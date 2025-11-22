@@ -37,5 +37,5 @@ pvc:
 pv:
   minioDataPv:
     capacity: 20Gi
-    hostPath: /home/vova/script_files/minio
+    hostPath: /home/vova/script_files/otacd/minio
 
