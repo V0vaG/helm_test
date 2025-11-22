@@ -51,4 +51,4 @@ pv:
 deployment:
   otacd:
     image:
-      tag: amd64_0.1.3
+      tag: amd64_0.1.4
