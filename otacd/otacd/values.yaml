@@ -1,5 +1,5 @@
 kubernetesClusterDomain: cluster.local
-namespace: argocd
+namespace: otacd
 # MongoDB is deployed separately via otacd-db chart
 # Reference the MongoDB service from otacd-db chart
 mongodbService:
@@ -14,10 +14,13 @@ otacdDeployment:
       flaskSecretKey: change-me-in-prod
       mongoDbName: otacd
       # MONGO_URL - defaults to mongodbService connection, can be overridden
-      mongoUrl: "mongodb://otacd-db-mongodb-service.otacd.svc.cluster.local:27017"
+      # Use short service name if in same namespace, or full FQDN for cross-namespace
+      # Format: mongodb://<service-name>.<namespace>.svc.<cluster-domain>:<port>
+      # Or just: mongodb://<service-name>:<port> if same namespace
+      mongoUrl: "mongodb://otacd-db-mongodb-service:27017"
     image:
       repository: 192.168.68.64:5000/otacd
-      tag: amd64_0.2.3
+      tag: amd64_0.2.1
     resources:
       limits:
         cpu: "4"
