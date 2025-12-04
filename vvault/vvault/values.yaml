@@ -34,10 +34,13 @@ ingress:
   enabled: true
   className: "nginx"
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
   hosts:
     - host: vova-g.tplinkdns.com
       paths:
         - path: /vvault(/|$)(.*)
+          pathType: ImplementationSpecific
+        - path: /((login|api|static)(/.*)?)$
           pathType: ImplementationSpecific
   tls: []
