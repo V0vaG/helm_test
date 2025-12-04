@@ -38,6 +38,19 @@ spec:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
     {{- end }}
+    - http:
+        paths:
+          {{- range .Values.ingress.hosts }}
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: vvault-service
+                port:
+                  number: {{ (index $.Values.service.ports 0).port }}
+          {{- end }}
+          {{- end }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -76,5 +89,28 @@ spec:
               port:
                 number: {{ (index $.Values.service.ports 0).port }}
     {{- end }}
+    - http:
+        paths:
+        - path: /login
+          pathType: Prefix
+          backend:
+            service:
+              name: vvault-service
+              port:
+                number: {{ (index $.Values.service.ports 0).port }}
+        - path: /api
+          pathType: Prefix
+          backend:
+            service:
+              name: vvault-service
+              port:
+                number: {{ (index $.Values.service.ports 0).port }}
+        - path: /static
+          pathType: Prefix
+          backend:
+            service:
+              name: vvault-service
+              port:
+                number: {{ (index $.Values.service.ports 0).port }}
 {{- end }}
 
