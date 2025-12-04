@@ -91,21 +91,7 @@ spec:
     {{- end }}
     - http:
         paths:
-        - path: /login
-          pathType: Prefix
-          backend:
-            service:
-              name: vvault-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
-        - path: /api
-          pathType: Prefix
-          backend:
-            service:
-              name: vvault-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
-        - path: /static
+        - path: /
           pathType: Prefix
           backend:
             service:
