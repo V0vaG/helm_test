@@ -5,10 +5,15 @@ metadata:
   name: {{ include "vvault.fullname" . }}-ingress
   labels:
     {{- include "vvault.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
   annotations:
+    {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ~* ^/vvault(/|$)(.*)$ {
+        rewrite ^/vvault(/|$)(.*)$ /$2 break;
+        proxy_pass http://vvault-service.argocd.svc.cluster.local;
+      }
 spec:
   {{- if .Values.ingress.className }}
   ingressClassName: {{ .Values.ingress.className }}
@@ -37,6 +42,13 @@ spec:
                 port:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vvault-service
+                port:
+                  number: {{ (index $.Values.service.ports 0).port }}
     {{- end }}
     - http:
         paths:
@@ -51,52 +63,12 @@ spec:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
           {{- end }}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ include "vvault.fullname" . }}-ingress-app
-  labels:
-    {{- include "vvault.labels" . | nindent 4 }}
-spec:
-  {{- if .Values.ingress.className }}
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- end }}
-  rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-        - path: /login
-          pathType: Prefix
-          backend:
-            service:
-              name: vvault-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
-        - path: /api
-          pathType: Prefix
-          backend:
-            service:
-              name: vvault-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
-        - path: /static
-          pathType: Prefix
-          backend:
-            service:
-              name: vvault-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
-    {{- end }}
-    - http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: vvault-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vvault-service
+                port:
+                  number: {{ (index $.Values.service.ports 0).port }}
 {{- end }}
 
