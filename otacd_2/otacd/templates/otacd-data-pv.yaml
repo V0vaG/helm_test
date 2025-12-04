@@ -8,7 +8,8 @@ spec:
   accessModes:
   - ReadWriteOnce
   capacity:
-    storage: 10Gi
+    storage: {{ .Values.pv.otacdDataPv.capacity }}
   hostPath:
-    path: /home/vova/script_files
+    path: {{ .Values.pv.otacdDataPv.hostPath }}
   storageClassName: ""
+

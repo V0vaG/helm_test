@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ include "otacd-db.fullname" . }}-otacd-mongo-pvc
+  namespace: {{ .Values.namespace }}
   labels:
   {{- include "otacd-db.labels" . | nindent 4 }}
 spec:
