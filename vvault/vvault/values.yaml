@@ -39,6 +39,6 @@ ingress:
   hosts:
     - host: vova-g.tplinkdns.com
       paths:
-        - path: (/vvault)?(/(login|api|static|.*))?$
+        - path: /vvault(/|$)(.*)
           pathType: ImplementationSpecific
   tls: []
