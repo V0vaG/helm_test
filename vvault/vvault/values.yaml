@@ -30,3 +30,13 @@ service:
     protocol: TCP
     targetPort: 5000
   type: NodePort
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+    - host: vova-g.tplinkdns.com
+      paths:
+        - path: /vvault
+          pathType: Prefix
+  tls: []
