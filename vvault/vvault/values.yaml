@@ -37,8 +37,8 @@ ingress:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
-    - host: vova-g.tplinkdns.com
+    - host: vova-g.tplinkdns.com/vvault
       paths:
-        - path: /vvault(/|$)(.*)
+        - path: (/|$)(.*)
           pathType: ImplementationSpecific
   tls: []
