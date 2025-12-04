@@ -32,7 +32,7 @@ service:
   type: NodePort
 ingress:
   enabled: true
-  className: ""
+  className: "nginx"
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
   hosts:
