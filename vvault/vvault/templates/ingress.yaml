@@ -33,7 +33,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "vvault.fullname" $ }}-service
+                name: vvault-service
                 port:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
