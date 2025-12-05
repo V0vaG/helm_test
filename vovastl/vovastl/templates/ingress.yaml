@@ -51,38 +51,5 @@ spec:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
           {{- end }}
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: {{ include "vovastl.fullname" . }}-ingress-app
-  labels:
-    {{- include "vovastl.labels" . | nindent 4 }}
-spec:
-  {{- if .Values.ingress.className }}
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- end }}
-  rules:
-    {{- range .Values.ingress.hosts }}
-    - host: {{ .host | quote }}
-      http:
-        paths:
-        - path: /vovastl
-          pathType: Prefix
-          backend:
-            service:
-              name: {{ include "vovastl.fullname" $ }}-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
-    {{- end }}
-    - http:
-        paths:
-        - path: /vovastl
-          pathType: Prefix
-          backend:
-            service:
-              name: {{ include "vovastl.fullname" $ }}-service
-              port:
-                number: {{ (index $.Values.service.ports 0).port }}
 {{- end }}
 
