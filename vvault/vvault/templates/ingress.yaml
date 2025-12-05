@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- if .Values.ingress.enabled }}
-    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-{{ include "vvault.fullname" . }}-redirect-root@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-{{ include "vvault.fullname" . }}-redirect-root@kubernetescrd,{{ .Release.Namespace }}-{{ include "vvault.fullname" . }}-headers@kubernetescrd,{{ .Release.Namespace }}-{{ include "vvault.fullname" . }}-stripprefix@kubernetescrd
     {{- end }}
 spec:
   {{- if .Values.ingress.className }}

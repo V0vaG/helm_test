@@ -28,12 +28,13 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "vvault.fullname" . }}-add-prefix
+  name: {{ include "vvault.fullname" . }}-headers
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "vvault.labels" . | nindent 4 }}
 spec:
-  addPrefix:
-    prefix: /vvault
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Prefix: /vvault
 {{- end }}
 
