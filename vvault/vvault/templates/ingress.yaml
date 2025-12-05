@@ -38,18 +38,5 @@ spec:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
     {{- end }}
-    - http:
-        paths:
-          {{- range .Values.ingress.hosts }}
-          {{- range .paths }}
-          - path: {{ .path }}
-            pathType: {{ .pathType }}
-            backend:
-              service:
-                name: vvault-service
-                port:
-                  number: {{ (index $.Values.service.ports 0).port }}
-          {{- end }}
-          {{- end }}
 {{- end }}
 

@@ -30,13 +30,12 @@ service:
   type: NodePort
 ingress:
   enabled: true
-  className: "nginx"
+  className: "traefik"
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    traefik.ingress.kubernetes.io/rewrite-target: /
   hosts:
     - host: vova-g.tplinkdns.com
       paths:
-        - path: /vovastl(/|$)(.*)
-          pathType: ImplementationSpecific
+        - path: /vovastl
+          pathType: Prefix
   tls: []
