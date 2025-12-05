@@ -25,10 +25,6 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        - name: SCRIPT_NAME
-          value: /vovastl
-        - name: APPLICATION_ROOT
-          value: /vovastl
         image: {{ .Values.deployment.vovastl.image.repository }}:{{ .Values.deployment.vovastl.image.tag
           | default .Chart.AppVersion }}
         name: vovastl
