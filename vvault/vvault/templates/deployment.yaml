@@ -27,6 +27,10 @@ spec:
           value: {{ quote .Values.deployment.vvault.env.mongoUrl }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
+        - name: BASE_PATH
+          value: /vvault
+        - name: BASE_URL
+          value: /vvault
         image: {{ .Values.deployment.vvault.image.repository }}:{{ .Values.deployment.vvault.image.tag
           | default .Chart.AppVersion }}
         name: vvault
