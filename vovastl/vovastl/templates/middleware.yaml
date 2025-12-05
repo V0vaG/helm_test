@@ -11,5 +11,17 @@ spec:
     prefixes:
     - /vovastl
     - /vovastl/
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "vovastl.fullname" . }}-headers
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "vovastl.labels" . | nindent 4 }}
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Prefix: /vovastl
 {{- end }}
 
