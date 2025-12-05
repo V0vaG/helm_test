@@ -33,8 +33,7 @@ service:
 ingress:
   enabled: true
   className: "traefik"
-  annotations:
-    traefik.ingress.kubernetes.io/rewrite-target: /
+  annotations: {}
   hosts:
     - host: vova-g.tplinkdns.com
       paths:
