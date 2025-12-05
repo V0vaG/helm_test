@@ -33,7 +33,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "vovastl.fullname" . }}-service
+                name: {{ include "vovastl.fullname" $ }}-service
                 port:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
@@ -46,7 +46,7 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "vovastl.fullname" . }}-service
+                name: {{ include "vovastl.fullname" $ }}-service
                 port:
                   number: {{ (index $.Values.service.ports 0).port }}
           {{- end }}
@@ -71,7 +71,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: {{ include "vovastl.fullname" . }}-service
+              name: {{ include "vovastl.fullname" $ }}-service
               port:
                 number: {{ (index $.Values.service.ports 0).port }}
     {{- end }}
@@ -81,7 +81,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: {{ include "vovastl.fullname" . }}-service
+              name: {{ include "vovastl.fullname" $ }}-service
               port:
                 number: {{ (index $.Values.service.ports 0).port }}
 {{- end }}
