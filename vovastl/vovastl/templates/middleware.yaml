@@ -9,6 +9,7 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - /vovastl
+    - /vovastl
+    - /vovastl/
 {{- end }}
 

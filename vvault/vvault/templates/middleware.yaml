@@ -9,6 +9,7 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - /vvault
+    - /vvault
+    - /vvault/
 {{- end }}
 
