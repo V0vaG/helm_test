@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
     {{- if .Values.ingress.enabled }}
-    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-{{ include "vovastl.fullname" . }}-stripprefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: {{ include "vovastl.fullname" . }}-stripprefix@kubernetescrd
     {{- end }}
 spec:
   {{- if .Values.ingress.className }}
