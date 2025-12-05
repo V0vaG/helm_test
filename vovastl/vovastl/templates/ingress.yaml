@@ -67,7 +67,7 @@ spec:
     - host: {{ .host | quote }}
       http:
         paths:
-        - path: /
+        - path: /vovastl
           pathType: Prefix
           backend:
             service:
@@ -77,7 +77,7 @@ spec:
     {{- end }}
     - http:
         paths:
-        - path: /
+        - path: /vovastl
           pathType: Prefix
           backend:
             service:
