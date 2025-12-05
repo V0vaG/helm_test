@@ -28,3 +28,15 @@ service:
       protocol: TCP
       targetPort: 5000
   type: NodePort
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  hosts:
+    - host: vova-g.tplinkdns.com
+      paths:
+        - path: /vovastl(/|$)(.*)
+          pathType: ImplementationSpecific
+  tls: []
