@@ -29,12 +29,4 @@ service:
       targetPort: 5000
   type: NodePort
 ingress:
-  enabled: true
-  className: "traefik"
-  annotations: {}
-  hosts:
-    - host: vova-g.tplinkdns.com
-      paths:
-        - path: /vovastl
-          pathType: Prefix
-  tls: []
+  enabled: false
