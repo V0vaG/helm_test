@@ -27,6 +27,10 @@ spec:
           value: {{ quote .Values.deployment.vvault.env.mongoUrl }}
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
+        - name: SCRIPT_NAME
+          value: /vvault
+        - name: APPLICATION_ROOT
+          value: /vvault
         - name: BASE_PATH
           value: /vvault
         - name: BASE_URL

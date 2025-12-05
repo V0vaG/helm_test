@@ -25,6 +25,10 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
+        - name: SCRIPT_NAME
+          value: /vovastl
+        - name: APPLICATION_ROOT
+          value: /vovastl
         - name: BASE_PATH
           value: /vovastl
         - name: BASE_URL
