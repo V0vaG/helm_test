@@ -18,14 +18,14 @@ apps:
   #- name: vhub
   #- name: vvolt
   #- name: factory
-  - name: vovastl
+  # - name: vovastl
   #- name: vovarepo
   #- name: weprintcloud
   #- name: postgresql
   #- name: vhide
-  - name: vvault
-  - name: mongodb
-  - name: list
+  # - name: vvault
+  # - name: mongodb
+  # - name: list
   # - name: kiwix
   # - name: gitlab
   # - name: gitea
@@ -33,9 +33,9 @@ apps:
   #- name: nginx
   # - name: coldvaultmanager
   # - name: artifactory
-  - name: minihub
+  # - name: minihub
   # - name: vovagpt
-  - name: otacd
-  - name: otacd-db
+  # - name: otacd
+  # - name: otacd-db
 
 
