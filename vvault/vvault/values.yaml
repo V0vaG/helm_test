@@ -30,3 +30,5 @@ service:
       protocol: TCP
       targetPort: 5000
   type: NodePort
+ingress:
+  enabled: false
