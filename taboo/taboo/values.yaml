@@ -8,7 +8,7 @@ deployment:
   taboos:
     image:
       repository: vova0911/taboo
-      tag: amd64_0.0.0
+      tag: amd64_0.0.6
     resources:
       limits:
         cpu: "1"
