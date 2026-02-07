@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "taboo.fullname" . }}-deployment
+  labels:
+  {{- include "taboo.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  strategy:
+    rollingUpdate:
+      maxSurge: {{ .Values.deployment.strategy.rollingUpdate.maxSurge | quote }}
+      maxUnavailable: {{ .Values.deployment.strategy.rollingUpdate.maxUnavailable }}
+    type: {{ .Values.deployment.strategy.type | quote }}
+  selector:
+    matchLabels:
+      app: taboo
+    {{- include "taboo.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: taboo
+      {{- include "taboo.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.taboos.image.repository }}:{{ .Values.deployment.taboos.image.tag
+          | default .Chart.AppVersion }}
+        name: taboos
+        ports:
+        - containerPort: 5000
+        resources: {{- toYaml .Values.deployment.taboos.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /root/script_files/taboo
+          name: data-volume
+      imagePullSecrets:
+      - name: regcred
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "taboo.fullname" . }}-data-pvc

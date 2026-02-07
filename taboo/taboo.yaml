@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: taboo
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: taboo-data-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /home/vova/script_files/taboo
+  storageClassName: ""
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: taboo-data-pvc
+  namespace: taboo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: taboo-data-pv
+  storageClassName: ""
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taboo-deployment
+  namespace: taboo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: taboo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: taboo
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+      - name: taboos
+        image: 192.168.68.64:5000/taboo:amd64_latest
+        ports:
+        - containerPort: 5000
+        # Uncomment if needed
+        # imagePullSecrets:
+        # - name: regcred
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /root/script_files/taboo
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: taboo-data-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: taboo-service
+  namespace: taboo
+spec:
+  selector:
+    app: taboo
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+      nodePort: 30088
+  type: NodePort
