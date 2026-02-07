@@ -7,8 +7,8 @@ deployment:
     type: RollingUpdate
   taboos:
     image:
-      repository: 192.168.68.64:5000/taboo
-      tag: amd64_latest
+      repository: vova0911/taboo
+      tag: amd64_0.0.0
     resources:
       limits:
         cpu: "1"

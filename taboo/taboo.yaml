@@ -54,7 +54,7 @@ spec:
         - name: regcred
       containers:
       - name: taboos
-        image: 192.168.68.64:5000/taboo:amd64_latest
+        image: vova0911/taboo:amd64_0.0.0
         ports:
         - containerPort: 5000
         # Uncomment if needed
