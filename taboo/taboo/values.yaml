@@ -5,10 +5,10 @@ deployment:
       maxSurge: 25%
       maxUnavailable: 1
     type: RollingUpdate
-  taboos:
+  taboo:
     image:
       repository: vova0911/taboo
-      tag: amd64_0.0.6
+      tag: amd64_0.0.5
     resources:
       limits:
         cpu: "1"
@@ -16,9 +16,6 @@ deployment:
       requests:
         cpu: 500m
         memory: 256Mi
-  taboo:
-    image:
-      tag: amd64_0.0.6
 kubernetesClusterDomain: cluster.local
 pvc:
   dataPvc:
