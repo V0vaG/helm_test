@@ -25,12 +25,12 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.taboos.image.repository }}:{{ .Values.deployment.taboos.image.tag
+        image: {{ .Values.deployment.taboo.image.repository }}:{{ .Values.deployment.taboo.image.tag
           | default .Chart.AppVersion }}
-        name: taboos
+        name: taboo
         ports:
         - containerPort: 5000
-        resources: {{- toYaml .Values.deployment.taboos.resources | nindent 10 }}
+        resources: {{- toYaml .Values.deployment.taboo.resources | nindent 10 }}
         volumeMounts:
         - mountPath: /root/script_files/taboo
           name: data-volume
