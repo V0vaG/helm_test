@@ -10,8 +10,6 @@ pvc:
     storageClass: shinobi-local
     storageRequest: 25Gi
 shinobi:
-  nodeSelector:
-    kubernetes.io/hostname: YOUR_NODE_NAME
   ports:
   - name: web
     nodePort: 30084

@@ -52,7 +52,6 @@ spec:
           name: dev-video3
         - mountPath: /dev/shm
           name: shm
-      nodeSelector: {{- toYaml .Values.shinobi.nodeSelector | nindent 8 }}
       volumes:
       - name: config
         persistentVolumeClaim:

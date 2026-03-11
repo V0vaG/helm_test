@@ -99,10 +99,6 @@ spec:
       labels:
         app: shinobi
     spec:
-
-      nodeSelector:
-        kubernetes.io/hostname: YOUR_NODE_NAME
-
       containers:
         - name: shinobi
           image: shinobisystems/shinobi:latest
