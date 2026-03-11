@@ -38,3 +38,4 @@ apps:
   # - name: otacd
   # - name: otacd-db
   # - name: taboo
+  - name: shinobi
