@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "shinobi.fullname" . }}-config-pv
+  labels:
+  {{- include "shinobi.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: /media/vova/2TB/shinobi/shinobi-config
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: shinobi-local

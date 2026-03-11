@@ -4,16 +4,18 @@ metadata:
   name: shinobi
 ---
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: PersistentVolume
 metadata:
-  name: shinobi-config
-  namespace: shinobi
+  name: shinobi-videos-pv
 spec:
+  capacity:
+    storage: 25Gi
   accessModes:
     - ReadWriteOnce
-  resources:
-    requests:
-      storage: 2Gi
+  storageClassName: shinobi-local
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /media/vova/2TB/shinobi/shinobi-videos
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -21,11 +23,53 @@ metadata:
   name: shinobi-videos
   namespace: shinobi
 spec:
+  storageClassName: shinobi-local
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 25Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: shinobi-config-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: shinobi-local
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /media/vova/2TB/shinobi/shinobi-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shinobi-config
+  namespace: shinobi
+spec:
+  storageClassName: shinobi-local
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: shinobi-custom-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: shinobi-local
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: /media/vova/2TB/shinobi/shinobi-custom
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -33,6 +77,7 @@ metadata:
   name: shinobi-custom
   namespace: shinobi
 spec:
+  storageClassName: shinobi-local
   accessModes:
     - ReadWriteOnce
   resources:
@@ -54,11 +99,15 @@ spec:
       labels:
         app: shinobi
     spec:
-      hostNetwork: false
+
+      nodeSelector:
+        kubernetes.io/hostname: YOUR_NODE_NAME
+
       containers:
         - name: shinobi
           image: shinobisystems/shinobi:latest
-          imagePullPolicy: Always
+          securityContext:
+            privileged: true
 
           ports:
             - containerPort: 8080
@@ -66,14 +115,11 @@ spec:
 
           env:
             - name: TZ
-              value: "Asia/Jerusalem"
+              value: Asia/Jerusalem
             - name: SHINOBI_UID
               value: "1000"
             - name: SHINOBI_GID
               value: "1000"
-
-          securityContext:
-            privileged: true
 
           volumeMounts:
             - name: config
@@ -94,7 +140,7 @@ spec:
             - name: dev-video3
               mountPath: /dev/video3
 
-            - name: dshm
+            - name: shm
               mountPath: /dev/shm
 
       volumes:
@@ -126,7 +172,7 @@ spec:
           hostPath:
             path: /dev/video3
 
-        - name: dshm
+        - name: shm
           emptyDir:
             medium: Memory
             sizeLimit: 1Gi
@@ -141,11 +187,9 @@ spec:
   selector:
     app: shinobi
   ports:
-    - name: web
-      port: 8080
+    - port: 8080
       targetPort: 8080
-      nodePort: 30082
-    - name: stream
-      port: 8081
+      nodePort: 30084
+    - port: 8081
       targetPort: 8081
       nodePort: 30083

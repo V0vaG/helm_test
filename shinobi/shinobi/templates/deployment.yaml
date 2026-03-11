@@ -28,7 +28,6 @@ spec:
           value: {{ quote .Values.kubernetesClusterDomain }}
         image: {{ .Values.shinobi.shinobi.image.repository }}:{{ .Values.shinobi.shinobi.image.tag
           | default .Chart.AppVersion }}
-        imagePullPolicy: {{ .Values.shinobi.shinobi.imagePullPolicy }}
         name: shinobi
         ports:
         - containerPort: 8080
@@ -52,7 +51,8 @@ spec:
         - mountPath: /dev/video3
           name: dev-video3
         - mountPath: /dev/shm
-          name: dshm
+          name: shm
+      nodeSelector: {{- toYaml .Values.shinobi.nodeSelector | nindent 8 }}
       volumes:
       - name: config
         persistentVolumeClaim:
@@ -78,4 +78,4 @@ spec:
       - emptyDir:
           medium: Memory
           sizeLimit: 1Gi
-        name: dshm
+        name: shm

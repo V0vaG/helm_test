@@ -10,3 +10,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.custom.storageRequest | quote }}
+  storageClassName: {{ .Values.pvc.custom.storageClass | quote }}
