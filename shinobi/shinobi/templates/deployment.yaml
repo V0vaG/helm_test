@@ -30,8 +30,8 @@ spec:
           | default .Chart.AppVersion }}
         name: shinobi
         ports:
-        - containerPort: 8080
-        - containerPort: 8081
+        - containerPort: 8084
+        - containerPort: 8083
         resources: {}
         securityContext: {{- toYaml .Values.shinobi.shinobi.containerSecurityContext |
           nindent 10 }}

@@ -106,8 +106,8 @@ spec:
             privileged: true
 
           ports:
-            - containerPort: 8080
-            - containerPort: 8081
+            - containerPort: 8084
+            - containerPort: 8083
 
           env:
             - name: TZ
