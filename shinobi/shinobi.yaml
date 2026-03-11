@@ -1,0 +1,151 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shinobi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shinobi-config
+  namespace: shinobi
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shinobi-videos
+  namespace: shinobi
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shinobi-custom
+  namespace: shinobi
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shinobi
+  namespace: shinobi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shinobi
+  template:
+    metadata:
+      labels:
+        app: shinobi
+    spec:
+      hostNetwork: false
+      containers:
+        - name: shinobi
+          image: shinobisystems/shinobi:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+
+          env:
+            - name: TZ
+              value: "Asia/Jerusalem"
+            - name: SHINOBI_UID
+              value: "1000"
+            - name: SHINOBI_GID
+              value: "1000"
+
+          securityContext:
+            privileged: true
+
+          volumeMounts:
+            - name: config
+              mountPath: /home/Shinobi/config
+
+            - name: videos
+              mountPath: /home/Shinobi/videos
+
+            - name: custom
+              mountPath: /home/Shinobi/custom
+
+            - name: dev-video0
+              mountPath: /dev/video0
+            - name: dev-video1
+              mountPath: /dev/video1
+            - name: dev-video2
+              mountPath: /dev/video2
+            - name: dev-video3
+              mountPath: /dev/video3
+
+            - name: dshm
+              mountPath: /dev/shm
+
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: shinobi-config
+
+        - name: videos
+          persistentVolumeClaim:
+            claimName: shinobi-videos
+
+        - name: custom
+          persistentVolumeClaim:
+            claimName: shinobi-custom
+
+        - name: dev-video0
+          hostPath:
+            path: /dev/video0
+
+        - name: dev-video1
+          hostPath:
+            path: /dev/video1
+
+        - name: dev-video2
+          hostPath:
+            path: /dev/video2
+
+        - name: dev-video3
+          hostPath:
+            path: /dev/video3
+
+        - name: dshm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shinobi
+  namespace: shinobi
+spec:
+  type: NodePort
+  selector:
+    app: shinobi
+  ports:
+    - name: web
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
+    - name: stream
+      port: 8081
+      targetPort: 8081
+      nodePort: 30081

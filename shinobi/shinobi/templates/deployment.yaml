@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "shinobi.fullname" . }}-shinobi
+  labels:
+  {{- include "shinobi.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.shinobi.replicas }}
+  selector:
+    matchLabels:
+      app: shinobi
+    {{- include "shinobi.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: shinobi
+      {{- include "shinobi.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: {{ quote .Values.shinobi.shinobi.env.tz }}
+        - name: SHINOBI_UID
+          value: {{ quote .Values.shinobi.shinobi.env.shinobiUid }}
+        - name: SHINOBI_GID
+          value: {{ quote .Values.shinobi.shinobi.env.shinobiGid }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.shinobi.shinobi.image.repository }}:{{ .Values.shinobi.shinobi.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: {{ .Values.shinobi.shinobi.imagePullPolicy }}
+        name: shinobi
+        ports:
+        - containerPort: 8080
+        - containerPort: 8081
+        resources: {}
+        securityContext: {{- toYaml .Values.shinobi.shinobi.containerSecurityContext |
+          nindent 10 }}
+        volumeMounts:
+        - mountPath: /home/Shinobi/config
+          name: config
+        - mountPath: /home/Shinobi/videos
+          name: videos
+        - mountPath: /home/Shinobi/custom
+          name: custom
+        - mountPath: /dev/video0
+          name: dev-video0
+        - mountPath: /dev/video1
+          name: dev-video1
+        - mountPath: /dev/video2
+          name: dev-video2
+        - mountPath: /dev/video3
+          name: dev-video3
+        - mountPath: /dev/shm
+          name: dshm
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: {{ include "shinobi.fullname" . }}-config
+      - name: videos
+        persistentVolumeClaim:
+          claimName: {{ include "shinobi.fullname" . }}-videos
+      - name: custom
+        persistentVolumeClaim:
+          claimName: {{ include "shinobi.fullname" . }}-custom
+      - hostPath:
+          path: /dev/video0
+        name: dev-video0
+      - hostPath:
+          path: /dev/video1
+        name: dev-video1
+      - hostPath:
+          path: /dev/video2
+        name: dev-video2
+      - hostPath:
+          path: /dev/video3
+        name: dev-video3
+      - emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+        name: dshm

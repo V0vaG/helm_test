@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "shinobi.fullname" . }}-shinobi
+  labels:
+  {{- include "shinobi.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.shinobi.type }}
+  selector:
+    app: shinobi
+    {{- include "shinobi.selectorLabels" . | nindent 4 }}
+  ports:
+  {{- .Values.shinobi.ports | toYaml | nindent 2 }}
