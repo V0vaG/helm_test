@@ -144,8 +144,8 @@ spec:
     - name: web
       port: 8080
       targetPort: 8080
-      nodePort: 30080
+      nodePort: 30082
     - name: stream
       port: 8081
       targetPort: 8081
-      nodePort: 30081
+      nodePort: 30083
