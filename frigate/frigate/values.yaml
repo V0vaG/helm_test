@@ -1,0 +1,36 @@
+frigate:
+  frigate:
+    containerSecurityContext:
+      privileged: true
+    env:
+      tz: Asia/Jerusalem
+    image:
+      repository: ghcr.io/blakeblackshear/frigate
+      tag: stable
+    resources:
+      limits:
+        cpu: "4"
+        memory: 6Gi
+      requests:
+        cpu: "1"
+        memory: 2Gi
+  ports:
+  - name: web
+    nodePort: 30500
+    port: 5000
+    targetPort: 5000
+  - name: rtsp
+    nodePort: 31554
+    port: 8554
+    targetPort: 8554
+  - name: webrtc
+    nodePort: 31555
+    port: 8555
+    targetPort: 8555
+  replicas: 1
+  type: NodePort
+kubernetesClusterDomain: cluster.local
+pvc:
+  pvc:
+    storageClass: frigate-local
+    storageRequest: 1Ti

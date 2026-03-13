@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ include "frigate.fullname" . }}-pv
+  labels:
+  {{- include "frigate.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 2Ti
+  hostPath:
+    path: /media/vova/2TB/frigate
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: frigate-local

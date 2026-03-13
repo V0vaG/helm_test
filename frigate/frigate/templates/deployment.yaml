@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "frigate.fullname" . }}-frigate
+  labels:
+  {{- include "frigate.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.frigate.replicas }}
+  selector:
+    matchLabels:
+      app: frigate
+    {{- include "frigate.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: frigate
+      {{- include "frigate.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        - name: TZ
+          value: {{ quote .Values.frigate.frigate.env.tz }}
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ quote .Values.kubernetesClusterDomain }}
+        image: {{ .Values.frigate.frigate.image.repository }}:{{ .Values.frigate.frigate.image.tag
+          | default .Chart.AppVersion }}
+        name: frigate
+        ports:
+        - containerPort: 5000
+          name: web
+        - containerPort: 8554
+          name: rtsp
+        - containerPort: 8555
+          name: webrtc-tcp
+          protocol: TCP
+        - containerPort: 8555
+          name: webrtc-udp
+          protocol: UDP
+        resources: {{- toYaml .Values.frigate.frigate.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.frigate.frigate.containerSecurityContext |
+          nindent 10 }}
+        volumeMounts:
+        - mountPath: /media/frigate
+          name: frigate-storage
+        - mountPath: /config
+          name: frigate-config
+        - mountPath: /dev/shm
+          name: shm
+      volumes:
+      - name: frigate-storage
+        persistentVolumeClaim:
+          claimName: {{ include "frigate.fullname" . }}-pvc
+      - hostPath:
+          path: /media/vova/2TB/frigate/config
+          type: DirectoryOrCreate
+        name: frigate-config
+      - emptyDir:
+          medium: Memory
+          sizeLimit: 1Gi
+        name: shm
