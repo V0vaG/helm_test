@@ -39,4 +39,4 @@ apps:
   # - name: otacd-db
   # - name: taboo
   # - name: shinobi
-  - name: frigate
+  # - name: frigate
