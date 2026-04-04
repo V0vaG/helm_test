@@ -45,3 +45,7 @@ pvc:
   otacdDataPvc:
     storageClass: ""
     storageRequest: 10Gi
+deployment:
+  otacd:
+    image:
+      tag: amd64_0.2.5
