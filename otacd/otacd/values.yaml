@@ -19,7 +19,7 @@ otacdDeployment:
       # Or just: mongodb://<service-name>:<port> if same namespace
       mongoUrl: "mongodb://otacd-db-mongodb-service:27017"
     image:
-      repository: 192.168.68.64:5000/otacd
+      repository: 192.168.68.60:5000/otacd
       tag: amd64_0.2.5
     resources:
       limits:
