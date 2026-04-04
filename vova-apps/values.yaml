@@ -35,8 +35,8 @@ apps:
   # - name: artifactory
   # - name: minihub
   # - name: vovagpt
-  # - name: otacd
-  # - name: otacd-db
+  - name: otacd
+  - name: otacd-db
   # - name: taboo
   # - name: shinobi
   # - name: frigate
