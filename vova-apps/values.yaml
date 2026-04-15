@@ -12,8 +12,8 @@ apps:
     # repoURL: https://github.com/V0vaG/helm_test
   # - name: vpkg
   # - name: topix
-  #- name: vbank
-  - name: jellyfin
+  # - name: vbank
+  # - name: jellyfin
   # - name: tools
   # - name: vhub
   # - name: vvolt
