@@ -15,22 +15,22 @@ apps:
   #- name: vbank
   - name: jellyfin
   # - name: tools
-  #- name: vhub
-  #- name: vvolt
-  #- name: factory
-  - name: vovastl
-  #- name: vovarepo
-  #- name: weprintcloud
-  #- name: postgresql
-  #- name: vhide
+  # - name: vhub
+  # - name: vvolt
+  # - name: factory
+  # - name: vovastl
+  # - name: vovarepo
+  # - name: weprintcloud
+  # - name: postgresql
+  # - name: vhide
   # - name: vvault
   # - name: mongodb
-  - name: list
+  # - name: list
   # - name: kiwix
   # - name: gitlab
   # - name: gitea
-  #- name: nextcloud
-  #- name: nginx
+  # - name: nextcloud
+  # - name: nginx
   # - name: coldvaultmanager
   # - name: artifactory
   # - name: minihub
